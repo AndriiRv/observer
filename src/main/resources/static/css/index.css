@@ -1,0 +1,29 @@
+
+body {
+    padding: 0;
+    margin: 0;
+}
+
+.root {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.resource-element {
+    min-width: 500px;
+    min-height: 200px;
+    border: black 1px solid;
+    flex-grow: 1;
+}
+
+.resource-element a {
+    float: right;
+}
+
+.resource-element:hover {
+    opacity: 0.6;
+}
+
+.resource-element span {
+    color: white;
+}
