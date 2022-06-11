@@ -6,7 +6,13 @@ plugins {
 
 group = 'com.defaultvalue'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(11)
+        vendor = JvmVendorSpec.ADOPTIUM
+    }
+}
 
 repositories {
     mavenCentral()
