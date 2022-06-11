@@ -1,0 +1,12 @@
+server:
+    port: 8999
+
+observer:
+    files:
+        enabled: true
+        filename: resources
+        filetype: txt
+
+    httpclient:
+        connectionTimeout: 5000
+        readTimeout: 10000
