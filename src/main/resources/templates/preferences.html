@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Preferences</title>
+
+    <link th:href="@{/css/index.css}" rel="stylesheet"/>
+</head>
+<body>
+
+<div th:insert="fragments/header :: header"></div>
+
+<form action="/observer/preferences/resources" method="POST">
+    <label>
+        <input name="name" type="text" placeholder="Name of resource" required/>
+    </label>
+    <label>
+        <input name="path" type="text" placeholder="Name of path" required/>
+    </label>
+    <button type="reset">Reset</button>
+    <button type="submit">Save</button>
+</form>
+
+<table class="resource-table">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>URL</th>
+        <th>Remove</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr class="resource-js" th:each="resource : ${resources}">
+        <td class="resource-id-js" th:text="${resource.id}"></td>
+        <td class="resource-name-js" th:text="${resource.name}"></td>
+        <td class="resource-path-js"><a th:text="${resource.path}"></a></td>
+        <td class="resource-remove-js"><button>Remove</button></td>
+    </tr>
+    </tbody>
+</table>
+
+<script th:src="@{/js/utils.js}"></script>
+<script th:src="@{/js/preferences.js}"></script>
+
+</body>
+</html>
