@@ -1,11 +1,30 @@
 document.addEventListener('DOMContentLoaded', function () {
 
+    let rootElement = document.querySelector(".root");
+    buildLoader(rootElement);
+
     fetch(document.location.href + "/resources")
         .then(response => {
+            removeLoader();
+
             response.json().then(function (json) {
                 buildUIResources(json);
             });
         });
+
+    function buildLoader(rootElement) {
+        let loaderElement = document.createElement("div");
+        loaderElement.className = "loader";
+
+        rootElement.append(loaderElement);
+    }
+
+    function removeLoader() {
+        let loaderElement = document.querySelector(".loader");
+        if (loaderElement) {
+            loaderElement.remove();
+        }
+    }
 
     /**
      * Create table with resources.

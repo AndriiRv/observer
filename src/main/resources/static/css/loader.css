@@ -1,0 +1,14 @@
+
+.loader {
+    height: 150px;
+    width: 150px;
+    margin: 0 auto;
+    background-image: url('../images/loader.svg');
+    animation: rotate 5s linear infinite;
+}
+
+@keyframes rotate {
+    to {
+        transform: rotate(360deg);
+    }
+}
