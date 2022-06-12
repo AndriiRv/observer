@@ -12,20 +12,6 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
 
-    function buildLoader(rootElement) {
-        let loaderElement = document.createElement("div");
-        loaderElement.className = "loader";
-
-        rootElement.append(loaderElement);
-    }
-
-    function removeLoader() {
-        let loaderElement = document.querySelector(".loader");
-        if (loaderElement) {
-            loaderElement.remove();
-        }
-    }
-
     /**
      * Create table with resources.
      * Set height each div by condition:
@@ -42,8 +28,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
             let childDiv = document.createElement("div");
             addEvent(childDiv, "click", function () {
-                getResource(resource.id)
+                getResource(resource.id, childDiv)
             });
+
+            let hiddenInput = document.createElement("input");
+            hiddenInput.className = "resourceId";
+            hiddenInput.value = resource.id;
+            hiddenInput.hidden = true;
+            childDiv.append(hiddenInput);
 
             childDiv.style.height = json.length <= 2 ? "calc(100vh - 2px)" : "calc(50vh - 2px)";
 
@@ -64,15 +56,18 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    function getResource(id) {
+    function getResource(id, childDiv) {
+        buildLoader(childDiv);
+
         fetch(document.location.href + "/resources/" + id)
             .then(response => {
+                removeLoader();
+
                 response.json().then(function (json) {
-                    let anchors = document.querySelectorAll("div a");
-                    for (const anchor of anchors) {
-                        let resource = json.data;
-                        if (anchor.href.includes(resource.path)) {
-                            anchor.parentElement.style.backgroundColor = resource.status;
+                    let resources = document.querySelectorAll(".resource-element");
+                    for (const resource of resources) {
+                        if (Number(resource.childNodes[0].value) === id) {
+                            resource.className = "resource-element " + json.data.status.toLowerCase();
                             break;
                         }
                     }
