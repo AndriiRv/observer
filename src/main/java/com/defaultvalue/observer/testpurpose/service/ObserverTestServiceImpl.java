@@ -19,7 +19,24 @@ public class ObserverTestServiceImpl implements ObserverService<Resource> {
 
     @Override
     public Resource findById(Integer id) {
+        for (Resource resource : findAll()) {
+            if (resource.getId().equals(id)) {
+                resource.setStatus(getRandomStatus());
+                return resource;
+            }
+        }
         return null;
+    }
+
+    private ResourceStatus getRandomStatus() {
+        int fromZeroToTwo = new Random().nextInt(3);
+        if (fromZeroToTwo == 0) {
+            return ResourceStatus.GREEN;
+        } else if (fromZeroToTwo == 1) {
+            return ResourceStatus.ORANGE;
+        } else {
+            return ResourceStatus.RED;
+        }
     }
 
     @Override
@@ -28,7 +45,7 @@ public class ObserverTestServiceImpl implements ObserverService<Resource> {
 
         List<ResourceStatus> resourceStatuses = List.of(ResourceStatus.RED, ResourceStatus.ORANGE, ResourceStatus.GREEN);
 
-        for (int i = 0; i < new Random().nextInt(10) + 1; i++) {
+        for (int i = 0; i < new Random().nextInt(20) + 1; i++) {
             resources.add(new Resource(i, "example", "http://localhost:8080/observer/#", resourceStatuses.get(new Random().nextInt(2))));
         }
 
