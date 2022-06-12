@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
     fetch(document.location.href + "/resources")
         .then(response => {
             response.json().then(function (json) {
-                createResourceTable(json);
+                buildUIResources(json);
             });
         });
 
@@ -15,8 +15,8 @@ document.addEventListener('DOMContentLoaded', function () {
      *
      * @param json
      */
-    function createResourceTable(json) {
-        let rootDiv = document.querySelector("div");
+    function buildUIResources(json) {
+        let rootDiv = document.querySelector(".root");
 
         for (let i = 0; i < json.data.length; i++) {
             let resource = json.data[i];

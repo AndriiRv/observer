@@ -4,6 +4,32 @@ body {
     margin: 0;
 }
 
+.header {
+    display: flex;
+    height: 50px;
+}
+
+.header .logo {
+    flex-grow: 1;
+    font-weight: bolder;
+}
+
+.header .logo a {
+    color: black;
+    font-size: xx-large;
+    text-decoration: none;
+}
+
+.header .logo a:hover {
+    text-decoration: underline;
+}
+
+.header .menu {
+    display: flex;
+    flex-direction: column-reverse;
+    float: right;
+}
+
 .root {
     display: flex;
     flex-wrap: wrap;
