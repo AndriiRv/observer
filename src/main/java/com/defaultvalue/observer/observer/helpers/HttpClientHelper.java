@@ -1,6 +1,6 @@
-package com.defaultvalue.observer.helper;
+package com.defaultvalue.observer.observer.helpers;
 
-import com.defaultvalue.observer.properties.HttpClientSettings;
+import com.defaultvalue.observer.observer.properties.HttpClientSettings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;

@@ -1,8 +1,8 @@
-package com.defaultvalue.observer.test.service;
+package com.defaultvalue.observer.testpurpose.service;
 
-import com.defaultvalue.observer.enums.ResourceStatus;
-import com.defaultvalue.observer.model.Resource;
-import com.defaultvalue.observer.service.ObserverService;
+import com.defaultvalue.observer.resources.enums.ResourceStatus;
+import com.defaultvalue.observer.resources.models.Resource;
+import com.defaultvalue.observer.observer.services.ObserverService;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

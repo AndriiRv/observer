@@ -1,4 +1,4 @@
-package com.defaultvalue.observer.enums;
+package com.defaultvalue.observer.resources.enums;
 
 public enum ResourceStatus {
 

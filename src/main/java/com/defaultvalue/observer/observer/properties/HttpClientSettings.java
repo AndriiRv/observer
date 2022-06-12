@@ -1,4 +1,4 @@
-package com.defaultvalue.observer.properties;
+package com.defaultvalue.observer.observer.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;

@@ -1,4 +1,4 @@
-package com.defaultvalue.observer.dto;
+package com.defaultvalue.observer.observer.dtos;
 
 public class ResponseDto {
 

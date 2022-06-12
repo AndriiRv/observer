@@ -1,8 +1,8 @@
-package com.defaultvalue.observer.controller;
+package com.defaultvalue.observer.observer.controllers;
 
-import com.defaultvalue.observer.dto.ResponseDto;
-import com.defaultvalue.observer.model.Resource;
-import com.defaultvalue.observer.service.ObserverService;
+import com.defaultvalue.observer.observer.dtos.ResponseDto;
+import com.defaultvalue.observer.resources.models.Resource;
+import com.defaultvalue.observer.observer.services.ObserverService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -24,7 +24,7 @@ public class ObserverController {
 
     private final ObserverService<Resource> observerService;
 
-    public ObserverController(@Qualifier("observerServiceImpl") ObserverService<Resource> observerService) {
+    public ObserverController(@Qualifier("observerResourceFileServiceImpl") ObserverService<Resource> observerService) {
         this.observerService = observerService;
     }
 
@@ -41,7 +41,7 @@ public class ObserverController {
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new ResponseDto(resources));
         } catch (Exception e) {
-            String errorMessage = "Resource is not fetching. Please try again.";
+            String errorMessage = "Resources are not fetching. Please try again.";
             LOG.error("Exception during get all resources.", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ResponseDto(errorMessage));

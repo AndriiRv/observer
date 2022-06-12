@@ -1,12 +1,13 @@
-package com.defaultvalue.observer.repository;
+package com.defaultvalue.observer.observer.repositories;
 
 import java.util.Collection;
+import java.util.Optional;
 
 public interface ObserverRepository<T> {
 
     boolean save(T obj);
 
-    T findById(Integer id);
+    Optional<T> findById(Integer id);
 
     Collection<T> findAll();
 

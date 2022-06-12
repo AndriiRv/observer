@@ -1,4 +1,4 @@
-package com.defaultvalue.observer.service;
+package com.defaultvalue.observer.observer.services;
 
 import java.util.List;
 

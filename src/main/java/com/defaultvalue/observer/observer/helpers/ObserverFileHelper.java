@@ -1,6 +1,6 @@
-package com.defaultvalue.observer.helper;
+package com.defaultvalue.observer.observer.helpers;
 
-import com.defaultvalue.observer.properties.ObserverFileSettings;
+import com.defaultvalue.observer.observer.properties.ObserverFileSettings;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedWriter;
@@ -36,26 +36,12 @@ public class ObserverFileHelper {
      * @param content  resources name with generated passwords as string.
      * @throws IOException
      */
-    public void saveToFile(String content) throws IOException {
+    public boolean saveToFile(String content) throws IOException {
         Path fileNamePath = createFile();
         try (BufferedWriter bufferedWriter = Files.newBufferedWriter(fileNamePath)) {
             bufferedWriter.append(content);
         }
-    }
-
-    public void removeFromFile(Integer id) throws IOException {
-        List<String> strings = readTheFile();
-
-        StringBuilder sb = new StringBuilder();
-        for (String strLine : strings) {
-            if (strLine.contains(id.toString())) {
-                strings.remove(strLine);
-            }
-            sb.append(strLine).append("\n");
-        }
-
-        saveToFile(sb.toString());
-
+        return true;
     }
 
     /**

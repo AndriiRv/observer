@@ -1,8 +1,8 @@
-package com.defaultvalue.observer.test.controller;
+package com.defaultvalue.observer.testpurpose.controller;
 
-import com.defaultvalue.observer.dto.ResponseDto;
-import com.defaultvalue.observer.model.Resource;
-import com.defaultvalue.observer.service.ObserverService;
+import com.defaultvalue.observer.observer.dtos.ResponseDto;
+import com.defaultvalue.observer.resources.models.Resource;
+import com.defaultvalue.observer.observer.services.ObserverService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;

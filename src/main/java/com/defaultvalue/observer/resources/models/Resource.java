@@ -1,6 +1,8 @@
-package com.defaultvalue.observer.model;
+package com.defaultvalue.observer.resources.models;
 
-import com.defaultvalue.observer.enums.ResourceStatus;
+import com.defaultvalue.observer.resources.enums.ResourceStatus;
+
+import java.util.Objects;
 
 public class Resource {
 
@@ -33,6 +35,10 @@ public class Resource {
         this.path = path;
     }
 
+    public Resource(Integer id) {
+        this.id = id;
+    }
+
     public Integer getId() {
         return id;
     }
@@ -63,6 +69,19 @@ public class Resource {
 
     public void setStatus(ResourceStatus status) {
         this.status = status;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Resource resource = (Resource) o;
+        return Objects.equals(id, resource.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
     @Override
