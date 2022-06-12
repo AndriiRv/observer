@@ -47,8 +47,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
             childDiv.style.height = json.length <= 2 ? "calc(100vh - 2px)" : "calc(50vh - 2px)";
 
-            childDiv.className = "resource-element";
-            childDiv.style.backgroundColor = resource.status === undefined || resource.status == null ? "gray" : resource.status
+            let resourceStatus = resource.status.toLowerCase();
+            childDiv.className = "resource-element " + (resourceStatus === undefined || resourceStatus == null ? "gray" : resourceStatus);
 
             let spanElement = document.createElement("span");
             spanElement.innerText = resource.name;

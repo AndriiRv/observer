@@ -42,6 +42,18 @@ body {
     flex-grow: 1;
 }
 
+.resource-element.red {
+    background-color: darkred;
+}
+
+.resource-element.orange {
+    background-color: orange;
+}
+
+.resource-element.green {
+    background-color: green;
+}
+
 .resource-element a {
     float: right;
 }
