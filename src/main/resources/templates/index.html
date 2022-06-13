@@ -20,6 +20,11 @@
 
 <div class="root"></div>
 
+<!--TODO we need to replace it with normal variant.-->
+<!--initialize loader.svg-->
+<!--we should init this image explicitly because we using loader class name with append js function and this image not load before.-->
+<img hidden th:src="@{/images/loader.svg}"/>
+
 <script th:src="@{/js/utils.js}"></script>
 <script th:src="@{/js/loader.js}"></script>
 <script th:src="@{/js/index.js}"></script>
