@@ -24,7 +24,7 @@ public class ObserverController {
 
     private final ObserverService<Resource> observerService;
 
-    public ObserverController(@Qualifier("observerResourceFileServiceImpl") ObserverService<Resource> observerService) {
+    public ObserverController(@Qualifier("observerResourceServiceImpl") ObserverService<Resource> observerService) {
         this.observerService = observerService;
     }
 

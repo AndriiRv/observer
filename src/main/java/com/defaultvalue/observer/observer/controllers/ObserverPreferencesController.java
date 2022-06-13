@@ -31,7 +31,7 @@ public class ObserverPreferencesController {
     private final ObserverService<Resource> observerService;
     private final ResourceTransform resourceTransform;
 
-    public ObserverPreferencesController(@Qualifier("observerResourceFileServiceImpl") ObserverService<Resource> observerService,
+    public ObserverPreferencesController(@Qualifier("observerResourcePreferencesServiceImpl") ObserverService<Resource> observerService,
                                          ResourceTransform resourceTransform) {
         this.observerService = observerService;
         this.resourceTransform = resourceTransform;
