@@ -23,37 +23,48 @@ document.addEventListener('DOMContentLoaded', function () {
     function buildUIResources(json) {
         let rootDiv = document.querySelector(".root");
 
-        for (let i = 0; i < json.data.length; i++) {
-            let resource = json.data[i];
+        if (!json.data) {
+            rootDiv.append(buildErrorMessage(json.message));
+        } else {
+            for (let i = 0; i < json.data.length; i++) {
+                let resource = json.data[i];
 
-            let childDiv = document.createElement("div");
-            addEvent(childDiv, "click", function () {
-                getResource(resource.id, childDiv)
-            });
+                let childDiv = document.createElement("div");
+                addEvent(childDiv, "click", function () {
+                    getResource(resource.id, childDiv)
+                });
 
-            let hiddenInput = document.createElement("input");
-            hiddenInput.className = "resourceId";
-            hiddenInput.value = resource.id;
-            hiddenInput.hidden = true;
-            childDiv.append(hiddenInput);
+                let hiddenInput = document.createElement("input");
+                hiddenInput.className = "resourceId";
+                hiddenInput.value = resource.id;
+                hiddenInput.hidden = true;
+                childDiv.append(hiddenInput);
 
-            childDiv.style.height = json.length <= 2 ? "calc(100vh - 2px)" : "calc(50vh - 2px)";
+                childDiv.style.height = json.length <= 2 ? "calc(100vh - 2px)" : "calc(50vh - 2px)";
 
-            let resourceStatus = resource.status.toLowerCase();
-            childDiv.className = "resource-element " + (resourceStatus === undefined || resourceStatus == null ? "gray" : resourceStatus);
+                let resourceStatus = resource.status.toLowerCase();
+                childDiv.className = "resource-element " + (resourceStatus === undefined || resourceStatus == null ? "gray" : resourceStatus);
 
-            let spanElement = document.createElement("span");
-            spanElement.innerText = resource.name;
+                let spanElement = document.createElement("span");
+                spanElement.innerText = resource.name;
 
-            let anchorElement = document.createElement("a");
-            anchorElement.href = resource.path;
-            anchorElement.text = resource.path;
-            anchorElement.target = "_blank";
+                let anchorElement = document.createElement("a");
+                anchorElement.href = resource.path;
+                anchorElement.text = resource.path;
+                anchorElement.target = "_blank";
 
-            childDiv.append(spanElement, anchorElement)
+                childDiv.append(spanElement, anchorElement)
 
-            rootDiv.append(childDiv);
+                rootDiv.append(childDiv);
+            }
         }
+    }
+
+    function buildErrorMessage(message) {
+        let messageElement = document.createElement("span");
+        messageElement.className = "message";
+        messageElement.innerText = message;
+        return messageElement;
     }
 
     function getResource(id, childDiv) {

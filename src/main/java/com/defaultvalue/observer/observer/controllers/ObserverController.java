@@ -38,6 +38,10 @@ public class ObserverController {
     public ResponseEntity<ResponseDto> getResources() {
         try {
             List<Resource> resources = observerService.findAll();
+            if (resources.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(new ResponseDto("No one resources found. Please add resource."));
+            }
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new ResponseDto(resources));
         } catch (Exception e) {

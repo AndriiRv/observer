@@ -71,3 +71,8 @@ body {
 .resource-element span {
     color: white;
 }
+
+.message {
+    font-size: xx-large;
+    margin: 0 auto;
+}
