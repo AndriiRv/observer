@@ -4,40 +4,17 @@ body {
     margin: 0;
 }
 
-.header {
-    display: flex;
-    height: 50px;
-}
-
-.header .logo {
-    flex-grow: 1;
-    font-weight: bolder;
-}
-
-.header .logo a {
-    color: black;
-    font-size: xx-large;
-    text-decoration: none;
-}
-
-.header .logo a:hover {
-    text-decoration: underline;
-}
-
-.header .menu {
-    display: flex;
-    flex-direction: column-reverse;
-    float: right;
-}
-
 .root {
     display: flex;
     flex-wrap: wrap;
 }
 
 .resource-element {
+    display: flex;
+    flex-direction: column-reverse;
     min-width: 500px;
     min-height: 200px;
+    padding: 5px;
     border: black 1px solid;
     flex-grow: 1;
 }
@@ -70,6 +47,7 @@ body {
 
 .resource-element span {
     color: white;
+    font-size: xx-large;
 }
 
 .message {
