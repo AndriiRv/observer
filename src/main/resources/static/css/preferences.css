@@ -3,3 +3,23 @@
     padding-left: 5px;
     padding-right: 5px;
 }
+
+.preferences form {
+    text-align: center;
+}
+
+.form-element {
+    display: flex;
+    flex-direction: column;
+    width: 20%;
+    margin: 0 auto;
+}
+
+.form-element .input-group {
+    flex-flow: column;
+}
+
+.resource-table {
+    margin: 0 auto;
+    width: 50%;
+}

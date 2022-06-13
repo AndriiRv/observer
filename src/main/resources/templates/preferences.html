@@ -20,32 +20,44 @@
 
 <div class="preferences">
     <form action="/observer/preferences/resources" method="POST">
-        <label>
-            <input name="name" type="text" placeholder="Name of resource" required/>
-        </label>
-        <label>
-            <input name="path" type="text" placeholder="Name of path" required/>
-        </label>
-        <button type="reset">Reset</button>
-        <button type="submit">Save</button>
+        <div class="form-element">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Name of resource</span>
+                </div>
+                <label>
+                    <input name="name" type="text" class="form-control" required/>
+                </label>
+            </div>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Name of path</span>
+                </div>
+                <label>
+                    <input name="path" type="text" class="form-control" required/>
+                </label>
+            </div>
+        </div>
+        <button class="btn btn-primary" type="reset">Reset</button>
+        <button class="btn btn-primary" type="submit">Save</button>
     </form>
 
-    <table class="resource-table">
+    <table class="table table-bordered table-hover resource-table">
         <thead>
         <tr>
             <th>ID</th>
             <th>Name</th>
             <th>URL</th>
-            <th>Remove</th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
         <tr class="resource-js" th:each="resource : ${resources}">
             <td class="resource-id-js" th:text="${resource.id}"></td>
             <td class="resource-name-js" th:text="${resource.name}"></td>
-            <td class="resource-path-js"><a th:text="${resource.path}"></a></td>
+            <td class="resource-path-js"><a th:href="@{${resource.path}}" th:text="${resource.path}" target="_blank"></a></td>
             <td class="resource-remove-js">
-                <button>Remove</button>
+                <button class="btn btn-primary">Remove</button>
             </td>
         </tr>
         </tbody>
