@@ -1,4 +1,4 @@
-let indexPreferencesPage = document.location.href;
+let indexPreferencesPage = getCurrentBrowserUrl();
 
 document.addEventListener('DOMContentLoaded', function () {
     let resources = document.querySelectorAll(".resource-js");
@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function removeResource(id) {
         if (confirm('Are you sure you want to remove resource ' + id + " ?")) {
-            fetch(indexPreferencesPage + "/resources/" + id, {
+            fetch(indexPreferencesPage + "resources/" + id, {
                 method: "DELETE",
             })
             document.location.href = indexPreferencesPage;

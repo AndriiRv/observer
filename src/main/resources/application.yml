@@ -1,5 +1,7 @@
 server:
     port: 8999
+    servlet:
+        context-path: /observer
 
 observer:
     files:

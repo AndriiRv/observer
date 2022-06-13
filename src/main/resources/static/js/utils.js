@@ -9,3 +9,16 @@ function addEvent(element, event, func) {
 function openNewFocusedBrowserTab(url, target = "_blank") {
     window.open(url, target).focus();
 }
+
+/**
+ * Add slash '/' character explicitly to current browser url.
+ *
+ * @return {string}
+ */
+function getCurrentBrowserUrl() {
+    let href = document.location.href;
+    if (href.slice(-1) !== "/") {
+        href += "/";
+    }
+    return href;
+}

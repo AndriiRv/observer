@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.List;
 
 @Controller
-@RequestMapping("/observer/preferences")
+@RequestMapping("/preferences")
 public class ObserverPreferencesController {
 
     private static final Logger LOG = LoggerFactory.getLogger(ObserverPreferencesController.class);
@@ -51,7 +51,7 @@ public class ObserverPreferencesController {
         } catch (Exception e) {
             LOG.error("Exception during get all resources.", e);
         }
-        return "redirect:/observer/preferences";
+        return "redirect:/preferences";
     }
 
     @GetMapping("/resources")

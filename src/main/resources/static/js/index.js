@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function getResource(id, childDiv) {
         buildLoader(childDiv);
 
-        fetch(document.location.href + "/resources/" + id)
+        fetch(getCurrentBrowserUrl() + "resources/" + id)
             .then(response => {
                 removeLoader();
 
