@@ -1,6 +1,7 @@
 package com.defaultvalue.observer.testpurpose.controller;
 
 import com.defaultvalue.observer.observer.dtos.ResponseDto;
+import com.defaultvalue.observer.resources.helpers.ResourceStatusHelper;
 import com.defaultvalue.observer.resources.models.Resource;
 import com.defaultvalue.observer.observer.services.ObserverService;
 import org.slf4j.Logger;
@@ -23,14 +24,36 @@ public class ObserverTestController {
     private static final Logger LOG = LoggerFactory.getLogger(ObserverTestController.class);
 
     private final ObserverService<Resource> observerService;
+    private final ResourceStatusHelper resourceStatusHelper;
 
-    public ObserverTestController(@Qualifier("observerTestServiceImpl") ObserverService<Resource> observerService) {
+    public ObserverTestController(@Qualifier("observerTestServiceImpl") ObserverService<Resource> observerService,
+                                  ResourceStatusHelper resourceStatusHelper) {
         this.observerService = observerService;
+        this.resourceStatusHelper = resourceStatusHelper;
     }
 
     @GetMapping
     public String index() {
         return "index.html";
+    }
+
+    @GetMapping("/resources/count")
+    @ResponseBody
+    public ResponseEntity<ResponseDto> getCountOfResources() {
+        try {
+            int countOfResources = observerService.findAll().size();
+            if (countOfResources == 0) {
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(new ResponseDto("No one resources found. Please add resource."));
+            }
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ResponseDto(countOfResources));
+        } catch (Exception e) {
+            String errorMessage = "Resources are not fetching. Please try again.";
+            LOG.error("Exception during get all resources.", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseDto(errorMessage));
+        }
     }
 
     @GetMapping("/resources")

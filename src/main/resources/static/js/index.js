@@ -1,63 +1,76 @@
 document.addEventListener('DOMContentLoaded', function () {
 
-    let rootElement = document.querySelector(".root");
-    buildLoader(rootElement);
+    let rootDiv = document.querySelector(".root");
 
-    fetch(document.location.href + "/resources")
-        .then(response => {
-            removeLoader();
+    initResources();
 
-            response.json().then(function (json) {
-                buildUIResources(json);
+    function getCountOfResources() {
+        return fetch(getCurrentBrowserUrl() + "resources/count")
+            .then(response => response.json())
+            .then(data => {
+                return data;
             });
-        });
+    }
 
-    /**
-     * Create table with resources.
-     * Set height each div by condition:
-     * 1. if count of resources less and equals 2 than set height is 100vh - 2px where "2px" is border size and "100vh" is all user viewport;
-     * 2. Otherwise, 50vh - 2px where "2px" is border size and "50vh" a half from user viewport.
-     *
-     * @param json
-     */
-    function buildUIResources(json) {
-        let rootDiv = document.querySelector(".root");
+    function initResources() {
+        let response = getCountOfResources();
+        response.then(response => {
+            if (!response.data) {
+                rootDiv.append(buildErrorMessage(response.message));
+            } else {
+                let countOfResources = response.data;
+                for (let i = 0; i < countOfResources; i++) {
+                    let childDiv = document.createElement("div");
 
-        if (!json.data) {
-            rootDiv.append(buildErrorMessage(json.message));
-        } else {
-            for (let i = 0; i < json.data.length; i++) {
-                let resource = json.data[i];
+                    childDiv.style.height = "calc(50vh - 2px)";
+                    childDiv.className = "resource-element gray";
 
-                let childDiv = document.createElement("div");
-                addEvent(childDiv, "click", function () {
-                    getResource(resource.id, childDiv)
-                });
+                    rootDiv.append(childDiv);
+                    buildLoader(childDiv);
 
-                let hiddenInput = document.createElement("input");
-                hiddenInput.className = "resourceId";
-                hiddenInput.value = resource.id;
-                hiddenInput.hidden = true;
-                childDiv.append(hiddenInput);
-
-                childDiv.style.height = json.length <= 2 ? "calc(100vh - 2px)" : "calc(50vh - 2px)";
-
-                let resourceStatus = resource.status.toLowerCase();
-                childDiv.className = "resource-element " + (resourceStatus === undefined || resourceStatus == null ? "gray" : resourceStatus);
-
-                let spanElement = document.createElement("span");
-                spanElement.innerText = resource.name;
-
-                let anchorElement = document.createElement("a");
-                anchorElement.href = resource.path;
-                anchorElement.text = resource.path;
-                anchorElement.target = "_blank";
-
-                childDiv.append(spanElement, anchorElement)
-
-                rootDiv.append(childDiv);
+                    buildResource(childDiv, i);
+                }
             }
-        }
+        });
+    }
+
+    async function buildResource(childDiv, i) {
+        await fetch(getCurrentBrowserUrl() + "resources/" + ++i)
+            .then(response => {
+                response.json().then(function (json) {
+                    let resource = json.data;
+
+                    addEvent(childDiv, "click", function () {
+                        getResource(resource.id, childDiv)
+                    });
+
+                    childDiv.append(buildHiddenInputWithResourceId(resource.id));
+
+                    childDiv.style.height = json.length <= 2 ? "calc(100vh - 2px)" : "calc(50vh - 2px)";
+
+                    let resourceStatus = resource.status.toLowerCase();
+                    childDiv.className = "resource-element " + (resourceStatus === undefined || resourceStatus == null ? "gray" : resourceStatus);
+
+                    let spanElement = document.createElement("span");
+                    spanElement.innerText = resource.name;
+
+                    let anchorElement = document.createElement("a");
+                    anchorElement.href = resource.path;
+                    anchorElement.text = resource.path;
+                    anchorElement.target = "_blank";
+
+                    childDiv.append(spanElement, anchorElement);
+                    removeLoader(childDiv);
+                });
+            });
+    }
+
+    function buildHiddenInputWithResourceId(resourceId) {
+        let hiddenInput = document.createElement("input");
+        hiddenInput.className = "resourceId";
+        hiddenInput.value = resourceId;
+        hiddenInput.hidden = true;
+        return hiddenInput;
     }
 
     function buildErrorMessage(message) {
@@ -72,13 +85,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
         fetch(getCurrentBrowserUrl() + "resources/" + id)
             .then(response => {
-                removeLoader();
-
                 response.json().then(function (json) {
                     let resources = document.querySelectorAll(".resource-element");
                     for (const resource of resources) {
                         if (Number(resource.childNodes[0].value) === id) {
                             resource.className = "resource-element " + json.data.status.toLowerCase();
+                            removeLoader(childDiv);
                             break;
                         }
                     }

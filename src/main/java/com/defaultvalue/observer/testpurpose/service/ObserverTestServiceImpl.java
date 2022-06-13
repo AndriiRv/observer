@@ -12,6 +12,12 @@ import java.util.Random;
 @Service
 public class ObserverTestServiceImpl implements ObserverService<Resource> {
 
+    private List<Resource> resources;
+
+    public ObserverTestServiceImpl() {
+        this.resources = findAll();
+    }
+
     @Override
     public boolean save(Resource resource) {
         return false;
@@ -19,7 +25,7 @@ public class ObserverTestServiceImpl implements ObserverService<Resource> {
 
     @Override
     public Resource findById(Integer id) {
-        for (Resource resource : findAll()) {
+        for (Resource resource : resources) {
             if (resource.getId().equals(id)) {
                 resource.setStatus(getRandomStatus());
                 return resource;

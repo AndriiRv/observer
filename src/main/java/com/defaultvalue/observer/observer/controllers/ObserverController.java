@@ -1,6 +1,7 @@
 package com.defaultvalue.observer.observer.controllers;
 
 import com.defaultvalue.observer.observer.dtos.ResponseDto;
+import com.defaultvalue.observer.resources.helpers.ResourceStatusHelper;
 import com.defaultvalue.observer.resources.models.Resource;
 import com.defaultvalue.observer.observer.services.ObserverService;
 import org.slf4j.Logger;
@@ -21,9 +22,12 @@ public class ObserverController {
     private static final Logger LOG = LoggerFactory.getLogger(ObserverController.class);
 
     private final ObserverService<Resource> observerService;
+    private final ResourceStatusHelper resourceStatusHelper;
 
-    public ObserverController(@Qualifier("observerResourceServiceImpl") ObserverService<Resource> observerService) {
+    public ObserverController(@Qualifier("observerResourceServiceImpl") ObserverService<Resource> observerService,
+                              ResourceStatusHelper resourceStatusHelper) {
         this.observerService = observerService;
+        this.resourceStatusHelper = resourceStatusHelper;
     }
 
     @GetMapping("/observer")
@@ -31,17 +35,17 @@ public class ObserverController {
         return "index.html";
     }
 
-    @GetMapping("/resources")
+    @GetMapping("/resources/count")
     @ResponseBody
-    public ResponseEntity<ResponseDto> getResources() {
+    public ResponseEntity<ResponseDto> getCountOfResources() {
         try {
-            List<Resource> resources = observerService.findAll();
-            if (resources.isEmpty()) {
+            int countOfResources = resourceStatusHelper.countOfResources();
+            if (countOfResources == 0) {
                 return ResponseEntity.status(HttpStatus.OK)
                         .body(new ResponseDto("No one resources found. Please add resource."));
             }
             return ResponseEntity.status(HttpStatus.OK)
-                    .body(new ResponseDto(resources));
+                    .body(new ResponseDto(countOfResources));
         } catch (Exception e) {
             String errorMessage = "Resources are not fetching. Please try again.";
             LOG.error("Exception during get all resources.", e);
