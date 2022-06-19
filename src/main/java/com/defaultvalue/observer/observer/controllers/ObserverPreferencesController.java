@@ -74,7 +74,7 @@ public class ObserverPreferencesController {
     public ResponseEntity<ResponseDto> remove(@PathVariable Integer id) {
         try {
             return observerService.deleteById(id)
-                    ? ResponseEntity.ok().build()
+                    ? ResponseEntity.ok().body(new ResponseDto("OK"))
                     : ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         } catch (Exception e) {
             String errorMessage = "Resource is not removed. Please try again.";

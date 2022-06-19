@@ -20,7 +20,8 @@ document.addEventListener('DOMContentLoaded', function () {
         for (let i = 0; i < partOfResourceRecords.length; i++) {
             if (partOfResourceRecords[i].className) {
                 if (partOfResourceRecords[i].className === "resource-remove-js") {
-                    addEvent(resource.childNodes[i], "click", function () {
+                    let removeButton = resource.childNodes[i].childNodes[1];
+                    addEvent(removeButton, "click", function () {
                         removeResource(resourceId);
                     });
                     break;
@@ -38,8 +39,10 @@ document.addEventListener('DOMContentLoaded', function () {
         if (confirm('Are you sure you want to remove resource ' + id + " ?")) {
             fetch(indexPreferencesPage + "resources/" + id, {
                 method: "DELETE",
-            })
-            document.location.href = indexPreferencesPage;
+            }).then(response => response.json())
+                .then(() => {
+                    document.location.href = indexPreferencesPage;
+                });
         }
     }
 });
