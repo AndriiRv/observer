@@ -40,7 +40,7 @@ public class ObserverTestController {
             int countOfResources = observerService.findAll().size();
             if (countOfResources == 0) {
                 return ResponseEntity.status(HttpStatus.OK)
-                        .body(new ResponseDto("No one resources found. Please add resource."));
+                        .body(new ResponseDto("No one resources found. Please add some resource."));
             }
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new ResponseDto(countOfResources));
