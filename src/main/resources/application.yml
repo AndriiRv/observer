@@ -8,6 +8,8 @@ observer:
         enabled: true
         filename: resources
         filetype: txt
+        separate-character: "|"
+        comment-character: "//"
 
     httpclient:
         connectionTimeout: 5000

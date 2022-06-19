@@ -10,6 +10,8 @@ public class ObserverFileSettings {
     private String filename;
     private String filetype;
     private Boolean enabled;
+    private String separateCharacter;
+    private String commentCharacter;
 
     public String getFilename() {
         return filename;
@@ -33,5 +35,21 @@ public class ObserverFileSettings {
 
     public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public String getSeparateCharacter() {
+        return separateCharacter;
+    }
+
+    public void setSeparateCharacter(String separateCharacter) {
+        this.separateCharacter = separateCharacter;
+    }
+
+    public String getCommentCharacter() {
+        return commentCharacter;
+    }
+
+    public void setCommentCharacter(String commentCharacter) {
+        this.commentCharacter = commentCharacter;
     }
 }

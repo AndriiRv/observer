@@ -1,5 +1,7 @@
 package com.defaultvalue.observer.observer.repositories;
 
+import com.defaultvalue.observer.observer.helpers.ObserverResourceFileValidator;
+import com.defaultvalue.observer.observer.properties.ObserverFileSettings;
 import com.defaultvalue.observer.resources.models.Resource;
 import com.defaultvalue.observer.observer.helpers.ObserverFileHelper;
 import org.slf4j.Logger;
@@ -9,9 +11,9 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Component
 public class ObserverResourceFileRepositoryImpl implements ObserverRepository<Resource> {
@@ -19,9 +21,15 @@ public class ObserverResourceFileRepositoryImpl implements ObserverRepository<Re
     private static final Logger LOG = LoggerFactory.getLogger(ObserverResourceFileRepositoryImpl.class);
 
     private final ObserverFileHelper observerFileHelper;
+    private final ObserverResourceFileValidator observerResourceFileValidator;
+    private final ObserverFileSettings observerFileSettings;
 
-    public ObserverResourceFileRepositoryImpl(ObserverFileHelper observerFileHelper) {
+    public ObserverResourceFileRepositoryImpl(ObserverFileHelper observerFileHelper,
+                                              ObserverResourceFileValidator observerResourceFileValidator,
+                                              ObserverFileSettings observerFileSettings) {
         this.observerFileHelper = observerFileHelper;
+        this.observerResourceFileValidator = observerResourceFileValidator;
+        this.observerFileSettings = observerFileSettings;
     }
 
     @Override
@@ -34,7 +42,7 @@ public class ObserverResourceFileRepositoryImpl implements ObserverRepository<Re
     boolean saveAll(Collection<Resource> resources) {
         StringBuilder sb = new StringBuilder();
         for (Resource obj : resources) {
-            sb.append(obj.getName()).append("|").append(obj.getPath()).append("\n");
+            sb.append(obj.getName()).append(observerFileSettings.getSeparateCharacter()).append(obj.getPath()).append("\n");
         }
 
         try {
@@ -59,15 +67,35 @@ public class ObserverResourceFileRepositoryImpl implements ObserverRepository<Re
 
     @Override
     public Collection<Resource> findAll() {
+        String separateCharacter = observerFileSettings.getSeparateCharacter();
+        String commentCharacter = observerFileSettings.getCommentCharacter();
+
         try {
             List<String> strings = observerFileHelper.readTheFile();
-
             List<Resource> resources = new ArrayList<>();
-            for (int i = 0; i < strings.size(); i++) {
-                String partOfResource = strings.get(i);
-                String name = partOfResource.substring(0, partOfResource.indexOf("|"));
-                String path = partOfResource.substring(partOfResource.indexOf("|") + 1);
-                resources.add(new Resource(i + 1, name, path));
+
+            int index = 0;
+            for (String line : strings) {
+                if (observerResourceFileValidator.isResourceEmpty(line)) {
+                    continue;
+                }
+
+                if (observerResourceFileValidator.isResourceStartsWithCommentChar(line, commentCharacter)) {
+                    continue;
+                }
+
+                if (observerResourceFileValidator.isResourceContainsMoreThanOneCommentChar(line, commentCharacter)) {
+                    continue;
+                }
+
+                if (!observerResourceFileValidator.isResourceContainsSeparateLine(line, separateCharacter)) {
+                    continue;
+                }
+
+                String name = line.substring(0, line.indexOf(separateCharacter));
+                String path = line.substring(line.indexOf(separateCharacter) + 1);
+                resources.add(new Resource(index + 1, name, path));
+                index++;
             }
 
             return resources;
