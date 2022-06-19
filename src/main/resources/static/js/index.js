@@ -4,14 +4,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     initResources();
 
-    function getCountOfResources() {
-        return fetch(getCurrentBrowserUrl() + "resources/count")
-            .then(response => response.json())
-            .then(data => {
-                return data;
-            });
-    }
-
     function initResources() {
         let response = getCountOfResources();
         response.then(response => {
@@ -34,6 +26,14 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    function getCountOfResources() {
+        return fetch(getCurrentBrowserUrl() + "resources/count")
+            .then(response => response.json())
+            .then(data => {
+                return data;
+            });
+    }
+
     async function buildResource(childDiv, i) {
         await fetch(getCurrentBrowserUrl() + "resources/" + ++i)
             .then(response => {
@@ -51,15 +51,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     let resourceStatus = resource.status.toLowerCase();
                     childDiv.className = "resource-element " + (resourceStatus === undefined || resourceStatus == null ? "gray" : resourceStatus);
 
-                    let spanElement = document.createElement("span");
-                    spanElement.innerText = resource.name;
-
-                    let anchorElement = document.createElement("a");
-                    anchorElement.href = resource.path;
-                    anchorElement.text = resource.path;
-                    anchorElement.target = "_blank";
-
-                    childDiv.append(spanElement, anchorElement);
+                    childDiv.append(buildInfoResource(resource));
                     removeLoader(childDiv);
                 });
             });
@@ -71,6 +63,31 @@ document.addEventListener('DOMContentLoaded', function () {
         hiddenInput.value = resourceId;
         hiddenInput.hidden = true;
         return hiddenInput;
+    }
+
+    function buildInfoResource(resource) {
+        let infoResourceElement = document.createElement("div");
+        infoResourceElement.className = "info-resource";
+
+        let spanElement = buildNameResource(resource.name);
+        let anchorElement = buildUrlAnchor(resource.path);
+
+        infoResourceElement.append(spanElement, anchorElement);
+        return infoResourceElement;
+    }
+
+    function buildNameResource(resourceName) {
+        let spanElement = document.createElement("span");
+        spanElement.innerText = resourceName;
+        return spanElement;
+    }
+
+    function buildUrlAnchor(resourcePath) {
+        let anchorElement = document.createElement("a");
+        anchorElement.href = resourcePath;
+        anchorElement.text = resourcePath;
+        anchorElement.target = "_blank";
+        return anchorElement;
     }
 
     function buildErrorMessage(message) {

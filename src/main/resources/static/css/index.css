@@ -11,12 +11,16 @@ body {
 
 .resource-element {
     display: flex;
-    flex-direction: column-reverse;
     min-width: 500px;
     min-height: 200px;
     padding: 5px;
     border: black 1px solid;
     flex-grow: 1;
+}
+
+.info-resource {
+    display: flex;
+    flex-flow: column-reverse;
 }
 
 .resource-element.red {
