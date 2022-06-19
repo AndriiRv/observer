@@ -21,7 +21,7 @@ public class HttpClientHelper {
         this.httpClientSettings = httpClientSettings;
     }
 
-    public int performGetRequest(String path) {
+    public int getResponseStatus(String path) {
         return performRequest(path, "GET");
     }
 

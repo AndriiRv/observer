@@ -52,7 +52,7 @@ public class ObserverResourceServiceImpl implements ObserverService<Resource> {
     }
 
     Resource addResponseStatus(Resource resource) {
-        int httpResponseStatus = httpClientHelper.performGetRequest(resource.getPath());
+        int httpResponseStatus = httpClientHelper.getResponseStatus(resource.getPath());
         resource.setStatus(resourceStatusHelper.buildResourceStatus(httpResponseStatus));
         return resource;
     }
