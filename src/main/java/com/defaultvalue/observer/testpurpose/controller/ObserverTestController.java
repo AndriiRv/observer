@@ -1,7 +1,6 @@
 package com.defaultvalue.observer.testpurpose.controller;
 
 import com.defaultvalue.observer.observer.dtos.ResponseDto;
-import com.defaultvalue.observer.resources.helpers.ResourceStatusHelper;
 import com.defaultvalue.observer.resources.models.Resource;
 import com.defaultvalue.observer.observer.services.ObserverService;
 import org.slf4j.Logger;
@@ -24,12 +23,9 @@ public class ObserverTestController {
     private static final Logger LOG = LoggerFactory.getLogger(ObserverTestController.class);
 
     private final ObserverService<Resource> observerService;
-    private final ResourceStatusHelper resourceStatusHelper;
 
-    public ObserverTestController(@Qualifier("observerTestServiceImpl") ObserverService<Resource> observerService,
-                                  ResourceStatusHelper resourceStatusHelper) {
+    public ObserverTestController(@Qualifier("observerTestServiceImpl") ObserverService<Resource> observerService) {
         this.observerService = observerService;
-        this.resourceStatusHelper = resourceStatusHelper;
     }
 
     @GetMapping
@@ -49,8 +45,8 @@ public class ObserverTestController {
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new ResponseDto(countOfResources));
         } catch (Exception e) {
-            String errorMessage = "Resources are not fetching. Please try again.";
-            LOG.error("Exception during get all resources.", e);
+            String errorMessage = "Resources are not fetched. Please try again.";
+            LOG.error("Exception during get count of resources.", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ResponseDto(errorMessage));
         }
@@ -80,7 +76,7 @@ public class ObserverTestController {
                     .body(new ResponseDto(resource));
         } catch (Exception e) {
             String errorMessage = "Resource is not fetching. Please try again.";
-            LOG.error("Exception during get resource. id={}", id, e);
+            LOG.error("Exception during get resource by id. id={}", id, e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ResponseDto(errorMessage));
         }

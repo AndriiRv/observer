@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.List;
-
 @Controller
 public class ObserverController {
 
@@ -48,7 +46,7 @@ public class ObserverController {
                     .body(new ResponseDto(countOfResources));
         } catch (Exception e) {
             String errorMessage = "Resources are not fetching. Please try again.";
-            LOG.error("Exception during get all resources.", e);
+            LOG.error("Exception during get count of all resources.", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ResponseDto(errorMessage));
         }
@@ -63,7 +61,7 @@ public class ObserverController {
                     .body(new ResponseDto(resource));
         } catch (Exception e) {
             String errorMessage = "Resource is not fetching. Please try again.";
-            LOG.error("Exception during get resource. id={}", id, e);
+            LOG.error("Exception during get resource by id. id={}", id, e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ResponseDto(errorMessage));
         }

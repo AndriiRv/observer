@@ -49,7 +49,7 @@ public class ObserverPreferencesController {
             Resource resource = resourceTransform.transformFromCommand(resourceCommand);
             observerService.save(resource);
         } catch (Exception e) {
-            LOG.error("Exception during get all resources.", e);
+            LOG.error("Exception during save resource.", e);
         }
         return "redirect:/preferences";
     }
@@ -78,7 +78,7 @@ public class ObserverPreferencesController {
                     : ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         } catch (Exception e) {
             String errorMessage = "Resource is not removed. Please try again.";
-            LOG.error("Exception during remove resource.", e);
+            LOG.error("Exception during remove resource by id. id = {}", id, e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ResponseDto(errorMessage));
         }

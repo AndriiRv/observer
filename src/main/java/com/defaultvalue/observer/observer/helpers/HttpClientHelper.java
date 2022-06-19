@@ -37,7 +37,7 @@ public class HttpClientHelper {
 
             return con.getResponseCode();
         } catch (SocketTimeoutException e) {
-            LOG.error(e.getMessage() + " with " + path);
+            LOG.error(e.getMessage() + " with " + path, e);
 
             if (e.getMessage().equalsIgnoreCase("read timed out")) {
                 return HttpStatus.REQUEST_TIMEOUT.value();
@@ -45,7 +45,7 @@ public class HttpClientHelper {
                 return HttpStatus.BAD_REQUEST.value();
             }
         } catch (Exception e) {
-            LOG.error(e.getMessage() + " with " + path);
+            LOG.error(e.getMessage() + " with " + path, e);
 
             return HttpStatus.BAD_REQUEST.value();
         } finally {

@@ -40,7 +40,7 @@ public class ObserverResourceFileRepositoryImpl implements ObserverRepository<Re
         try {
             return observerFileHelper.saveToFile(sb.toString());
         } catch (IOException e) {
-            LOG.error("Exception during save all resources to the file.");
+            LOG.error("Exception during save all resources to the file.", e);
             return false;
         }
     }
@@ -52,7 +52,7 @@ public class ObserverResourceFileRepositoryImpl implements ObserverRepository<Re
                     .filter(e -> e.getId().equals(id))
                     .findFirst();
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error("Exception during find resource by id to the file. id = {}", id, e);
             return Optional.empty();
         }
     }
@@ -72,6 +72,7 @@ public class ObserverResourceFileRepositoryImpl implements ObserverRepository<Re
 
             return resources;
         } catch (Exception e) {
+            LOG.error("Exception during find all resources.", e);
             return Collections.emptyList();
         }
     }
@@ -83,7 +84,7 @@ public class ObserverResourceFileRepositoryImpl implements ObserverRepository<Re
             resources.remove(new Resource(id));
             return saveAll(resources);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error("Exception during delete resource by id. id = {}", id, e);
             return false;
         }
     }
