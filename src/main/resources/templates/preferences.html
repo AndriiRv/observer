@@ -18,7 +18,13 @@
 
 <div th:replace="fragments/header :: header"></div>
 
-<div class="preferences">
+<div class="errorMessageDiv">
+    <span class="message" th:if="${message} != null"
+          th:text="${message}">
+    </span>
+</div>
+
+<div class="preferences" th:unless="${message} != null">
     <form action="/observer/preferences/resources" method="POST">
         <div class="form-element">
             <div class="input-group mb-3">

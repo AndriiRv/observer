@@ -1,6 +1,7 @@
 package com.defaultvalue.observer.observer.controllers;
 
 import com.defaultvalue.observer.observer.dtos.ResponseDto;
+import com.defaultvalue.observer.observer.exceptions.ObserverException;
 import com.defaultvalue.observer.resources.helpers.ResourceStatusHelper;
 import com.defaultvalue.observer.resources.models.Resource;
 import com.defaultvalue.observer.observer.services.ObserverService;
@@ -44,6 +45,9 @@ public class ObserverController {
             }
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new ResponseDto(countOfResources));
+        } catch (ObserverException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseDto(e.getMessage()));
         } catch (Exception e) {
             String errorMessage = "Resources are not fetching. Please try again.";
             LOG.error("Exception during get count of all resources.", e);
@@ -59,6 +63,9 @@ public class ObserverController {
             Resource resource = observerService.findById(id);
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new ResponseDto(resource));
+        } catch (ObserverException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseDto(e.getMessage()));
         } catch (Exception e) {
             String errorMessage = "Resource is not fetching. Please try again.";
             LOG.error("Exception during get resource by id. id={}", id, e);

@@ -1,5 +1,6 @@
 package com.defaultvalue.observer.observer.repositories;
 
+import com.defaultvalue.observer.observer.exceptions.ObserverException;
 import com.defaultvalue.observer.observer.helpers.ObserverResourceFileValidator;
 import com.defaultvalue.observer.observer.properties.ObserverFileSettings;
 import com.defaultvalue.observer.resources.models.Resource;
@@ -100,8 +101,10 @@ public class ObserverResourceFileRepositoryImpl implements ObserverRepository<Re
 
             return resources;
         } catch (Exception e) {
-            LOG.error("Exception during find all resources.", e);
-            return Collections.emptyList();
+            String uuid = UUID.randomUUID().toString();
+            String errorMessage = "Resource is not fetching. Please check resource file and try again. Error id = " + uuid;
+            LOG.error(errorMessage, e);
+            throw new ObserverException(errorMessage);
         }
     }
 

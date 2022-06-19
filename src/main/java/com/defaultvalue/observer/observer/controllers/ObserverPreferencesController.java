@@ -1,6 +1,7 @@
 package com.defaultvalue.observer.observer.controllers;
 
 import com.defaultvalue.observer.observer.dtos.ResponseDto;
+import com.defaultvalue.observer.observer.exceptions.ObserverException;
 import com.defaultvalue.observer.resources.dtos.ResourceCommand;
 import com.defaultvalue.observer.resources.dtos.transform.ResourceTransform;
 import com.defaultvalue.observer.resources.models.Resource;
@@ -39,7 +40,15 @@ public class ObserverPreferencesController {
 
     @GetMapping
     public String index(Model model) {
-        model.addAttribute("resources", observerService.findAll());
+        try {
+            model.addAttribute("resources", observerService.findAll());
+        } catch (ObserverException e) {
+            model.addAttribute("message", e.getMessage());
+        } catch (Exception e) {
+            String errorMessage = "Resource is not fetching. Please try again.";
+            LOG.error("Exception during get all resources.", e);
+            model.addAttribute("message", errorMessage);
+        }
         return "preferences.html";
     }
 
@@ -61,6 +70,9 @@ public class ObserverPreferencesController {
             List<Resource> resources = observerService.findAll();
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new ResponseDto(resources));
+        } catch (ObserverException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseDto(e.getMessage()));
         } catch (Exception e) {
             String errorMessage = "Resource is not fetching. Please try again.";
             LOG.error("Exception during get all resources.", e);
