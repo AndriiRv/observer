@@ -2,6 +2,7 @@ package com.defaultvalue.observer.observer.controllers;
 
 import com.defaultvalue.observer.observer.dtos.ResponseDto;
 import com.defaultvalue.observer.observer.exceptions.ObserverException;
+import com.defaultvalue.observer.observer.validators.ObserverPreferencesValidator;
 import com.defaultvalue.observer.resources.dtos.ResourceCommand;
 import com.defaultvalue.observer.resources.dtos.transform.ResourceTransform;
 import com.defaultvalue.observer.resources.models.Resource;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -31,11 +33,14 @@ public class ObserverPreferencesController {
 
     private final ObserverService<Resource> observerService;
     private final ResourceTransform resourceTransform;
+    private final ObserverPreferencesValidator observerPreferencesValidator;
 
     public ObserverPreferencesController(@Qualifier("observerResourcePreferencesServiceImpl") ObserverService<Resource> observerService,
-                                         ResourceTransform resourceTransform) {
+                                         ResourceTransform resourceTransform,
+                                         ObserverPreferencesValidator observerPreferencesValidator) {
         this.observerService = observerService;
         this.resourceTransform = resourceTransform;
+        this.observerPreferencesValidator = observerPreferencesValidator;
     }
 
     @GetMapping
@@ -53,12 +58,18 @@ public class ObserverPreferencesController {
     }
 
     @PostMapping("/resources")
-    public String save(@ModelAttribute ResourceCommand resourceCommand) {
+    public String save(@ModelAttribute ResourceCommand resourceCommand, RedirectAttributes redirectAttributes) {
         try {
             Resource resource = resourceTransform.transformFromCommand(resourceCommand);
+            observerPreferencesValidator.isDataValid(resource);
             observerService.save(resource);
+        } catch (ObserverException e) {
+            LOG.error(e.getMessage(), e);
+            redirectAttributes.addFlashAttribute("resourceDataErrorMessage", e.getMessage());
         } catch (Exception e) {
+            String errorMessage = "Resource is not saved. Please try again.";
             LOG.error("Exception during save resource.", e);
+            redirectAttributes.addFlashAttribute("resourceDataErrorMessage", errorMessage);
         }
         return "redirect:/preferences";
     }

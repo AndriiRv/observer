@@ -17,7 +17,6 @@ body {
 }
 
 .form-element {
-    display: flex;
     width: 20%;
     margin: 0 auto;
     align-items: center;
@@ -26,6 +25,11 @@ body {
 
 .form-elements {
     padding-right: 10px;
+}
+
+.error-message {
+    color: red;
+    background-color: darkred;
 }
 
 .form-element .input-group {

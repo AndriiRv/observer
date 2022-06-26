@@ -35,8 +35,11 @@
                 </div>
                 <div class="input-group">
                     <label>
-                        <input name="path" type="search" class="form-control" placeholder="Name of path" required/>
+                        <input name="path" type="url" class="form-control" placeholder="Name of path" required/>
                     </label>
+                </div>
+                <div class="input-group" th:if="${resourceDataErrorMessage} != null">
+                    <span class="error-message" th:text="${resourceDataErrorMessage}"></span>
                 </div>
             </div>
             <button class="btn btn-primary" type="submit">Save</button>
