@@ -50,7 +50,7 @@ public class ObserverResourceFileValidator {
      * @param separateCharacter passed separate character as String.
      * @return boolean flag.
      */
-    public boolean isResourceContainsSeparateLine(String line, String separateCharacter) {
+    public boolean isResourceContainsSeparateChar(String line, String separateCharacter) {
         return !isResourceEmpty(line) && line.contains(separateCharacter);
     }
 

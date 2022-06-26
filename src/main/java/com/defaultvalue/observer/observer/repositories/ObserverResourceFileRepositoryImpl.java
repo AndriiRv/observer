@@ -89,7 +89,7 @@ public class ObserverResourceFileRepositoryImpl implements ObserverRepository<Re
                     continue;
                 }
 
-                if (!observerResourceFileValidator.isResourceContainsSeparateLine(line, separateCharacter)) {
+                if (!observerResourceFileValidator.isResourceContainsSeparateChar(line, separateCharacter)) {
                     continue;
                 }
 
