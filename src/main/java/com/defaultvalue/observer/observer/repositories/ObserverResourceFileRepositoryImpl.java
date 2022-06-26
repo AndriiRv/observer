@@ -1,7 +1,7 @@
 package com.defaultvalue.observer.observer.repositories;
 
 import com.defaultvalue.observer.observer.exceptions.ObserverException;
-import com.defaultvalue.observer.observer.helpers.ObserverResourceFileValidator;
+import com.defaultvalue.observer.observer.validators.ObserverResourceFileValidator;
 import com.defaultvalue.observer.observer.properties.ObserverFileSettings;
 import com.defaultvalue.observer.resources.models.Resource;
 import com.defaultvalue.observer.observer.helpers.ObserverFileHelper;

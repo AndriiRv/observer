@@ -1,4 +1,4 @@
-package com.defaultvalue.observer.observer.helpers;
+package com.defaultvalue.observer.observer.validators;
 
 import org.springframework.stereotype.Component;
 
