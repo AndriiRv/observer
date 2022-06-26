@@ -16,7 +16,7 @@
 </head>
 <body>
 
-<div th:replace="fragments/header :: header"></div>
+<div th:insert="fragments/header :: header(enableFilter=true)"></div>
 
 <div class="root"></div>
 
@@ -28,6 +28,7 @@
 <script th:src="@{/js/utils.js}"></script>
 <script th:src="@{/js/loader.js}"></script>
 <script th:src="@{/js/index.js}"></script>
+<script th:src="@{/js/filter-resources.js}"></script>
 
 </body>
 </html>

@@ -1,3 +1,6 @@
+
+var resources = new Set();
+
 document.addEventListener('DOMContentLoaded', function () {
 
     let rootDiv = document.querySelector(".root");
@@ -52,6 +55,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     childDiv.className = "resource-element " + (resourceStatus === undefined || resourceStatus == null ? "gray" : resourceStatus);
 
                     childDiv.append(buildInfoResource(resource));
+
+                    resources.add(resource);
+
                     removeLoader(childDiv);
                 });
             });
