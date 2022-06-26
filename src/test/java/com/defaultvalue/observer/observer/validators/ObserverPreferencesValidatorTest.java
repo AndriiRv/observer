@@ -6,12 +6,12 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class ObserverPreferencesValidatorTest {
+class ObserverPreferencesValidatorTest {
 
-    private ObserverPreferencesValidator validator = new ObserverPreferencesValidator();
+    private final ObserverPreferencesValidator validator = new ObserverPreferencesValidator();
 
     @Test
-    public void test_isPathValid() {
+    void test_isPathValid() {
         assertAll(
                 () -> assertTrue(validator.isPathValid("https://www.example.com")),
                 () -> assertTrue(validator.isPathValid("http://www.example.com")),
