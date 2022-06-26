@@ -50,7 +50,7 @@ public class ObserverPreferencesController {
         } catch (ObserverException e) {
             model.addAttribute("message", e.getMessage());
         } catch (Exception e) {
-            String errorMessage = "Resource is not fetching. Please try again.";
+            String errorMessage = "Resources are not fetching. Please try again.";
             LOG.error("Exception during get all resources.", e);
             model.addAttribute("message", errorMessage);
         }
@@ -85,7 +85,7 @@ public class ObserverPreferencesController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ResponseDto(e.getMessage()));
         } catch (Exception e) {
-            String errorMessage = "Resource is not fetching. Please try again.";
+            String errorMessage = "Resources are not fetching. Please try again.";
             LOG.error("Exception during get all resources.", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ResponseDto(errorMessage));

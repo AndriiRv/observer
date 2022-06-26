@@ -102,7 +102,7 @@ public class ObserverResourceFileRepositoryImpl implements ObserverRepository<Re
             return resources;
         } catch (Exception e) {
             String uuid = UUID.randomUUID().toString();
-            String errorMessage = "Resource is not fetching. Please check resource file and try again. Error id = " + uuid;
+            String errorMessage = "Resources are not fetching. Please check resource file and try again. Error id = " + uuid;
             LOG.error(errorMessage, e);
             throw new ObserverException(errorMessage);
         }
