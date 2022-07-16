@@ -42,6 +42,10 @@ body {
     height: calc(100vh - 142px);
 }
 
+.resource-name-js {
+    cursor: pointer;
+}
+
 @media screen and (max-width: 1024px) {
     .resources-in-table {
         width: 100%;

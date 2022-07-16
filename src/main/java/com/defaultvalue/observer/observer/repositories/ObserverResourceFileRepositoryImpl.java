@@ -35,8 +35,15 @@ public class ObserverResourceFileRepositoryImpl implements ObserverRepository<Re
 
     @Override
     public boolean save(Resource resource) {
-        Collection<Resource> resources = findAll();
-        resources.add(resource);
+        List<Resource> resources = new ArrayList<>(findAll());
+        Resource updatableResource = findById(resource.getId()).orElse(null);
+        if (updatableResource != null) {
+            int resourceIndex = resources.indexOf(updatableResource);
+            resources.remove(resourceIndex);
+            resources.add(resourceIndex, resource);
+        } else {
+            resources.add(resource);
+        }
         return saveAll(resources);
     }
 

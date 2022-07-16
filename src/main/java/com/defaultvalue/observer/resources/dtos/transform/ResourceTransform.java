@@ -8,6 +8,6 @@ import org.springframework.stereotype.Component;
 public class ResourceTransform {
 
     public Resource transformFromCommand(ResourceCommand command) {
-        return new Resource(command.getName(), command.getPath());
+        return new Resource(command.getId(), command.getName(), command.getPath());
     }
 }

@@ -74,6 +74,25 @@ public class ObserverPreferencesController {
         return "redirect:/preferences";
     }
 
+    @PutMapping("/resources")
+    @ResponseBody
+    public ResponseEntity<ResponseDto> update(@RequestBody ResourceCommand resourceCommand) {
+        try {
+            Resource resource = resourceTransform.transformFromCommand(resourceCommand);
+            observerService.save(resource);
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ResponseDto(null));
+        } catch (ObserverException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseDto(e.getMessage()));
+        } catch (Exception e) {
+            String errorMessage = "Resource is not saved. Please try again.";
+            LOG.error("Exception during save resource.", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseDto(errorMessage));
+        }
+    }
+
     @GetMapping("/resources")
     @ResponseBody
     public ResponseEntity<ResponseDto> getResources() {

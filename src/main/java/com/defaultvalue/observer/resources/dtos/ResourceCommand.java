@@ -2,8 +2,15 @@ package com.defaultvalue.observer.resources.dtos;
 
 public class ResourceCommand {
 
+    private Integer id;
     private String name;
     private String path;
+
+    public ResourceCommand(Integer id, String name, String path) {
+        this.id = id;
+        this.name = name;
+        this.path = path;
+    }
 
     public ResourceCommand(String name, String path) {
         this.name = name;
@@ -11,6 +18,14 @@ public class ResourceCommand {
     }
 
     public ResourceCommand() {
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getName() {
