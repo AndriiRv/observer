@@ -2,11 +2,11 @@ package com.defaultvalue.observer.observer.controllers;
 
 import com.defaultvalue.observer.observer.dtos.ResponseDto;
 import com.defaultvalue.observer.observer.exceptions.ObserverException;
+import com.defaultvalue.observer.observer.services.ObserverPreferencesService;
 import com.defaultvalue.observer.observer.validators.ObserverPreferencesValidator;
 import com.defaultvalue.observer.resources.dtos.ResourceCommand;
 import com.defaultvalue.observer.resources.dtos.transform.ResourceTransform;
 import com.defaultvalue.observer.resources.models.Resource;
-import com.defaultvalue.observer.observer.services.ObserverService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -19,7 +19,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -31,14 +34,14 @@ public class ObserverPreferencesController {
 
     private static final Logger LOG = LoggerFactory.getLogger(ObserverPreferencesController.class);
 
-    private final ObserverService<Resource> observerService;
+    private final ObserverPreferencesService<Resource> observerPreferencesService;
     private final ResourceTransform resourceTransform;
     private final ObserverPreferencesValidator observerPreferencesValidator;
 
-    public ObserverPreferencesController(@Qualifier("observerResourcePreferencesServiceImpl") ObserverService<Resource> observerService,
+    public ObserverPreferencesController(@Qualifier("observerResourcePreferencesServiceImpl") ObserverPreferencesService<Resource> observerPreferencesService,
                                          ResourceTransform resourceTransform,
                                          ObserverPreferencesValidator observerPreferencesValidator) {
-        this.observerService = observerService;
+        this.observerPreferencesService = observerPreferencesService;
         this.resourceTransform = resourceTransform;
         this.observerPreferencesValidator = observerPreferencesValidator;
     }
@@ -46,7 +49,7 @@ public class ObserverPreferencesController {
     @GetMapping
     public String index(Model model) {
         try {
-            model.addAttribute("resources", observerService.findAll());
+            model.addAttribute("resources", observerPreferencesService.findAll());
         } catch (ObserverException e) {
             model.addAttribute("message", e.getMessage());
         } catch (Exception e) {
@@ -62,7 +65,7 @@ public class ObserverPreferencesController {
         try {
             Resource resource = resourceTransform.transformFromCommand(resourceCommand);
             observerPreferencesValidator.isDataValid(resource);
-            observerService.save(resource);
+            observerPreferencesService.save(resource);
         } catch (ObserverException e) {
             LOG.error(e.getMessage(), e);
             redirectAttributes.addFlashAttribute("resourceDataErrorMessage", e.getMessage());
@@ -79,7 +82,7 @@ public class ObserverPreferencesController {
     public ResponseEntity<ResponseDto> update(@RequestBody ResourceCommand resourceCommand) {
         try {
             Resource resource = resourceTransform.transformFromCommand(resourceCommand);
-            observerService.save(resource);
+            observerPreferencesService.save(resource);
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new ResponseDto(null));
         } catch (ObserverException e) {
@@ -97,7 +100,7 @@ public class ObserverPreferencesController {
     @ResponseBody
     public ResponseEntity<ResponseDto> getResources() {
         try {
-            List<Resource> resources = observerService.findAll();
+            List<Resource> resources = observerPreferencesService.findAll();
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new ResponseDto(resources));
         } catch (ObserverException e) {
@@ -111,11 +114,28 @@ public class ObserverPreferencesController {
         }
     }
 
+    @PutMapping("/resources/swap")
+    @ResponseBody
+    public ResponseEntity<ResponseDto> swapResources(@RequestParam Integer selectedResourceId, @RequestParam Integer newSelectedIndex) {
+        try {
+            observerPreferencesService.swap(selectedResourceId, newSelectedIndex);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } catch (ObserverException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseDto(e.getMessage()));
+        } catch (Exception e) {
+            String errorMessage = "Resources are not swapped. Please try again.";
+            LOG.error("Exception during swap resources.", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseDto(errorMessage));
+        }
+    }
+
     @DeleteMapping("/resources/{id}")
     @ResponseBody
     public ResponseEntity<ResponseDto> remove(@PathVariable Integer id) {
         try {
-            return observerService.deleteById(id)
+            return observerPreferencesService.deleteById(id)
                     ? ResponseEntity.ok().body(new ResponseDto("OK"))
                     : ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         } catch (Exception e) {

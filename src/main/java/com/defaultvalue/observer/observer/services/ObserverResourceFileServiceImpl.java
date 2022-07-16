@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -23,6 +24,11 @@ public class ObserverResourceFileServiceImpl implements ObserverService<Resource
     @Override
     public boolean save(Resource resource) {
         return observerRepository.save(resource);
+    }
+
+    @Override
+    public boolean saveAll(Collection<Resource> resources) {
+        return observerRepository.saveAll(resources);
     }
 
     @Override

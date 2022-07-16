@@ -47,7 +47,8 @@ public class ObserverResourceFileRepositoryImpl implements ObserverRepository<Re
         return saveAll(resources);
     }
 
-    boolean saveAll(Collection<Resource> resources) {
+    @Override
+    public boolean saveAll(Collection<Resource> resources) {
         StringBuilder sb = new StringBuilder();
         for (Resource obj : resources) {
             sb.append(obj.getName()).append(observerFileSettings.getSeparateCharacter()).append(obj.getPath()).append("\n");

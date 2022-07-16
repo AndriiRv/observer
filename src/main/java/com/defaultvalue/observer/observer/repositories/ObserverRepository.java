@@ -7,6 +7,8 @@ public interface ObserverRepository<T> {
 
     boolean save(T obj);
 
+    boolean saveAll(Collection<T> resources);
+
     Optional<T> findById(Integer id);
 
     Collection<T> findAll();

@@ -6,6 +6,7 @@ import com.defaultvalue.observer.observer.services.ObserverService;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 
@@ -20,6 +21,11 @@ public class ObserverTestServiceImpl implements ObserverService<Resource> {
 
     @Override
     public boolean save(Resource resource) {
+        return false;
+    }
+
+    @Override
+    public boolean saveAll(Collection<Resource> resources) {
         return false;
     }
 

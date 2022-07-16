@@ -6,6 +6,7 @@ import com.defaultvalue.observer.resources.models.Resource;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -26,6 +27,11 @@ public class ObserverResourceServiceImpl implements ObserverService<Resource> {
     @Override
     public boolean save(Resource obj) {
         return observerService.save(obj);
+    }
+
+    @Override
+    public boolean saveAll(Collection<Resource> resources) {
+        return observerService.saveAll(resources);
     }
 
     @Override

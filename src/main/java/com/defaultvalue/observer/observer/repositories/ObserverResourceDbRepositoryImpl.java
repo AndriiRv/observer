@@ -13,6 +13,11 @@ public class ObserverResourceDbRepositoryImpl implements ObserverRepository<Reso
     }
 
     @Override
+    public boolean saveAll(Collection<Resource> resources) {
+        return false;
+    }
+
+    @Override
     public Optional<Resource> findById(Integer id) {
         return Optional.empty();
     }
