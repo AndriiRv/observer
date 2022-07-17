@@ -5,6 +5,9 @@ server:
 
 observer:
     version: 0.0.2
+    banner:
+        enabled: true
+        path: util/banner.txt
     files:
         enabled: true
         filename: resources
