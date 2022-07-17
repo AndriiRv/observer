@@ -7,6 +7,7 @@
 
 ## 0.0.2 (2022-07-17)
 
+- Added release notes (2ccd1557).
 - Add application custom banner to logs (ab22d992).
 - Add application version indicator (f50629e1).
 - Implement swap order of resources in Preferences page (15f30edf).
