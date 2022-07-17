@@ -7,7 +7,10 @@
 
 ## 0.0.2 (2022-07-17)
 
-- Added release notes (2ccd1557).
+- Change loader icon with iridescent colors of the rainbow (4904f1fa).
+- Change color to black of text on orange div (1b9d38b2).
+- Add observer.httpclient.stacktrace.enabled flag (d999df55).
+- Add release notes (2ccd1557).
 - Add application custom banner to logs (ab22d992).
 - Add application version indicator (f50629e1).
 - Implement swap order of resources in Preferences page (15f30edf).
