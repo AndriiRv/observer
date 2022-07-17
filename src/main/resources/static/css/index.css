@@ -31,6 +31,10 @@ body {
     background-color: orange;
 }
 
+.resource-element.orange span, .resource-element.orange a {
+    color: black;
+}
+
 .resource-element.green {
     background-color: green;
 }
