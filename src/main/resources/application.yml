@@ -18,3 +18,5 @@ observer:
     httpclient:
         connectionTimeout: 5000
         readTimeout: 10000
+        stacktrace:
+            enabled: false

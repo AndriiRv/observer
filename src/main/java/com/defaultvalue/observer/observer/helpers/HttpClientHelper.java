@@ -1,6 +1,7 @@
 package com.defaultvalue.observer.observer.helpers;
 
-import com.defaultvalue.observer.observer.properties.HttpClientSettings;
+import com.defaultvalue.observer.observer.properties.httpclient.ObserverHttpClientSettings;
+import com.defaultvalue.observer.observer.properties.httpclient.ObserverHttpClientStacktraceSettings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -15,10 +16,13 @@ public class HttpClientHelper {
 
     private static final Logger LOG = LoggerFactory.getLogger(HttpClientHelper.class);
 
-    private final HttpClientSettings httpClientSettings;
+    private final ObserverHttpClientSettings observerHttpClientSettings;
+    private final ObserverHttpClientStacktraceSettings observerHttpClientStacktraceSettings;
 
-    public HttpClientHelper(HttpClientSettings httpClientSettings) {
-        this.httpClientSettings = httpClientSettings;
+    public HttpClientHelper(ObserverHttpClientSettings observerHttpClientSettings,
+                            ObserverHttpClientStacktraceSettings observerHttpClientStacktraceSettings) {
+        this.observerHttpClientSettings = observerHttpClientSettings;
+        this.observerHttpClientStacktraceSettings = observerHttpClientStacktraceSettings;
     }
 
     public int getResponseStatus(String path) {
@@ -32,12 +36,16 @@ public class HttpClientHelper {
             con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod(httpMethod);
 
-            con.setConnectTimeout(httpClientSettings.getConnectionTimeout());
-            con.setReadTimeout(httpClientSettings.getReadTimeout());
+            con.setConnectTimeout(observerHttpClientSettings.getConnectionTimeout());
+            con.setReadTimeout(observerHttpClientSettings.getReadTimeout());
 
             return con.getResponseCode();
         } catch (SocketTimeoutException e) {
-            LOG.error(e.getMessage() + " with " + path, e);
+            if (observerHttpClientStacktraceSettings.getEnabled()) {
+                LOG.error(e.getMessage() + " with " + path, e);
+            } else {
+                LOG.error(e.getMessage() + " with " + path);
+            }
 
             if (e.getMessage().equalsIgnoreCase("read timed out")) {
                 return HttpStatus.REQUEST_TIMEOUT.value();
@@ -45,7 +53,11 @@ public class HttpClientHelper {
                 return HttpStatus.BAD_REQUEST.value();
             }
         } catch (Exception e) {
-            LOG.error(e.getMessage() + " with " + path, e);
+            if (observerHttpClientStacktraceSettings.getEnabled()) {
+                LOG.error(e.getMessage() + " with " + path, e);
+            } else {
+                LOG.error(e.getMessage() + " with " + path);
+            }
 
             return HttpStatus.BAD_REQUEST.value();
         } finally {
