@@ -9,6 +9,7 @@
                 <img class="logo" th:src="@{/images/favicon.svg}" alt="Logo"/>
                 <span class="name-of-application">Observer</span>
             </a>
+            <span class="version">Version: <span th:text="${@environment.getProperty('observer.version')}"></span></span>
         </div>
 
         <div class="buttons-and-search">
