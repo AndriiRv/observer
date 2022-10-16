@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     childDiv.className = "resource-element gray";
 
                     rootDiv.append(childDiv);
-                    buildLoader(childDiv);
+                    addLoader(childDiv);
 
                     buildResource(childDiv, i);
                 }
@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function getResource(id, childDiv) {
-        buildLoader(childDiv);
+        addLoader(childDiv);
 
         fetch(getCurrentBrowserUrl() + "resources/" + id)
             .then(response => {

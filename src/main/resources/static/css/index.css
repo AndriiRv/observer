@@ -21,6 +21,7 @@ body {
 .info-resource {
     display: flex;
     flex-flow: column-reverse;
+    mix-blend-mode: difference;
 }
 
 .resource-element.red {
@@ -37,6 +38,10 @@ body {
 
 .resource-element.green {
     background-color: green;
+}
+
+.resource-element:not(.loader) .info-resource {
+    mix-blend-mode: unset;
 }
 
 .resource-element a {
