@@ -3,17 +3,18 @@ package com.defaultvalue.observer.observer.controllers;
 import com.defaultvalue.observer.observer.dtos.ResponseDto;
 import com.defaultvalue.observer.observer.exceptions.ObserverException;
 import com.defaultvalue.observer.observer.services.ObserverPreferencesService;
-import com.defaultvalue.observer.observer.validators.ObserverPreferencesValidator;
 import com.defaultvalue.observer.resources.dtos.ResourceCommand;
 import com.defaultvalue.observer.resources.dtos.transform.ResourceTransform;
 import com.defaultvalue.observer.resources.models.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -26,7 +27,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/preferences")
@@ -36,14 +39,11 @@ public class ObserverPreferencesController {
 
     private final ObserverPreferencesService<Resource> observerPreferencesService;
     private final ResourceTransform resourceTransform;
-    private final ObserverPreferencesValidator observerPreferencesValidator;
 
     public ObserverPreferencesController(@Qualifier("observerResourcePreferencesServiceImpl") ObserverPreferencesService<Resource> observerPreferencesService,
-                                         ResourceTransform resourceTransform,
-                                         ObserverPreferencesValidator observerPreferencesValidator) {
+                                         ResourceTransform resourceTransform) {
         this.observerPreferencesService = observerPreferencesService;
         this.resourceTransform = resourceTransform;
-        this.observerPreferencesValidator = observerPreferencesValidator;
     }
 
     @GetMapping
@@ -61,10 +61,17 @@ public class ObserverPreferencesController {
     }
 
     @PostMapping("/resources")
-    public String save(@ModelAttribute ResourceCommand resourceCommand, RedirectAttributes redirectAttributes) {
+    public String save(@ModelAttribute @Valid ResourceCommand resourceCommand, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
+            String errorMessage = bindingResult.getAllErrors().stream()
+                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                    .collect(Collectors.joining("\n"));
+            redirectAttributes.addFlashAttribute("resourceDataErrorMessage", errorMessage);
+            return "redirect:/preferences";
+        }
+
         try {
             Resource resource = resourceTransform.transformFromCommand(resourceCommand);
-            observerPreferencesValidator.isDataValid(resource);
             observerPreferencesService.save(resource);
         } catch (ObserverException e) {
             LOG.error(e.getMessage(), e);
@@ -79,7 +86,15 @@ public class ObserverPreferencesController {
 
     @PutMapping("/resources")
     @ResponseBody
-    public ResponseEntity<ResponseDto> update(@RequestBody ResourceCommand resourceCommand) {
+    public ResponseEntity<ResponseDto> update(@RequestBody @Valid ResourceCommand resourceCommand, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            String errorMessage = bindingResult.getAllErrors().stream()
+                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                    .collect(Collectors.joining("\n"));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseDto(errorMessage));
+        }
+
         try {
             Resource resource = resourceTransform.transformFromCommand(resourceCommand);
             observerPreferencesService.save(resource);

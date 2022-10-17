@@ -1,5 +1,8 @@
 package com.defaultvalue.observer.resources.dtos;
 
+import com.defaultvalue.observer.resources.validator.ResourceValid;
+
+@ResourceValid
 public class ResourceCommand {
 
     private Integer id;
@@ -42,5 +45,14 @@ public class ResourceCommand {
 
     public void setPath(String path) {
         this.path = path;
+    }
+
+    @Override
+    public String toString() {
+        return "ResourceCommand{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", path='" + path + '\'' +
+                '}';
     }
 }

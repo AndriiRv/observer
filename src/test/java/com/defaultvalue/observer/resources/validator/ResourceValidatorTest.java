@@ -1,14 +1,13 @@
-package com.defaultvalue.observer.observer.validators;
+package com.defaultvalue.observer.resources.validator;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class ObserverPreferencesValidatorTest {
+public class ResourceValidatorTest {
 
-    private final ObserverPreferencesValidator validator = new ObserverPreferencesValidator();
+    private final ResourceValidator validator = new ResourceValidator();
 
     @Test
     void test_isPathValid() {
@@ -19,6 +18,7 @@ class ObserverPreferencesValidatorTest {
                 () -> assertTrue(validator.isPathValid("http://example.com")),
                 () -> assertFalse(validator.isPathValid("https://example")),
                 () -> assertFalse(validator.isPathValid("http://example")),
+                () -> assertFalse(validator.isPathValid("https://k")),
                 () -> assertFalse(validator.isPathValid("https://.")),
                 () -> assertFalse(validator.isPathValid("http://.")),
                 () -> assertFalse(validator.isPathValid("https://")),

@@ -23,6 +23,11 @@ public class ObserverResourceFileServiceImpl implements ObserverService<Resource
 
     @Override
     public boolean save(Resource resource) {
+        if (resource.getName() == null) {
+            resource.setName(observerRepository.findById(resource.getId()).orElseThrow().getName());
+        } else if (resource.getPath() == null) {
+            resource.setPath(observerRepository.findById(resource.getId()).orElseThrow().getPath());
+        }
         return observerRepository.save(resource);
     }
 
