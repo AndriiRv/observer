@@ -42,8 +42,12 @@ body {
     height: calc(100vh - 180px);
 }
 
-.resource-name-js {
+.resource-name-js, .resource-path-js {
     cursor: pointer;
+}
+
+.resource-remove-js button {
+    width: 100%;
 }
 
 @media screen and (max-width: 1024px) {

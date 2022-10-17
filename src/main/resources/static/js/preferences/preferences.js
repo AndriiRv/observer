@@ -8,63 +8,64 @@ document.addEventListener('DOMContentLoaded', function () {
         let resource = resources[i];
         let resourceId = resource.children[0].textContent;
 
-        addRenameEventToResourceName(resource);
+        addRenameEventToResource(resource, "resource-name-js");
+        addRenameEventToResource(resource, "resource-path-js");
         addClickEventToRemoveButton(resource, resourceId);
     }
 
-    function addRenameEventToResourceName(resource) {
-        let resourceNameElement = Array.from(resource.childNodes).filter(x => x.classList == "resource-name-js")[0];
-        addEvent(resourceNameElement, "click", function () {
-            renameResource(resourceNameElement);
+    function addRenameEventToResource(resource, className) {
+        let resourcePart = Array.from(resource.childNodes).filter(x => x.classList == className)[0];
+        addEvent(resourcePart, "click", function () {
+            renameResource(resourcePart, className);
         });
 
-        addEvent(resourceNameElement, "focusout", function () {
-            submitRenameResource(resourceNameElement);
+        addEvent(resourcePart, "focusout", function () {
+            submitRenameResource(resource, resourcePart, className);
         });
     }
 
-    function renameResource(resourceNameElement) {
-        previousResourceName = resourceNameElement.textContent;
-        let renameInputElement = document.querySelector(".resource-name-js input");
+    function renameResource(resourcePart, className) {
+        previousResourceName = resourcePart.textContent;
+        let renameInputElement = document.querySelector("." + className + " input");
 
         if (!renameInputElement) {
             renameInputElement = document.createElement("input");
 
-            if (resourceNameElement.textContent) {
-                renameInputElement.value = resourceNameElement.textContent;
+            if (resourcePart.textContent) {
+                renameInputElement.value = resourcePart.textContent;
             } else {
-                if (resourceNameElement.childNodes[0]) {
-                    renameInputElement.value = resourceNameElement.childNodes[0].value;
+                if (resourcePart.childNodes[0]) {
+                    renameInputElement.value = resourcePart.childNodes[0].value;
                 } else {
                     renameInputElement.value = "";
                 }
             }
 
-            resourceNameElement.textContent = "";
-            resourceNameElement.append(renameInputElement);
+            resourcePart.textContent = "";
+            resourcePart.append(renameInputElement);
             renameInputElement.focus();
         }
     }
 
-    function submitRenameResource(resourceNameElement) {
-        let renameInputElement = document.querySelector(".resource-name-js input");
+    function submitRenameResource(resourceElement, resourcePart, className) {
+        let renameInputElement = document.querySelector("." + className + " input");
 
         if (previousResourceName === renameInputElement.value) {
-            submitInputtedText(resourceNameElement, renameInputElement);
+            submitInputtedText(resourcePart, renameInputElement);
             return;
         }
 
-        submitInputtedText(resourceNameElement, renameInputElement);
+        submitInputtedText(resourcePart, renameInputElement);
 
-        let idElement = resourceNameElement.previousElementSibling.textContent;
-        let urlElement = resourceNameElement.nextElementSibling.childNodes[0].href;
-
-        let body = JSON.stringify({id: idElement, name: resourceNameElement.textContent, path: urlElement});
+        let idElement = resourceElement.firstElementChild.textContent;
+        let body = className === "resource-name-js"
+            ? JSON.stringify({id: idElement, name: resourcePart.textContent})
+            : JSON.stringify({id: idElement, path: resourcePart.textContent});
 
         putAjaxRequestWithBody(indexPreferencesPage + "resources", body);
 
-        function submitInputtedText(resourceNameElement, renameInputElement) {
-            resourceNameElement.textContent = renameInputElement.value;
+        function submitInputtedText(resourcePart, renameInputElement) {
+            resourcePart.textContent = renameInputElement.value;
             renameInputElement.remove();
         }
     }
