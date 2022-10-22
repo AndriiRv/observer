@@ -1,0 +1,42 @@
+
+.loader {
+    height: 100%;
+    margin: 0 auto;
+    animation: rotate 10s infinite;
+}
+
+@keyframes rotate {
+    0% {
+        background: darkred;
+    }
+    10% {
+        background: red;
+    }
+    20% {
+        background: orange;
+    }
+    30% {
+        background: yellow;
+    }
+    40% {
+        background: green;
+    }
+    50% {
+        background: blue;
+    }
+    60% {
+        background: rebeccapurple;
+    }
+    70% {
+        background: pink;
+    }
+    80% {
+        background: brown;
+    }
+    90% {
+        background: gray;
+    }
+    100% {
+        background: black;
+    }
+}

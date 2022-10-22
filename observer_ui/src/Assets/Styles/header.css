@@ -1,0 +1,51 @@
+
+.navbar {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.logo-and-title {
+    flex-grow: 1;
+}
+
+.search-resources, .buttons-and-search {
+    display: flex;
+}
+
+.logo {
+    width: 25px;
+    height: 25px;
+}
+
+img.logo {
+    margin-right: 5px;
+}
+
+.header .logo {
+    flex-grow: 1;
+    font-weight: bolder;
+}
+
+.header .logo a {
+    color: black;
+    font-size: xx-large;
+    text-decoration: none;
+}
+
+.header .logo a:hover {
+    text-decoration: underline;
+}
+
+.header .version {
+    color: lightgray;
+}
+
+.header .menu {
+    display: flex;
+    flex-direction: column-reverse;
+    float: right;
+}
+
+.search-resources-form {
+    display: flex;
+}

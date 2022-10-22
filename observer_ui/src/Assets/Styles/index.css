@@ -1,0 +1,59 @@
+
+.resource-element {
+    display: flex;
+    min-width: 500px;
+    min-height: 200px;
+    padding: 5px;
+    border: black 1px solid;
+    flex-grow: 1;
+}
+
+.info-resource {
+    display: flex;
+    flex-flow: column-reverse;
+    mix-blend-mode: difference;
+}
+
+.resource-element.red {
+    background-color: darkred;
+}
+
+.resource-element.orange {
+    background-color: orange;
+}
+
+.resource-element.orange span, .resource-element.orange a {
+    color: black;
+}
+
+.resource-element.green {
+    background-color: green;
+}
+
+.resource-element:not(.loader) .info-resource {
+    mix-blend-mode: unset;
+}
+
+.resource-element a {
+    color: white;
+    float: right;
+    text-decoration: none;
+}
+
+.resource-element a:hover {
+    text-decoration: underline;
+}
+
+.resource-element:hover {
+    opacity: 0.6;
+}
+
+.resource-element span {
+    color: white;
+    font-size: xx-large;
+}
+
+.message {
+    font-size: xx-large;
+    margin: 0 auto;
+}

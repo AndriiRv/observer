@@ -1,0 +1,59 @@
+
+.errorMessageDiv {
+    display: flex;
+}
+
+.preferences {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.preferences form {
+    text-align: center;
+}
+
+.form-element {
+    width: 20%;
+    margin: 0 auto;
+    align-items: center;
+    padding-bottom: 10px;
+}
+
+.form-elements {
+    padding-right: 10px;
+}
+
+.error-message {
+    color: red;
+    background-color: darkred;
+}
+
+.form-element .input-group {
+    flex-flow: column;
+}
+
+.resources-in-table {
+    margin: 0 auto;
+    overflow-y: auto;
+    height: calc(100vh - 180px);
+}
+
+.resource-name-js, .resource-path-js {
+    cursor: pointer;
+}
+
+.resource-remove-js button {
+    width: 100%;
+}
+
+@media screen and (max-width: 1024px) {
+    .resources-in-table {
+        width: 100%;
+    }
+}
+
+@media screen and (min-width: 1195px) {
+    .resources-in-table {
+        width: 50%;
+    }
+}
