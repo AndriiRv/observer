@@ -54,7 +54,10 @@ document.addEventListener('DOMContentLoaded', function () {
                     let resourceStatus = resource.status.toLowerCase();
                     childDiv.className = "resource-element " + (resourceStatus === undefined || resourceStatus == null ? "gray" : resourceStatus);
 
-                    childDiv.append(buildInfoResource(resource));
+                    childDiv.append(
+                        buildInfoResource(resource),
+                        buildStatus(resource)
+                    );
 
                     resources.add(resource);
 
@@ -75,16 +78,39 @@ document.addEventListener('DOMContentLoaded', function () {
         let infoResourceElement = document.createElement("div");
         infoResourceElement.className = "info-resource";
 
-        let spanElement = buildNameResource(resource.name);
+        let spanElement = buildSpanWithClassAndText("info-resource-title", resource.name);
         let anchorElement = buildUrlAnchor(resource.path);
 
         infoResourceElement.append(spanElement, anchorElement);
         return infoResourceElement;
     }
 
-    function buildNameResource(resourceName) {
+    function buildStatus(resource) {
+        let statusResourceElement = document.createElement("div");
+        statusResourceElement.className = "status-resource";
+
+        let spanElement = buildSpanWithClassAndText("status-resource-title", buildStatusTitle(resource.status));
+
+        statusResourceElement.append(spanElement);
+        return statusResourceElement;
+    }
+
+    function buildStatusTitle(resourceStatus) {
+        let statusTitle;
+        if (resourceStatus.toLowerCase() === "green") {
+            statusTitle = "[active]";
+        } else if (resourceStatus.toLowerCase() === "red") {
+            statusTitle = "[inactive]";
+        } else {
+            statusTitle = "[issues are exists]";
+        }
+        return statusTitle;
+    }
+
+    function buildSpanWithClassAndText(className, innerText) {
         let spanElement = document.createElement("span");
-        spanElement.innerText = resourceName;
+        spanElement.className = className;
+        spanElement.innerText = innerText;
         return spanElement;
     }
 
@@ -105,6 +131,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function getResource(id, childDiv) {
         addLoader(childDiv);
+        childDiv.querySelector(".status-resource span").textContent = "[loading...]";
 
         fetch(getCurrentBrowserUrl() + "resources/" + id)
             .then(response => {
@@ -113,6 +140,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     for (const resource of resources) {
                         if (Number(resource.childNodes[0].value) === id) {
                             resource.className = "resource-element " + json.data.status.toLowerCase();
+                            resource.querySelector(".status-resource span").textContent = buildStatusTitle(json.data.status.toLowerCase());
                             removeLoader(childDiv);
                             break;
                         }

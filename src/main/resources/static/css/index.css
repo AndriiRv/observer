@@ -16,12 +16,22 @@ body {
     padding: 5px;
     border: black 1px solid;
     flex-grow: 1;
+    justify-content: space-between;
 }
 
 .info-resource {
     display: flex;
     flex-flow: column-reverse;
     mix-blend-mode: difference;
+}
+
+.status-resource {
+    display: flex;
+    flex-flow: column-reverse;
+}
+
+.resource-element span.status-resource-title {
+    font-size: 20px;
 }
 
 .resource-element.red {
