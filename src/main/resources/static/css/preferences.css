@@ -42,6 +42,10 @@ body {
     height: calc(100vh - 180px);
 }
 
+.resource-id-js {
+    cursor: grabbing;
+}
+
 .resource-name-js, .resource-path-js {
     cursor: pointer;
 }
