@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -51,12 +50,14 @@ public class ObserverResourcePreferencesServiceImpl implements ObserverPreferenc
                 .findFirst().orElseThrow();
         int selectedResourceIndex = resources.indexOf(selectedResource);
 
-        Resource nextResource = resources.stream()
+        Resource newSelectedResource = resources.stream()
                 .filter(e -> e.getId().equals(newSelectedIndex))
                 .findFirst().orElseThrow();
-        int nextResourceIndex = resources.indexOf(nextResource);
+        int nextSelectedResourceIndex = resources.indexOf(newSelectedResource);
 
-        Collections.swap(resources, selectedResourceIndex, nextResourceIndex);
+        resources.remove(selectedResourceIndex);
+        resources.add(nextSelectedResourceIndex, selectedResource);
+
         return saveAll(resources);
     }
 }
