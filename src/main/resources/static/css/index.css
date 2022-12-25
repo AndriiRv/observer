@@ -19,15 +19,10 @@ body {
     justify-content: space-between;
 }
 
-.info-resource {
+.info-resource, .status-resource {
     display: flex;
     flex-flow: column-reverse;
     mix-blend-mode: difference;
-}
-
-.status-resource {
-    display: flex;
-    flex-flow: column-reverse;
 }
 
 .resource-element span.status-resource-title {
@@ -50,7 +45,8 @@ body {
     background-color: green;
 }
 
-.resource-element:not(.loader) .info-resource {
+.resource-element:not(.loader) .info-resource,
+.resource-element:not(.loader) .status-resource {
     mix-blend-mode: unset;
 }
 
