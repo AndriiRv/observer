@@ -8,6 +8,17 @@ function postAjaxRequest(url, callback) {
 
 /**
  *
+ * @param {String} url
+ * @param {String} body
+ * @param callback
+ * @param errorCallback
+ */
+function postAjaxRequestWithBody(url, body, callback, errorCallback) {
+    fetchAjaxWithBody(url, "POST", body, callback, errorCallback);
+}
+
+/**
+ *
  *
  * @param {String} url
  * @param {String} body

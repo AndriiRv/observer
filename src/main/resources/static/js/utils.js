@@ -22,3 +22,7 @@ function getCurrentBrowserUrl() {
     }
     return href;
 }
+
+function reload() {
+    window.location.reload();
+}

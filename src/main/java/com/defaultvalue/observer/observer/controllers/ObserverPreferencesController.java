@@ -17,7 +17,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -25,7 +24,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -61,27 +59,31 @@ public class ObserverPreferencesController {
     }
 
     @PostMapping("/resources")
-    public String save(@ModelAttribute @Valid ResourceCommand resourceCommand, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+    @ResponseBody
+    public ResponseEntity<ResponseDto> save(@RequestBody @Valid ResourceCommand resourceCommand, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             String errorMessage = bindingResult.getAllErrors().stream()
                     .map(DefaultMessageSourceResolvable::getDefaultMessage)
                     .collect(Collectors.joining("\n"));
-            redirectAttributes.addFlashAttribute("resourceDataErrorMessage", errorMessage);
-            return "redirect:/preferences";
+            LOG.error(errorMessage);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseDto(errorMessage));
         }
 
         try {
             Resource resource = resourceTransform.transformFromCommand(resourceCommand);
             observerPreferencesService.save(resource);
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ResponseDto(null));
         } catch (ObserverException e) {
-            LOG.error(e.getMessage(), e);
-            redirectAttributes.addFlashAttribute("resourceDataErrorMessage", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseDto(e.getMessage()));
         } catch (Exception e) {
             String errorMessage = "Resource is not saved. Please try again.";
             LOG.error("Exception during save resource.", e);
-            redirectAttributes.addFlashAttribute("resourceDataErrorMessage", errorMessage);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseDto(errorMessage));
         }
-        return "redirect:/preferences";
     }
 
     @PutMapping("/resources")

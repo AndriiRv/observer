@@ -18,33 +18,24 @@
 
 <div th:insert="fragments/header :: header(enableFilter=false)"></div>
 
-<div class="errorMessageDiv">
-    <span class="message" th:if="${message} != null"
-          th:text="${message}">
-    </span>
-</div>
-
 <div class="preferences" th:unless="${message} != null">
-    <form action="/observer/preferences/resources" method="POST">
-        <div class="form-element">
-            <div class="form-elements">
-                <div class="input-group">
-                    <label>
-                        <input name="name" type="search" class="form-control" placeholder="Name of resource" required/>
-                    </label>
-                </div>
-                <div class="input-group">
-                    <label>
-                        <input name="path" type="url" class="form-control" placeholder="Name of path" required/>
-                    </label>
-                </div>
-                <div class="input-group" th:if="${resourceDataErrorMessage} != null">
-                    <span class="error-message" th:text="${resourceDataErrorMessage}"></span>
-                </div>
+    <div class="form-element">
+        <div class="form-elements">
+            <div class="input-group">
+                <label>
+                    <input name="name" type="search" class="form-control name-new-resource-js"
+                           placeholder="Name of resource" required/>
+                </label>
             </div>
-            <button class="btn btn-primary" type="submit">Save</button>
+            <div class="input-group">
+                <label>
+                    <input name="path" type="url" class="form-control path-new-resource-js" placeholder="Name of path"
+                           required/>
+                </label>
+            </div>
         </div>
-    </form>
+        <button class="btn btn-primary save-new-resource-js" type="submit">Save</button>
+    </div>
 
     <div class="resources-in-table">
         <table class="table table-bordered table-hover resource-table">
@@ -72,6 +63,7 @@
 </div>
 
 <script th:src="@{/js/general/general.js}"></script>
+<script th:src="@{/js/preferences/saveResource.js}"></script>
 <script th:src="@{/js/utils.js}"></script>
 <script th:src="@{/js/fetch.js}"></script>
 <script th:src="@{/js/preferences/preferences.js}"></script>

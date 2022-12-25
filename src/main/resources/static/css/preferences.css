@@ -12,11 +12,8 @@ body {
     padding-right: 5px;
 }
 
-.preferences form {
-    text-align: center;
-}
-
 .form-element {
+    text-align: center;
     width: 20%;
     margin: 0 auto;
     align-items: center;

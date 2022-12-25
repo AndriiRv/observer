@@ -32,8 +32,4 @@ document.addEventListener('DOMContentLoaded', function () {
             notification.buildNotification();
         });
     }
-
-    function reload() {
-        window.location.reload();
-    }
 });
