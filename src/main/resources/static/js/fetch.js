@@ -1,4 +1,3 @@
-
 function getAjaxRequest(url, callback) {
     fetchAjaxWithoutBody(url, "GET", callback);
 }
@@ -12,9 +11,11 @@ function postAjaxRequest(url, callback) {
  *
  * @param {String} url
  * @param {String} body
+ * @param callback
+ * @param errorCallback
  */
-function putAjaxRequestWithBody(url, body, callback) {
-    fetchAjaxWithBody(url, "PUT", body, callback);
+function putAjaxRequestWithBody(url, body, callback, errorCallback) {
+    fetchAjaxWithBody(url, "PUT", body, callback, errorCallback);
 }
 
 /**
@@ -56,7 +57,7 @@ function fetchAjaxWithoutBody(url, methodStr, callback) {
         });
 }
 
-function fetchAjaxWithBody(url, methodStr, bodyValueAsJson, callback) {
+function fetchAjaxWithBody(url, methodStr, bodyValueAsJson, callback, errorCallback) {
     fetch(url, {
         method: methodStr,
         headers: {
@@ -67,8 +68,16 @@ function fetchAjaxWithBody(url, methodStr, bodyValueAsJson, callback) {
         .then(function (response) {
             console.log(response);
 
-            if (callback) {
-                callback();
+            if (response.ok) {
+                if (callback) {
+                    callback();
+                }
+            } else {
+                response.json().then(function (json) {
+                    if (errorCallback) {
+                        errorCallback(json.message);
+                    }
+                });
             }
         })
         .catch(function (error) {

@@ -64,7 +64,15 @@ document.addEventListener('DOMContentLoaded', function () {
             path: resourcePart.parentElement.querySelector(".resource-path-js").textContent
         });
 
-        putAjaxRequestWithBody(indexPreferencesPage + "resources", body);
+        putAjaxRequestWithBody(indexPreferencesPage + "resources", body, null, function (error) {
+            const notification = new Notification(
+                "Error",
+                error,
+                NotificationLocation.NOTIFICATION_LOCATION.BOTTOM_LEFT,
+                NotificationType.NOTIFICATION_TYPE.ERROR
+            );
+            notification.buildNotification();
+        });
 
         function submitInputtedText(resourcePart, renameInputElement) {
             resourcePart.textContent = renameInputElement.value;

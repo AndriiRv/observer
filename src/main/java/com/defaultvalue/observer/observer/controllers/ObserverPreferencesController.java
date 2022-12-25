@@ -91,6 +91,7 @@ public class ObserverPreferencesController {
             String errorMessage = bindingResult.getAllErrors().stream()
                     .map(DefaultMessageSourceResolvable::getDefaultMessage)
                     .collect(Collectors.joining("\n"));
+            LOG.error(errorMessage);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ResponseDto(errorMessage));
         }
