@@ -17,7 +17,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 for (let i = 0; i < countOfResources; i++) {
                     let childDiv = document.createElement("div");
 
-                    childDiv.style.height = "calc(50vh - 2px)";
+                    childDiv.style.height = countOfResources <= 3 ? "calc(100vh - 56px)" : "calc(50vh - 2px)";
+
                     childDiv.className = "resource-element gray";
 
                     rootDiv.append(childDiv);
@@ -48,8 +49,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     });
 
                     childDiv.append(buildHiddenInputWithResourceId(resource.id));
-
-                    childDiv.style.height = json.length <= 2 ? "calc(100vh - 2px)" : "calc(50vh - 2px)";
 
                     let resourceStatus = resource.status.toLowerCase();
                     childDiv.className = "resource-element " + (resourceStatus === undefined || resourceStatus == null ? "gray" : resourceStatus);
