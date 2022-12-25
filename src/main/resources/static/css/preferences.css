@@ -48,6 +48,7 @@ body {
 
 .resource-name-js, .resource-path-js {
     cursor: pointer;
+    word-break: break-word;
 }
 
 .resource-remove-js button {
