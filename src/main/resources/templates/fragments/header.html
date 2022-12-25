@@ -7,6 +7,9 @@
         <div class="logo-and-title">
             <a class="navbar-brand" href="/observer">
                 <img class="logo" th:src="@{/images/favicon.svg}" alt="Logo"/>
+                <svg class="logo2" height="25" width="25" style="display: none">
+                    <line x1="0" y1="12" x2="400" y2="0" style="stroke:black" />
+                </svg>
                 <span class="name-of-application">Observer</span>
             </a>
             <span class="version">Version: <span th:text="${@environment.getProperty('observer.version')}"></span></span>
