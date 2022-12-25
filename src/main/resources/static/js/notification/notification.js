@@ -57,6 +57,7 @@ class Notification {
         notificationElement.style.backgroundColor = this.type === NotificationType.NOTIFICATION_TYPE.INFO ? "blue" : "darkred"
         notificationElement.style.color = "white";
         notificationElement.style.position = "absolute";
+        notificationElement.style.padding = "5px";
 
         const notificationLocation = NotificationLocation.getLocation(this.location);
         if (notificationLocation === NotificationLocation.NOTIFICATION_LOCATION.TOP_LEFT) {
