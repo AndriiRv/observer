@@ -58,9 +58,11 @@ document.addEventListener('DOMContentLoaded', function () {
         submitInputtedText(resourcePart, renameInputElement);
 
         let idElement = resourceElement.firstElementChild.textContent;
-        let body = className === "resource-name-js"
-            ? JSON.stringify({id: idElement, name: resourcePart.textContent})
-            : JSON.stringify({id: idElement, path: resourcePart.textContent});
+        let body = JSON.stringify({
+            id: idElement,
+            name: resourcePart.parentElement.querySelector(".resource-name-js").textContent,
+            path: resourcePart.parentElement.querySelector(".resource-path-js").textContent
+        });
 
         putAjaxRequestWithBody(indexPreferencesPage + "resources", body);
 
