@@ -21,11 +21,19 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function swap(newIndex) {
-        putAjaxRequest(indexPreferencesPage + "resources/swap" + "?selectedResourceId=" + initialIndex + "&newSelectedIndex=" + newIndex, reload);
+        let url = indexPreferencesPage + "resources/swap" + "?selectedResourceId=" + initialIndex + "&newSelectedIndex=" + newIndex;
+        putAjaxRequest(url, reload, function (error) {
+            const notification = new Notification(
+                "Error",
+                error,
+                NotificationLocation.NOTIFICATION_LOCATION.BOTTOM_LEFT,
+                NotificationType.NOTIFICATION_TYPE.ERROR
+            );
+            notification.buildNotification();
+        });
     }
 
-    function reload(){
+    function reload() {
         window.location.reload();
     }
-
 });
