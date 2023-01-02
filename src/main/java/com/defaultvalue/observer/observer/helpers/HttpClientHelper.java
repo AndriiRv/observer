@@ -41,23 +41,16 @@ public class HttpClientHelper {
 
             return con.getResponseCode();
         } catch (SocketTimeoutException e) {
-            if (observerHttpClientStacktraceSettings.getEnabled()) {
-                LOG.error(e.getMessage() + " with " + path, e);
-            } else {
-                LOG.error(e.getMessage() + " with " + path);
-            }
+            renderLog(path, e);
 
             if (e.getMessage().equalsIgnoreCase("read timed out")) {
                 return HttpStatus.REQUEST_TIMEOUT.value();
-            } else if (e.getMessage().equalsIgnoreCase("connect timed out") || e.getMessage().equalsIgnoreCase("connection reset")) {
+            } else if (e.getMessage().equalsIgnoreCase("connect timed out")
+                    || e.getMessage().equalsIgnoreCase("connection reset")) {
                 return HttpStatus.BAD_REQUEST.value();
             }
         } catch (Exception e) {
-            if (observerHttpClientStacktraceSettings.getEnabled()) {
-                LOG.error(e.getMessage() + " with " + path, e);
-            } else {
-                LOG.error(e.getMessage() + " with " + path);
-            }
+            renderLog(path, e);
 
             return HttpStatus.BAD_REQUEST.value();
         } finally {
@@ -66,5 +59,13 @@ public class HttpClientHelper {
             }
         }
         return 0;
+    }
+
+    void renderLog(String path, Exception e) {
+        if (observerHttpClientStacktraceSettings.getEnabled()) {
+            LOG.warn(e.getMessage() + " with " + path, e);
+        } else {
+            LOG.warn(e.getMessage() + " with " + path);
+        }
     }
 }
