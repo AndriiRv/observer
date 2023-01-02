@@ -11,12 +11,11 @@
           crossorigin="anonymous">
 
     <link th:href="@{/css/header.css}" rel="stylesheet"/>
-    <link th:href="@{/css/index.css}" rel="stylesheet"/>
     <link th:href="@{/css/preferences.css}" rel="stylesheet"/>
 </head>
 <body>
 
-<div th:insert="fragments/header :: header(enableFilter=false)"></div>
+<div class="header-wrapper" th:insert="fragments/header :: header(enableFilter=false)"></div>
 
 <div class="preferences" th:unless="${message} != null">
     <div class="form-element">
@@ -36,30 +35,6 @@
         </div>
         <button class="btn btn-primary save-new-resource-js" type="submit">Save</button>
     </div>
-
-    <div class="resources-in-table">
-        <table class="table table-bordered table-hover resource-table">
-            <thead>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>URL</th>
-                <th></th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr class="resource-js" th:each="resource : ${resources}">
-                <td class="resource-id-js" th:text="${resource.id}"></td>
-                <td class="resource-name-js" th:text="${resource.name}"></td>
-                <td class="resource-path-js"><a th:href="@{${resource.path}}" th:text="${resource.path}"
-                                                target="_blank"></a></td>
-                <td class="resource-remove-js">
-                    <button class="btn btn-primary">Remove</button>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
 </div>
 
 <script th:src="@{/js/general/general.js}"></script>
@@ -67,6 +42,7 @@
 <script th:src="@{/js/utils.js}"></script>
 <script th:src="@{/js/fetch.js}"></script>
 <script th:src="@{/js/preferences/preferences.js}"></script>
+<script th:src="@{/js/preferences/preferenceResource.js}"></script>
 <script th:src="@{/js/preferences/swapElements.js}"></script>
 
 <script th:src="@{/js/notification/notification.js}"></script>

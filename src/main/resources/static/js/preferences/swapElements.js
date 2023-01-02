@@ -1,28 +1,23 @@
-document.addEventListener('DOMContentLoaded', function () {
-    let initialIndex;
 
-    let resources = document.querySelectorAll(".resource-id-js");
-    for (let i = 0; i < resources.length; i++) {
-        let resourceId = resources[i];
-        addSwapEvent(resourceId);
-    }
+let initialIndex;
+function addSwapEvent(resourceId) {
+    addEvent(resourceId, "mousedown", function () {
+        initialIndex = resourceId.textContent;
+    });
 
-    function addSwapEvent(resourceId) {
-        addEvent(resourceId, "mousedown", function () {
-            initialIndex = resourceId.textContent;
-        });
+    addEvent(resourceId, "mousemove", function (event) {
+    });
 
-        addEvent(resourceId, "mousemove", function (event) {
-        });
+    addEvent(resourceId, "mouseup", function (event) {
+        swap(initialIndex, event.target.textContent);
+    });
 
-        addEvent(resourceId, "mouseup", function (event) {
-            swap(event.target.textContent);
-        });
-    }
+    function swap(initialIndex, newIndex) {
+        let url = new URL(indexPreferencesPage + "resources/swap");
+        url.searchParams.set("selectedResourceId", initialIndex);
+        url.searchParams.set("newSelectedIndex", newIndex);
 
-    function swap(newIndex) {
-        let url = indexPreferencesPage + "resources/swap" + "?selectedResourceId=" + initialIndex + "&newSelectedIndex=" + newIndex;
-        putAjaxRequest(url, reload, function (error) {
+        putAjaxRequest(url.toString(), reload, function (error) {
             const notification = new Notification(
                 "Error",
                 error,
@@ -32,4 +27,4 @@ document.addEventListener('DOMContentLoaded', function () {
             notification.buildNotification();
         });
     }
-});
+}

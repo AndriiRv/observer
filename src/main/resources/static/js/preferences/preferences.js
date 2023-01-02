@@ -3,18 +3,22 @@ let indexPreferencesPage = getCurrentBrowserUrl();
 document.addEventListener('DOMContentLoaded', function () {
     let previousResourceName;
 
-    let resources = document.querySelectorAll(".resource-js");
-    for (let i = 0; i < resources.length; i++) {
-        let resource = resources[i];
-        let resourceId = resource.children[0].textContent;
+    buildResources().then(r => {
+        let resources = document.querySelectorAll(".resource-js");
+        for (let i = 0; i < resources.length; i++) {
+            let resource = resources[i];
 
-        addRenameEventToResource(resource, "resource-name-js");
-        addRenameEventToResource(resource, "resource-path-js");
-        addClickEventToRemoveButton(resource, resourceId);
-    }
+            addRenameEventToResource(resource, "resource-name-js");
+            addRenameEventToResource(resource, "resource-path-js");
+            addClickEventToRemoveButton(resource);
+
+            let resourceIdElement = resource.querySelector(".resource-id-js");
+            addSwapEvent(resourceIdElement);
+        }
+    });
 
     function addRenameEventToResource(resource, className) {
-        let resourcePart = Array.from(resource.childNodes).filter(x => x.classList == className)[0];
+        let resourcePart = resource.querySelector("." + className);
         addEvent(resourcePart, "click", function () {
             renameResource(resourcePart, className);
         });
@@ -86,27 +90,24 @@ document.addEventListener('DOMContentLoaded', function () {
      * @param resource 'resource-js' element.
      * @param resourceId resource id from 'resource-id-js'.
      */
-    function addClickEventToRemoveButton(resource, resourceId) {
-        let partOfResourceRecords = resource.childNodes;
-        for (let i = 0; i < partOfResourceRecords.length; i++) {
-            if (partOfResourceRecords[i].className === "resource-remove-js") {
-                let removeButton = resource.childNodes[i].childNodes[1];
-                addEvent(removeButton, "click", function () {
-                    removeResource(resourceId);
-                });
-                break;
-            }
-        }
+    function addClickEventToRemoveButton(resource) {
+        let removeButton = resource.querySelector(".resource-remove-js");
+        addEvent(removeButton, "click", function () {
+            removeResource(resource);
+        });
     }
 
     /**
      * Remove resource by resource id
      *
-     * @param id resource id.
+     * @param resource resource.
      */
-    function removeResource(id) {
-        if (confirm('Are you sure you want to remove resource "' + id + '" ?')) {
-            fetch(indexPreferencesPage + "resources/" + id, {
+    function removeResource(resource) {
+        let resourceId = resource.querySelector(".resource-id-js").textContent;
+        let resourceName = resource.querySelector(".resource-name-js").textContent;
+
+        if (confirm('Are you sure you want to remove resource "' + resourceId + ". " + resourceName + '" ?')) {
+            fetch(indexPreferencesPage + "resources/" + resourceId, {
                 method: "DELETE",
             }).then(response => response.json())
                 .then(() => {
