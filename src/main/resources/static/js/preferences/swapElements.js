@@ -16,6 +16,7 @@ function addSwapEvent(resourceElement) {
             selectedElement.style.position = "absolute";
             selectedElement.style.top = positionY + 10 + "px";
             selectedElement.style.left = positionX + 10 + "px";
+            selectedElement.style.backgroundColor = "white";
 
             return selectedElement;
 
@@ -75,26 +76,26 @@ function addSwapEvent(resourceElement) {
 
         selectedResource = null;
         swap(initialIndex, resourceIdElement.textContent);
+
+        function swap(initialIndex, newIndex) {
+            let url = new URL(indexPreferencesPage + "resources/swap");
+            url.searchParams.set("selectedResourceId", initialIndex);
+            url.searchParams.set("newSelectedIndex", newIndex);
+
+            putAjaxRequest(url.toString(), reload, function (error) {
+                const notification = new Notification(
+                    "Error",
+                    error,
+                    NotificationLocation.NOTIFICATION_LOCATION.BOTTOM_LEFT,
+                    NotificationType.NOTIFICATION_TYPE.ERROR
+                );
+                notification.buildNotification();
+            });
+        }
     });
 
     addEvent(document.querySelector("body"), "mouseup", function (event) {
         resourceElement.style.position = "initial";
         selectedResource = null;
     });
-
-    function swap(initialIndex, newIndex) {
-        let url = new URL(indexPreferencesPage + "resources/swap");
-        url.searchParams.set("selectedResourceId", initialIndex);
-        url.searchParams.set("newSelectedIndex", newIndex);
-
-        putAjaxRequest(url.toString(), reload, function (error) {
-            const notification = new Notification(
-                "Error",
-                error,
-                NotificationLocation.NOTIFICATION_LOCATION.BOTTOM_LEFT,
-                NotificationType.NOTIFICATION_TYPE.ERROR
-            );
-            notification.buildNotification();
-        });
-    }
 }
