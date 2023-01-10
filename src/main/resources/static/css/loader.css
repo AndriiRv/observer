@@ -19,24 +19,24 @@
         background: yellow;
     }
     40% {
-        background: green;
+        background: lightgreen;
     }
     50% {
-        background: blue;
+        background: green;
     }
     60% {
-        background: rebeccapurple;
+        background: deepskyblue;
     }
     70% {
-        background: pink;
+        background: blue;
     }
     80% {
-        background: brown;
+        background: mediumpurple;
     }
     90% {
-        background: gray;
+        background: rebeccapurple;
     }
     100% {
-        background: black;
+        background: pink;
     }
 }
