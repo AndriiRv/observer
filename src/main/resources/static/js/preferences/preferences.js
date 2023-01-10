@@ -12,8 +12,7 @@ document.addEventListener('DOMContentLoaded', function () {
             addRenameEventToResource(resource, "resource-path-js");
             addClickEventToRemoveButton(resource);
 
-            let resourceIdElement = resource.querySelector(".resource-id-js");
-            addSwapEvent(resourceIdElement);
+            addSwapEvent(resource);
         }
     });
 
