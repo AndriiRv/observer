@@ -1,6 +1,7 @@
 package com.defaultvalue.observer.helper;
 
 import com.defaultvalue.observer.observer.properties.ObserverBannerSettings;
+import com.defaultvalue.observer.observer.properties.ObserverInfoSettings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.DefaultResourceLoader;
@@ -19,9 +20,12 @@ public class ObserverBannerHelper {
     private static final Logger LOG = LoggerFactory.getLogger(ObserverBannerHelper.class);
 
     private final ObserverBannerSettings observerBannerSettings;
+    private final ObserverInfoSettings observerInfoSettings;
 
-    public ObserverBannerHelper(ObserverBannerSettings observerBannerSettings) {
+    public ObserverBannerHelper(ObserverBannerSettings observerBannerSettings,
+                                ObserverInfoSettings observerInfoSettings) {
         this.observerBannerSettings = observerBannerSettings;
+        this.observerInfoSettings = observerInfoSettings;
     }
 
     public void buildBanner() {
@@ -30,7 +34,16 @@ public class ObserverBannerHelper {
         }
 
         ResourceLoader resourceLoader = new DefaultResourceLoader();
-        System.out.println(asString(resourceLoader.getResource("classpath:" + observerBannerSettings.getPath())));
+        String strBanner = asString(resourceLoader.getResource("classpath:" + observerBannerSettings.getPath()));
+        String appInfo = String.format(
+                "Observer [%s mode] v%s (%s)",
+                observerInfoSettings.getEnvironmentBanner(),
+                observerInfoSettings.getVersion(),
+                observerInfoSettings.getVersionDate()
+        );
+        strBanner = strBanner.concat("\n" + appInfo);
+
+        LOG.info(strBanner);
     }
 
     private String asString(Resource resource) {
