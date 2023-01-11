@@ -26,6 +26,10 @@ public class ResourceValidator implements ConstraintValidator<ResourceValid, Res
     }
 
     boolean isPathValid(String path) {
+        if (path.startsWith("http://localhost:")) {
+            return true;
+        }
+
         Pattern pattern = Pattern.compile("https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)");
         Matcher matcher = pattern.matcher(path);
         return matcher.matches();
