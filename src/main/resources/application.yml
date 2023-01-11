@@ -4,7 +4,10 @@ server:
         context-path: /observer
 
 observer:
-    version: 0.0.2
+    info:
+        version: 0.0.2
+        version-date: 7.17.22
+        environment-banner: development
     banner:
         enabled: true
         path: util/banner.txt

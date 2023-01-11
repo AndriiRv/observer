@@ -1,0 +1,8 @@
+server:
+    port: 8998
+    servlet:
+        context-path: /observer-test
+
+observer:
+    info:
+        environment-banner: test
