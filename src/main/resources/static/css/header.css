@@ -32,8 +32,12 @@
     text-decoration: underline;
 }
 
-.header .version {
+.header .version, .environment-banner {
     color: lightgray;
+}
+
+.header .environment-banner {
+    padding-left: 20px;
 }
 
 .header .menu {

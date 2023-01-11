@@ -12,7 +12,8 @@
                 </svg>
                 <span class="name-of-application">Observer</span>
             </a>
-            <span class="version">Version: <span th:text="${@environment.getProperty('observer.version')}"></span></span>
+            <span class="version">Version: <span th:text="${@environment.getProperty('observer.info.version')}"></span></span>
+            <span class="environment-banner"><span th:text="${@environment.getProperty('observer.info.environment-banner')}"></span></span>
         </div>
 
         <div class="buttons-and-search">
