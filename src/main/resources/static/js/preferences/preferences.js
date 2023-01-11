@@ -1,4 +1,4 @@
-let indexPreferencesPage = getCurrentBrowserUrl();
+let indexPreferencesPage = getCurrentBrowserUrl() + "preferences/";
 
 document.addEventListener('DOMContentLoaded', function () {
     let previousResourceName;

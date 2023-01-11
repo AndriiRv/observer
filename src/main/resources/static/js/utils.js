@@ -16,7 +16,7 @@ function openNewFocusedBrowserTab(url, target = "_blank") {
  * @return {string}
  */
 function getCurrentBrowserUrl() {
-    let href = document.location.href;
+    let href = document.location.origin + document.querySelector("meta[name=context-path]").content;
     if (href.slice(-1) !== "/") {
         href += "/";
     }

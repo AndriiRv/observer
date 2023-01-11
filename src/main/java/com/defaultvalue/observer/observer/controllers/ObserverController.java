@@ -7,6 +7,7 @@ import com.defaultvalue.observer.observer.services.ObserverService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.UUID;
 
 @Controller
+@Profile("!test")
 public class ObserverController {
 
     private static final Logger LOG = LoggerFactory.getLogger(ObserverController.class);

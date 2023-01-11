@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="context-path" th:content="${#httpServletRequest.getContextPath()}">
+
     <link rel="icon" type="image/svg" th:href="@{/images/favicon.svg}"/>
     <title>Observer</title>
 

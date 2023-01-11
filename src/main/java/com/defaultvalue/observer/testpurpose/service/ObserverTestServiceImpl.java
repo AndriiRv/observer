@@ -13,10 +13,28 @@ import java.util.Random;
 @Service
 public class ObserverTestServiceImpl implements ObserverService<Resource> {
 
+    private int countOfResources;
     private List<Resource> resources;
 
     public ObserverTestServiceImpl() {
-        this.resources = findAll();
+        this.setCountOfResources(this.fetchRandomValue());
+    }
+
+    public int getCountOfResources() {
+        return countOfResources;
+    }
+
+    public void setCountOfResources(int countOfResources) {
+        if (countOfResources < 0) {
+            countOfResources = this.fetchRandomValue();
+        }
+
+        this.countOfResources = countOfResources;
+        this.resources = this.findAll();
+    }
+
+    int fetchRandomValue() {
+        return new Random().nextInt(20) + 1;
     }
 
     @Override
@@ -40,7 +58,7 @@ public class ObserverTestServiceImpl implements ObserverService<Resource> {
         return null;
     }
 
-    private ResourceStatus getRandomStatus() {
+    ResourceStatus getRandomStatus() {
         int fromZeroToTwo = new Random().nextInt(3);
         if (fromZeroToTwo == 0) {
             return ResourceStatus.GREEN;
@@ -55,20 +73,16 @@ public class ObserverTestServiceImpl implements ObserverService<Resource> {
     public List<Resource> findAll() {
         List<Resource> resources = new ArrayList<>();
 
-        List<ResourceStatus> resourceStatuses = List.of(ResourceStatus.RED, ResourceStatus.ORANGE, ResourceStatus.GREEN);
+        for (int i = 0; i < this.countOfResources; i++) {
+            int resourceId = i + 1;
 
-        for (int i = 0; i < new Random().nextInt(20) + 1; i++) {
-            resources.add(new Resource(i, "example", "http://localhost:8080/observer/#", resourceStatuses.get(new Random().nextInt(2))));
-        }
-
-        for (int i = 0; i < resources.size(); i++) {
-            if (i % 2 == 0) {
-                resources.get(i).setStatus(ResourceStatus.GREEN);
-            } else if (i % 3 == 0) {
-                resources.get(i).setStatus(ResourceStatus.ORANGE);
-            } else {
-                resources.get(i).setStatus(ResourceStatus.RED);
-            }
+            Resource resource = new Resource(
+                    resourceId,
+                    "example" + resourceId,
+                    "http:/example.com",
+                    List.of(ResourceStatus.RED, ResourceStatus.ORANGE, ResourceStatus.GREEN).get(new Random().nextInt(2))
+            );
+            resources.add(resource);
         }
 
         return resources;
