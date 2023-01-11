@@ -61,13 +61,22 @@ document.addEventListener('DOMContentLoaded', function () {
         submitInputtedText(resourcePart, renameInputElement);
 
         let idElement = resourceElement.firstElementChild.textContent;
-        let body = JSON.stringify({
-            id: idElement,
-            name: resourcePart.parentElement.querySelector(".resource-name-js").textContent,
-            path: resourcePart.parentElement.querySelector(".resource-path-js").textContent
-        });
+        let name = resourcePart.parentElement.querySelector(".resource-name-js").textContent;
+        let path = resourcePart.parentElement.querySelector(".resource-path-js").textContent;
 
-        putAjaxRequestWithBody(indexPreferencesPage + "resources", body, null, function (error) {
+        let body = JSON.stringify({id: idElement, name: name, path: path});
+
+        function successCallback() {
+            const notification = new Notification(
+                "Success",
+                idElement + ". - " + name + " [" + path + "] updated.",
+                NotificationLocation.NOTIFICATION_LOCATION.BOTTOM_LEFT,
+                NotificationType.NOTIFICATION_TYPE.INFO,
+                5000
+            );
+            notification.buildNotification();
+        }
+        putAjaxRequestWithBody(indexPreferencesPage + "resources", body, successCallback, function (error) {
             const notification = new Notification(
                 "Error",
                 error,
