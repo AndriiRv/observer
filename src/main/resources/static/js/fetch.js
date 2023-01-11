@@ -58,8 +58,6 @@ function fetchAjaxWithoutBody(url, methodStr, callback, errorCallback) {
         },
     })
         .then(function (response) {
-            console.log(response);
-
             if (response.ok) {
                 if (callback) {
                     callback();
@@ -73,7 +71,13 @@ function fetchAjaxWithoutBody(url, methodStr, callback, errorCallback) {
             }
         })
         .catch(function (error) {
-            alert("Server error");
+            const notification = new Notification(
+                "Error",
+                "Server error. Please try again.",
+                NotificationLocation.NOTIFICATION_LOCATION.BOTTOM_LEFT,
+                NotificationType.NOTIFICATION_TYPE.ERROR
+            );
+            notification.buildNotification();
             console.log(error);
         });
 }
@@ -87,8 +91,6 @@ function fetchAjaxWithBody(url, methodStr, bodyValueAsJson, callback, errorCallb
         body: bodyValueAsJson
     })
         .then(function (response) {
-            console.log(response);
-
             if (response.ok) {
                 if (callback) {
                     callback();
@@ -102,7 +104,13 @@ function fetchAjaxWithBody(url, methodStr, bodyValueAsJson, callback, errorCallb
             }
         })
         .catch(function (error) {
-            alert("Server error");
+            const notification = new Notification(
+                "Error",
+                "Server error. Please try again.",
+                NotificationLocation.NOTIFICATION_LOCATION.BOTTOM_LEFT,
+                NotificationType.NOTIFICATION_TYPE.ERROR
+            );
+            notification.buildNotification();
             console.log(error);
         });
 }
