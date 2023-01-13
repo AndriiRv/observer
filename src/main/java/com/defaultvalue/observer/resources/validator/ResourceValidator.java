@@ -13,7 +13,16 @@ public class ResourceValidator implements ConstraintValidator<ResourceValid, Res
 
     @Override
     public boolean isValid(ResourceCommand command, ConstraintValidatorContext context) {
-        return pathValidation(command.getPath(), context);
+        return nameValidation(command.getName(), context) && pathValidation(command.getPath(), context);
+    }
+
+    boolean nameValidation(String name, ConstraintValidatorContext context) {
+        if (StringUtils.isNotBlank(name)) {
+            return true;
+        } else {
+            setValidationMessage(context, "Name is not valid. Please try again. Error id = " + UUID.randomUUID()).addConstraintViolation();
+            return false;
+        }
     }
 
     boolean pathValidation(String path, ConstraintValidatorContext context) {
