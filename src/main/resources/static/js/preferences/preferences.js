@@ -23,25 +23,19 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         addEvent(resourcePart, "focusout", function () {
-            submitRenameResource(resource, resourcePart, className);
+            submitRenameResource(resourcePart, className);
         });
     }
 
     function renameResource(resourcePart, className) {
-        previousResourceName = resourcePart.textContent;
         let renameInputElement = document.querySelector("." + className + " input");
+        previousResourceName = resourcePart.textContent ? resourcePart.textContent : renameInputElement ? renameInputElement.value : "";
 
         if (!renameInputElement) {
             renameInputElement = document.createElement("input");
 
             if (resourcePart.textContent) {
                 renameInputElement.value = resourcePart.textContent;
-            } else {
-                if (resourcePart.childNodes[0]) {
-                    renameInputElement.value = resourcePart.childNodes[0].value;
-                } else {
-                    renameInputElement.value = "";
-                }
             }
 
             resourcePart.textContent = "";
@@ -50,45 +44,50 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    function submitRenameResource(resourceElement, resourcePart, className) {
+    function submitRenameResource(resourcePart, className) {
         let renameInputElement = document.querySelector("." + className + " input");
 
         if (previousResourceName === renameInputElement.value) {
-            submitInputtedText(resourcePart, renameInputElement);
+            renameResourcePartToInputtedText(resourcePart, renameInputElement);
             return;
         }
 
-        submitInputtedText(resourcePart, renameInputElement);
+        renameResourcePartToInputtedText(resourcePart, renameInputElement);
 
-        let idElement = resourceElement.firstElementChild.textContent;
-        let name = resourcePart.parentElement.querySelector(".resource-name-js").textContent;
-        let path = resourcePart.parentElement.querySelector(".resource-path-js").textContent;
+        submit();
 
-        let body = JSON.stringify({id: idElement, name: name, path: path});
-
-        function successCallback() {
-            const notification = new Notification(
-                "Success",
-                idElement + ". - " + name + " [" + path + "] updated.",
-                NotificationLocation.NOTIFICATION_LOCATION.BOTTOM_LEFT,
-                NotificationType.NOTIFICATION_TYPE.INFO,
-                5000
-            );
-            notification.buildNotification();
-        }
-        putAjaxRequestWithBody(indexPreferencesPage + "resources", body, successCallback, function (error) {
-            const notification = new Notification(
-                "Error",
-                error,
-                NotificationLocation.NOTIFICATION_LOCATION.BOTTOM_LEFT,
-                NotificationType.NOTIFICATION_TYPE.ERROR
-            );
-            notification.buildNotification();
-        });
-
-        function submitInputtedText(resourcePart, renameInputElement) {
+        function renameResourcePartToInputtedText(resourcePart, renameInputElement) {
             resourcePart.textContent = renameInputElement.value;
             renameInputElement.remove();
+        }
+
+        function submit() {
+            let idElement = resourcePart.parentElement.querySelector(".resource-id-js").textContent;
+            let name = resourcePart.parentElement.querySelector(".resource-name-js").textContent;
+            let path = resourcePart.parentElement.querySelector(".resource-path-js").textContent;
+
+            let body = JSON.stringify({id: idElement, name: name, path: path});
+
+            function successCallback() {
+                const notification = new Notification(
+                    "Success",
+                    idElement + ". - " + name + " [" + path + "] updated.",
+                    NotificationLocation.NOTIFICATION_LOCATION.BOTTOM_LEFT,
+                    NotificationType.NOTIFICATION_TYPE.INFO,
+                    5000
+                );
+                notification.buildNotification();
+            }
+
+            putAjaxRequestWithBody(indexPreferencesPage + "resources", body, successCallback, function (error) {
+                const notification = new Notification(
+                    "Error",
+                    error,
+                    NotificationLocation.NOTIFICATION_LOCATION.BOTTOM_LEFT,
+                    NotificationType.NOTIFICATION_TYPE.ERROR
+                );
+                notification.buildNotification();
+            });
         }
     }
 
@@ -96,7 +95,6 @@ document.addEventListener('DOMContentLoaded', function () {
      * Add click event to Remove button on each resource record.
      *
      * @param resource 'resource-js' element.
-     * @param resourceId resource id from 'resource-id-js'.
      */
     function addClickEventToRemoveButton(resource) {
         let removeButton = resource.querySelector(".resource-remove-js");
