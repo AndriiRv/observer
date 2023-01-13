@@ -57,7 +57,11 @@ document.addEventListener('DOMContentLoaded', function () {
         submit();
 
         function renameResourcePartToInputtedText(resourcePart, renameInputElement) {
-            resourcePart.textContent = renameInputElement.value;
+            if (className === "resource-path-js") {
+                resourcePart.append(buildAnchor(renameInputElement.value))
+            } else {
+                resourcePart.textContent = renameInputElement.value;
+            }
             renameInputElement.remove();
         }
 
