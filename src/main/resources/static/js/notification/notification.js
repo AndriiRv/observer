@@ -1,20 +1,20 @@
-
 class Notification {
 
-    constructor(header, description, location, type, timeMs) {
-        this._header = header;
+    constructor(headerText, description, location, type, timeMs) {
+        this._headerText = headerText;
         this._description = description;
         this._location = location;
         this._type = type;
         this._timeMs = timeMs;
+        this._domElement = null;
     }
 
-    get header() {
-        return this._header;
+    get headerText() {
+        return this._headerText;
     }
 
-    set header(value) {
-        this._header = value;
+    set headerText(value) {
+        this._headerText = value;
     }
 
     get description() {
@@ -49,47 +49,44 @@ class Notification {
         this._timeMs = value;
     }
 
+    get domElement() {
+        return this._domElement;
+    }
+
+    set domElement(value) {
+        this._domElement = value;
+    }
+
     buildNotification() {
         let notificationElement = document.createElement("div");
-        notificationElement.style.height = "auto";
-        notificationElement.style.width = "auto";
-        notificationElement.style.maxWidth = "300px";
-        notificationElement.style.backgroundColor = this.type === NotificationType.NOTIFICATION_TYPE.INFO ? "blue" : "darkred"
+        notificationElement.className = "notification-js"
+        notificationElement.style.backgroundColor = this.type === NotificationType.NOTIFICATION_TYPE.INFO ? "green" : "darkred"
         notificationElement.style.color = "white";
-        notificationElement.style.position = "absolute";
-        notificationElement.style.padding = "5px";
 
-        const notificationLocation = NotificationLocation.getLocation(this.location);
-        if (notificationLocation === NotificationLocation.NOTIFICATION_LOCATION.TOP_LEFT) {
-            notificationElement.style.top = "66px";
-            notificationElement.style.left = "10px";
-        } else if (notificationLocation === NotificationLocation.NOTIFICATION_LOCATION.TOP_RIGHT) {
-            notificationElement.style.top = "66px";
-            notificationElement.style.right = "10px";
-        } else if (notificationLocation === NotificationLocation.NOTIFICATION_LOCATION.BOTTOM_LEFT) {
-            notificationElement.style.bottom = "10px";
-            notificationElement.style.left = "10px";
-        } else if (notificationLocation === NotificationLocation.NOTIFICATION_LOCATION.BOTTOM_RIGHT) {
-            notificationElement.style.bottom = "10px";
-            notificationElement.style.right = "10px";
-        }
+        notificationElement.append(buildHeader(this.headerText), buildDescription(this.description));
+        this.domElement = notificationElement;
 
-        if (this.header) {
+        notificationQueueObj.addToQueue(this);
+
+        function buildHeader(headerText) {
             let headerPart = document.createElement("div");
-            headerPart.textContent = this.header;
+            headerPart.className = "notification-header-js";
+            headerPart.textContent = headerText;
             headerPart.style.height = "20px";
             headerPart.style.width = "100px";
-            notificationElement.append(headerPart);
+
+            let crossElement = document.createElement("span");
+            crossElement.className = "cross-notification-js";
+            headerPart.append(crossElement);
+
+            return headerPart;
         }
 
-        let descriptionPart = document.createElement("div");
-        descriptionPart.textContent = this.description;
-        notificationElement.append(descriptionPart);
-
-        document.querySelector(".preferences").append(notificationElement);
-
-        setTimeout(function () {
-            notificationElement.remove();
-        }, this.timeMs);
+        function buildDescription(descriptionText) {
+            let descriptionPart = document.createElement("div");
+            descriptionPart.className = "notification-description-js";
+            descriptionPart.textContent = descriptionText;
+            return descriptionPart;
+        }
     }
 }

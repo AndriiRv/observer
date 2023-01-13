@@ -1,0 +1,69 @@
+
+.notification-js {
+    margin-bottom: 10px;
+    padding: 5px;
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+.notification-queue-js {
+    max-width: 300px;
+    padding: 5px;
+}
+
+.notification-queue-js.notification-queue-top-left-js {
+    position: absolute;
+    top: 66px;
+    left: 10px;
+}
+
+.notification-queue-js.notification-queue-top-right-js {
+    position: absolute;
+    top: 66px;
+    right: 10px;
+}
+
+.notification-queue-js.notification-queue-bottom-left-js {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+}
+
+.notification-queue-js.notification-queue-bottom-right-js {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+}
+
+.notification-description-js {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 14px;
+}
+
+.cross-notification-js {
+    position: absolute;
+    right: 33px;
+    opacity: 0.3;
+}
+
+.cross-notification-js:hover {
+    opacity: 1;
+}
+
+.cross-notification-js:before, .cross-notification-js:after {
+    position: absolute;
+    left: 15px;
+    content: ' ';
+    height: 15px;
+    width: 2px;
+    background-color: white;
+}
+
+.cross-notification-js:before {
+    transform: rotate(45deg);
+}
+
+.cross-notification-js:after {
+    transform: rotate(-45deg);
+}

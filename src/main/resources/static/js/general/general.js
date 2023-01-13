@@ -1,4 +1,9 @@
 
+let notificationQueueObj;
+document.addEventListener('DOMContentLoaded', function () {
+    notificationQueueObj = new NotificationQueue();
+});
+
 window.addEventListener('beforeunload', function () {
     changeLogo();
 });
