@@ -1,6 +1,9 @@
 let indexPreferencesPage = getCurrentBrowserUrl() + "preferences/";
 
+let notificationQueueObj;
 document.addEventListener('DOMContentLoaded', function () {
+    notificationQueueObj = new NotificationQueue();
+
     let previousResourceName;
 
     buildResources().then(r => {
