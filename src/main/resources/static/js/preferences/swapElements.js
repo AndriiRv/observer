@@ -51,7 +51,7 @@ function addSwapEvent(resourceElement) {
     });
 
     addEvent(document.querySelector("body"), "mousemove", function (event) {
-        if (window.getSelection) {
+        if (selectedResource && window.getSelection) {
             window.getSelection().removeAllRanges();
         }
 
