@@ -1,9 +1,27 @@
 # Observer Release Notes
 
-- [0.0.2 (2022-07-17)](#001-2022-07-17)
+- [0.0.3 (2023-01-14)](#003-2023-01-14)
+- [0.0.2 (2022-07-17)](#002-2022-07-17)
 - [0.0.1 (2022-06-22)](#001-2022-06-22)
 
 ---
+
+## 0.0.3 (2023-01-14)
+
+- Shows multiple notifications in one time (941b86e4).
+- Replace cdn bootstrap styles with webjar version (b69f2803).
+- Add success notification if update resource is successful (cd311545).
+- Add different profiles (46c101bb).
+- Add visualization of swapping in the Preferences page (61dae458).
+- Add change font color related to background color in status resource (a6d01802).
+- Add UI error notification during save new resource in the Preference page (28cbe11b).
+- Add error notification during swap resource (1e3415a1).
+- Add error notification during update resource (cf2b12c5).
+- Add UI notifications (657c258d).
+- Add animation to logo page (cf05c117).
+- Add resource text-status (1c1dab0c).
+- Add possibility to change url (926323c8).
+- Add and use java bean validation (ce8bb422).
 
 ## 0.0.2 (2022-07-17)
 
