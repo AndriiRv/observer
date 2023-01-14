@@ -10,13 +10,14 @@
 
 ## Setup
 
-###### UPDATED Jan 14, 2023
+###### UPDATED Jan 15, 2023
 
 * For now only file as data store of resources is supporting.
 
 1. First, can specify server port on which application will run. It can do by run of jar application with VM options or
    in `application.yml`. Default server port is `8999`. E.g., if server port is
-   1111: `java -Dserver.port=1111 -jar observer.jar`.
+   `1111` and we need run production profile:
+   `java -Dserver.port=1111 -Dspring.profiles.active=production -jar observer.jar`.
 2. Next in `application.yml` can change the `filename` and `filetype` file from which will read the resources if has selected
    file as data store of resources. Also, can change `separate-character` and `comment-character`
    to convenient manual work with resource file and can change http client timeouts at your discretion.
