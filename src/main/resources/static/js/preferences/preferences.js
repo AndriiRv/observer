@@ -76,24 +76,14 @@ document.addEventListener('DOMContentLoaded', function () {
             let body = JSON.stringify({id: idElement, name: name, path: path});
 
             function successCallback() {
-                const notification = new Notification(
-                    "Success",
-                    idElement + ". - " + name + " [" + path + "] updated.",
-                    NotificationLocation.NOTIFICATION_LOCATION.BOTTOM_LEFT,
-                    NotificationType.NOTIFICATION_TYPE.INFO,
-                    5000
-                );
-                notification.buildNotification();
+                const notification = new Notification("Success", idElement + ". - " + name + " [" + path + "] updated.");
+                notification.timeMs = 5000;
+                notification.buildInfoNotificationOnBottomLeft();
             }
 
             putAjaxRequestWithBody(indexPreferencesPage + "resources", body, successCallback, function (error) {
-                const notification = new Notification(
-                    "Error",
-                    error,
-                    NotificationLocation.NOTIFICATION_LOCATION.BOTTOM_LEFT,
-                    NotificationType.NOTIFICATION_TYPE.ERROR
-                );
-                notification.buildNotification();
+                const notification = new Notification("Error", error);
+                notification.buildErrorNotificationOnBottomLeft();
             });
         }
     }

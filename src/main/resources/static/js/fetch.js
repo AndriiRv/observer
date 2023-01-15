@@ -71,13 +71,8 @@ function fetchAjaxWithoutBody(url, methodStr, callback, errorCallback) {
             }
         })
         .catch(function (error) {
-            const notification = new Notification(
-                "Error",
-                "Server error. Please try again.",
-                NotificationLocation.NOTIFICATION_LOCATION.BOTTOM_LEFT,
-                NotificationType.NOTIFICATION_TYPE.ERROR
-            );
-            notification.buildNotification();
+            const notification = new Notification("Error", "Server error. Please try again.");
+            notification.buildErrorNotificationOnBottomLeft();
             console.log(error);
         });
 }
@@ -104,13 +99,8 @@ function fetchAjaxWithBody(url, methodStr, bodyValueAsJson, callback, errorCallb
             }
         })
         .catch(function (error) {
-            const notification = new Notification(
-                "Error",
-                "Server error. Please try again.",
-                NotificationLocation.NOTIFICATION_LOCATION.BOTTOM_LEFT,
-                NotificationType.NOTIFICATION_TYPE.ERROR
-            );
-            notification.buildNotification();
+            const notification = new Notification("Error", "Server error. Please try again.");
+            notification.buildErrorNotificationOnBottomLeft();
             console.log(error);
         });
 }

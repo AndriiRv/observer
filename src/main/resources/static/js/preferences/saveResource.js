@@ -14,47 +14,27 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         postAjaxRequestWithBody(indexPreferencesPage + "resources", body, () => reload(), function (error) {
-            const notification = new Notification(
-                "Error",
-                error,
-                NotificationLocation.NOTIFICATION_LOCATION.BOTTOM_LEFT,
-                NotificationType.NOTIFICATION_TYPE.ERROR
-            );
-            notification.buildNotification();
+            const notification = new Notification("Error", error);
+            notification.buildErrorNotificationOnBottomLeft();
         });
     });
 
     function isValidate(nameNewResource, pathNewResource) {
         if (!nameNewResource && !pathNewResource) {
-            const notification = new Notification(
-                "Error",
-                "Name and path of resource are not valid. Please try again.",
-                NotificationLocation.NOTIFICATION_LOCATION.BOTTOM_LEFT,
-                NotificationType.NOTIFICATION_TYPE.ERROR
-            );
-            notification.buildNotification();
+            const notification = new Notification("Error", "Name and path of resource are not valid. Please try again.");
+            notification.buildErrorNotificationOnBottomLeft();
             return false;
         }
 
         if (!nameNewResource) {
-            const notification = new Notification(
-                "Error",
-                "Name of resource is not valid. Please try again.",
-                NotificationLocation.NOTIFICATION_LOCATION.BOTTOM_LEFT,
-                NotificationType.NOTIFICATION_TYPE.ERROR
-            );
-            notification.buildNotification();
+            const notification = new Notification("Error", "Name of resource is not valid. Please try again.");
+            notification.buildErrorNotificationOnBottomLeft();
             return false;
         }
 
         if (!pathNewResource) {
-            const notification = new Notification(
-                "Error",
-                "Path of resource is not valid. Please try again.",
-                NotificationLocation.NOTIFICATION_LOCATION.BOTTOM_LEFT,
-                NotificationType.NOTIFICATION_TYPE.ERROR
-            );
-            notification.buildNotification();
+            const notification = new Notification("Error", "Path of resource is not valid. Please try again.");
+            notification.buildErrorNotificationOnBottomLeft();
             return false;
         }
 

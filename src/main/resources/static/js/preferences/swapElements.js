@@ -83,13 +83,8 @@ function addSwapEvent(resourceElement) {
             url.searchParams.set("newSelectedIndex", newIndex);
 
             putAjaxRequest(url.toString(), reload, function (error) {
-                const notification = new Notification(
-                    "Error",
-                    error,
-                    NotificationLocation.NOTIFICATION_LOCATION.BOTTOM_LEFT,
-                    NotificationType.NOTIFICATION_TYPE.ERROR
-                );
-                notification.buildNotification();
+                const notification = new Notification("Error", error);
+                notification.buildErrorNotificationOnBottomLeft();
             });
         }
     });

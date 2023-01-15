@@ -57,6 +57,20 @@ class Notification {
         this._domElement = value;
     }
 
+    buildErrorNotificationOnBottomLeft() {
+        this.location = NotificationLocation.NOTIFICATION_LOCATION.BOTTOM_LEFT;
+        this.type = NotificationType.NOTIFICATION_TYPE.ERROR;
+
+        this.buildNotification();
+    }
+
+    buildInfoNotificationOnBottomLeft() {
+        this.location = NotificationLocation.NOTIFICATION_LOCATION.BOTTOM_LEFT;
+        this.type = NotificationType.NOTIFICATION_TYPE.INFO;
+
+        this.buildNotification();
+    }
+
     buildNotification() {
         let notificationElement = document.createElement("div");
         notificationElement.className = "notification-js"
