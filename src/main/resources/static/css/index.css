@@ -29,6 +29,10 @@ body {
     font-size: 20px;
 }
 
+.resource-element span.last-update-time-resource {
+    font-size: 15px;
+}
+
 .resource-element.red {
     background-color: darkred;
 }

@@ -31,6 +31,7 @@ dependencies {
     implementation 'org.apache.commons:commons-lang3:3.12.0'
 
     webjars 'org.webjars.npm:bootstrap:5.2.3'
+    webjars 'org.webjars.npm:luxon:3.2.1'
     implementation configurations.webjars.dependencies
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'

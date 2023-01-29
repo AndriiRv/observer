@@ -1,5 +1,5 @@
 
-var resources = new Set();
+var resources = [];
 
 document.addEventListener('DOMContentLoaded', function () {
 
@@ -53,12 +53,14 @@ document.addEventListener('DOMContentLoaded', function () {
                     let resourceStatus = resource.status.toLowerCase();
                     childDiv.className = "resource-element " + (resourceStatus === undefined || resourceStatus == null ? "gray" : resourceStatus);
 
+                    resource.lastUpdateDateTime = luxon.DateTime.now().toISO();
+
                     childDiv.append(
                         buildInfoResource(resource),
                         buildStatus(resource)
                     );
 
-                    resources.add(resource);
+                    resources.push(resource);
 
                     removeLoader(childDiv);
                 });
@@ -88,10 +90,41 @@ document.addEventListener('DOMContentLoaded', function () {
         let statusResourceElement = document.createElement("div");
         statusResourceElement.className = "status-resource";
 
-        let spanElement = buildSpanWithClassAndText("status-resource-title", buildStatusTitle(resource.status));
+        let spanElement = buildSpanWithClassAndText("last-update-time-resource", calculateLastUpdateTime(resource.lastUpdateDateTime));
+        let spanElement2 = buildSpanWithClassAndText("status-resource-title", buildStatusTitle(resource.status));
 
-        statusResourceElement.append(spanElement);
+        statusResourceElement.append(spanElement, spanElement2);
         return statusResourceElement;
+    }
+
+    setInterval(function () {
+        for (const resourceId of document.querySelectorAll(".resource-element .resourceId")) {
+            for (const resource of resources) {
+                if (Number(resourceId.value) === resource.id) {
+                    resourceId.parentElement.querySelector(".status-resource .last-update-time-resource").textContent
+                        = calculateLastUpdateTime(resource.lastUpdateDateTime);
+                }
+            }
+        }
+    }, 15000);
+
+    function calculateLastUpdateTime(lastUpdateDateTime) {
+        const luxonDifference = luxon.DateTime.now().diff(luxon.DateTime.fromISO(lastUpdateDateTime));
+        const ms = luxonDifference.values.milliseconds;
+
+        let formattedResult = "Last check: ";
+        if (ms <= 1000) {
+            formattedResult += "just now";
+        } else if (ms > 1000 && ms <= 60000) {
+            formattedResult += luxonDifference.toFormat("s") + " s ago";
+        } else if (ms > 60_000 && ms <= 3_600_000) {
+            formattedResult += luxonDifference.toFormat("m") + " min ago";
+        } else if (ms > 3_600_000 && ms <= 86_400_000) {
+            formattedResult += luxonDifference.toFormat("h") + " h ago";
+        } else if (ms > 86_400_000) {
+            formattedResult += "some time ago";
+        }
+        return formattedResult;
     }
 
     function buildStatusTitle(resourceStatus) {
@@ -135,11 +168,16 @@ document.addEventListener('DOMContentLoaded', function () {
         fetch(getCurrentBrowserUrl() + "resources/" + id)
             .then(response => {
                 response.json().then(function (json) {
-                    let resources = document.querySelectorAll(".resource-element");
-                    for (const resource of resources) {
-                        if (Number(resource.childNodes[0].value) === id) {
-                            resource.className = "resource-element " + json.data.status.toLowerCase();
-                            resource.querySelector(".status-resource span").textContent = buildStatusTitle(json.data.status.toLowerCase());
+                    let resourcesElements = document.querySelectorAll(".resource-element");
+                    for (const resourceElement of resourcesElements) {
+                        if (Number(resourceElement.childNodes[0].value) === id) {
+                            resourceElement.className = "resource-element " + json.data.status.toLowerCase();
+
+                            let resourceObj = resources.filter(e => e.id === id)[0];
+                            resourceObj.lastUpdateDateTime = luxon.DateTime.now().toISO()
+
+                            resourceElement.querySelector(".status-resource .last-update-time-resource").textContent = calculateLastUpdateTime(resourceObj.lastUpdateDateTime);
+                            resourceElement.querySelector(".status-resource .status-resource-title").textContent = buildStatusTitle(json.data.status.toLowerCase());
                             removeLoader(childDiv);
                             break;
                         }
