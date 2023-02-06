@@ -1,13 +1,14 @@
 # Observer Release Notes
 
-- [0.0.3 (2023-01-14)](#003-2023-01-14)
+- [0.0.3 (2023-01-29)](#003-2023-01-29)
 - [0.0.2 (2022-07-17)](#002-2022-07-17)
 - [0.0.1 (2022-06-22)](#001-2022-06-22)
 
 ---
 
-## 0.0.3 (2023-01-14)
+## 0.0.3 (2023-01-29)
 
+- Add last time of checking resource about status on UI (c42fe532).
 - Shows multiple notifications in one time (941b86e4).
 - Replace cdn bootstrap styles with webjar version (b69f2803).
 - Add success notification if update resource is successful (cd311545).

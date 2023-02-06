@@ -6,7 +6,7 @@ server:
 observer:
     info:
         version: 0.0.3
-        version-date: 1.14.23
+        version-date: 1.29.23
         environment-banner: development
     banner:
         enabled: true
