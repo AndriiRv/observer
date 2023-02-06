@@ -34,5 +34,8 @@
 
 ### Test mode
 
+###### UPDATED Fab 6, 2023
+
 * Can use test mode for specific functional test cases.
-E.g.,: add `spring.profiles.active=test` to environment variables in IDE or 
+E.g.,: add `spring.profiles.active=test` to environment variables in IDE
+or `java -Dserver.port=1111 -Dspring.profiles.active=test -jar observer.jar` while using jar file.
