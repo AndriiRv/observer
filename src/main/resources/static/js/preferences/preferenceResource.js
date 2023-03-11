@@ -9,7 +9,6 @@ async function buildResources() {
     inputSelectorElement.style.display = "none";
 
     let exportButtonElement = buildButton("btn btn-primary export-file-js", "Export");
-    resourceInTableDiv.append(importButtonElement, inputSelectorElement, exportButtonElement);
 
     let table = document.createElement("table");
     table.className = "table table-bordered table-hover resource-table";
@@ -19,7 +18,11 @@ async function buildResources() {
     tr.append(buildTableHeader("ID"));
     tr.append(buildTableHeader("Name"));
     tr.append(buildTableHeader("URL"));
-    tr.append(buildTableHeader(""));
+
+    let thContent = buildTableHeader("");
+    thContent.append(importButtonElement, exportButtonElement, inputSelectorElement);
+
+    tr.append(thContent);
     thead.append(tr);
     table.append(thead);
 

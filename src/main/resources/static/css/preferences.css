@@ -42,6 +42,10 @@ body {
     height: calc(100vh - 180px);
 }
 
+.resources-in-table .resource-table th:nth-child(4) {
+    max-width: 165px;
+}
+
 .resource-id-js {
     cursor: grabbing;
 }
