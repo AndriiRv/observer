@@ -3,17 +3,15 @@ document.addEventListener('DOMContentLoaded', function () {
     let filterInputElement = document.querySelector(".filter-resources-js");
 
     addEvent(filterInputElement, "input", function () {
-        filterResources();
+        filterResources(filterInputElement.value);
     });
 
-    function filterResources() {
-        let inputtedValue = filterInputElement.value;
-
+    function filterResources(enteredValue) {
         showAllResources();
 
-        if (inputtedValue.length >= 2) {
+        if (enteredValue.length >= 2) {
             for (let resource of resources) {
-                if (!resource.name.toLowerCase().includes(inputtedValue)) {
+                if (!resource.name.toLowerCase().includes(enteredValue.toLowerCase())) {
                     hideResource(resource.id);
                 }
             }
