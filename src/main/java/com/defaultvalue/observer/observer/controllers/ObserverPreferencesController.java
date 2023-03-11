@@ -1,6 +1,8 @@
 package com.defaultvalue.observer.observer.controllers;
 
 import com.defaultvalue.observer.observer.dtos.ResponseDto;
+import com.defaultvalue.observer.observer.exceptions.ObserverException;
+import com.defaultvalue.observer.observer.properties.ObserverFileSettings;
 import com.defaultvalue.observer.observer.services.ObserverPreferencesService;
 import com.defaultvalue.observer.resources.dtos.ResourceCommand;
 import com.defaultvalue.observer.resources.dtos.transform.ResourceTransform;
@@ -10,6 +12,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -22,8 +26,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -37,11 +43,14 @@ public class ObserverPreferencesController {
 
     private final ObserverPreferencesService<Resource> observerPreferencesService;
     private final ResourceTransform resourceTransform;
+    private final ObserverFileSettings observerFileSettings;
 
     public ObserverPreferencesController(@Qualifier("observerResourcePreferencesServiceImpl") ObserverPreferencesService<Resource> observerPreferencesService,
-                                         ResourceTransform resourceTransform) {
+                                         ResourceTransform resourceTransform,
+                                         ObserverFileSettings observerFileSettings) {
         this.observerPreferencesService = observerPreferencesService;
         this.resourceTransform = resourceTransform;
+        this.observerFileSettings = observerFileSettings;
     }
 
     @GetMapping
@@ -143,5 +152,31 @@ public class ObserverPreferencesController {
 
             return ResponseEntity.internalServerError().body(new ResponseDto(errorMessage));
         }
+    }
+
+    @PutMapping(value = "/resources/import")
+    public ResponseEntity<ResponseDto> importResources(MultipartFile file) {
+        try {
+            observerPreferencesService.importObject(file);
+            return ResponseEntity.ok(new ResponseDto(null));
+        } catch (ObserverException e) {
+            return ResponseEntity.internalServerError().body(new ResponseDto(e.getMessage()));
+        } catch (Exception e) {
+            String errorId = UUID.randomUUID().toString();
+            String errorMessage = "Import has not performed. Please try again. Error: " + errorId;
+            LOG.error("Exception during import resources from file. uuid = {}", errorId, e);
+
+            return ResponseEntity.internalServerError().body(new ResponseDto(errorMessage));
+        }
+    }
+
+    @GetMapping(value = "/resources/export", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    public ResponseEntity<ByteArrayResource> exportResources() throws IOException {
+        ByteArrayResource byteArrayResource = observerPreferencesService.exportObject();
+        return ResponseEntity.ok()
+                .contentLength(byteArrayResource.contentLength())
+                .contentType(MediaType.parseMediaType("application/octet-stream"))
+                .header("Content-Disposition", "attachment; filename=" + observerFileSettings.getFilename() + "." + observerFileSettings.getFiletype())
+                .body(byteArrayResource);
     }
 }

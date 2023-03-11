@@ -2,6 +2,15 @@ async function buildResources() {
     let resourceInTableDiv = document.createElement("div");
     resourceInTableDiv.className = "resources-in-table";
 
+    let importButtonElement = buildButton("btn btn-primary import-file-js", "Import");
+
+    let inputSelectorElement = buildInput("file", "form-control input-selector-js");
+    inputSelectorElement.accept = ".txt";
+    inputSelectorElement.style.display = "none";
+
+    let exportButtonElement = buildButton("btn btn-primary export-file-js", "Export");
+    resourceInTableDiv.append(importButtonElement, inputSelectorElement, exportButtonElement);
+
     let table = document.createElement("table");
     table.className = "table table-bordered table-hover resource-table";
 
@@ -56,11 +65,18 @@ function buildAnchor(href) {
     return anchor;
 }
 
-function buildButton() {
+function buildButton(classNameStr, title) {
     let button = document.createElement("button");
-    button.className = "btn btn-primary";
-    button.textContent = "Remove";
+    button.className = classNameStr;
+    button.textContent = title;
     return button;
+}
+
+function buildInput(typeStr, classNameStr) {
+    let input = document.createElement("input");
+    input.type = typeStr;
+    input.className = classNameStr;
+    return input;
 }
 
 async function buildResourcesToTableRow(tbody) {
@@ -74,7 +90,7 @@ async function buildResourcesToTableRow(tbody) {
                     tr.append(buildTableData("resource-id-js", resource.id));
                     tr.append(buildTableData("resource-name-js", resource.name));
                     tr.append(buildTableDataWithCallback("resource-path-js", buildAnchor(resource.path)));
-                    tr.append(buildTableDataWithCallback("resource-remove-js", buildButton()));
+                    tr.append(buildTableDataWithCallback("resource-remove-js", buildButton("btn btn-primary", "Remove")));
 
                     tbody.append(tr);
                 }

@@ -41,6 +41,16 @@ public class ObserverFileHelper {
         }
     }
 
+    public Path getPathOfFile() {
+        try {
+            return createFile();
+        } catch (Exception e) {
+            String errorId = UUID.randomUUID().toString();
+            LOG.error("Exception has occurred during getting the file. Error id = {}", errorId, e);
+            throw new ObserverException("Unable to get the observer file");
+        }
+    }
+
     /**
      * Save content as string to file.
      *
