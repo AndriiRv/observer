@@ -2,10 +2,8 @@
 function addEventToImportTrigger(buttonElement) {
     let inputSelectorElement = document.querySelector(".input-selector-js");
 
-    let isImportButtonClicked = true;
     addEvent(buttonElement, "click", function () {
-        inputSelectorElement.style.display = isImportButtonClicked ? "block" : "none";
-        isImportButtonClicked = !isImportButtonClicked;
+        inputSelectorElement.click();
     });
 
     addEvent(inputSelectorElement, "change", function () {
