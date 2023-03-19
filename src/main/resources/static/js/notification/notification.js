@@ -1,3 +1,6 @@
+
+var notificationQueueObj = new NotificationQueue();
+
 class Notification {
 
     constructor(headerText, description, location, type, timeMs) {
