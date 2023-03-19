@@ -1,5 +1,6 @@
 package com.defaultvalue.observer.observer.helpers;
 
+import com.defaultvalue.observer.observer.enums.ObserverFile;
 import com.defaultvalue.observer.observer.exceptions.ObserverException;
 import com.defaultvalue.observer.observer.properties.ObserverFileSettings;
 import org.slf4j.Logger;
@@ -30,9 +31,9 @@ public class ObserverFileHelper {
      *
      * @return list of each line of file.
      */
-    public List<String> readTheFile() {
+    public List<String> readTheFile(ObserverFile observerFile) {
         try {
-            Path fileNamePath = createFile();
+            Path fileNamePath = createFile(observerFile);
             return Files.readAllLines(fileNamePath);
         } catch (IOException e) {
             String errorId = UUID.randomUUID().toString();
@@ -41,9 +42,9 @@ public class ObserverFileHelper {
         }
     }
 
-    public Path getPathOfFile() {
+    public Path getPathOfFile(ObserverFile observerFile) {
         try {
-            return createFile();
+            return createFile(observerFile);
         } catch (Exception e) {
             String errorId = UUID.randomUUID().toString();
             LOG.error("Exception has occurred during getting the file. Error id = {}", errorId, e);
@@ -56,8 +57,8 @@ public class ObserverFileHelper {
      *
      * @param content resources as string.
      */
-    public boolean saveToFile(String content) {
-        Path fileNamePath = createFile();
+    public boolean saveToFile(String content, ObserverFile observerFile) {
+        Path fileNamePath = createFile(observerFile);
 
         try (BufferedWriter bufferedWriter = Files.newBufferedWriter(fileNamePath)) {
             bufferedWriter.append(content);
@@ -74,9 +75,9 @@ public class ObserverFileHelper {
      *
      * @return {@link Path} object with file.
      */
-    Path createFile() {
+    Path createFile(ObserverFile observerFile) {
         try {
-            Path fileNamePath = Paths.get(observerFileSettings.getFilename() + "." + observerFileSettings.getFiletype());
+            Path fileNamePath = Paths.get(buildFilename(observerFile));
             if (Files.notExists(fileNamePath)) {
                 Files.createFile(fileNamePath);
             }
@@ -86,5 +87,22 @@ public class ObserverFileHelper {
             LOG.error("Exception has occurred during create the file. Error id = {}", errorId, e);
             throw new ObserverException("Unable to create the observer file");
         }
+    }
+
+    /**
+     * Builder of file name depends on Observer file type.
+     *
+     * @param observerFile {@link ObserverFile} obj.
+     * @return built String file name.
+     */
+    String buildFilename(ObserverFile observerFile) {
+        String observerFileName = observerFileSettings.getResources().getFilename() + ".";
+
+        if (observerFile.equals(ObserverFile.RESOURCES)) {
+            return observerFileName + observerFileSettings.getResources().getFiletype();
+        } else if (observerFile.equals(ObserverFile.NETWORKS)) {
+            return observerFileName + observerFileSettings.getNetworks().getFiletype();
+        }
+        return observerFileName;
     }
 }

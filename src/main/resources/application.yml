@@ -12,11 +12,18 @@ observer:
         enabled: true
         path: util/banner.txt
     files:
-        enabled: true
-        filename: resources
-        filetype: txt
-        separate-character: "|"
-        comment-character: "//"
+        resources:
+            enabled: true
+            filename: resources
+            filetype: txt
+            separate-character: "|"
+            comment-character: "//"
+        networks:
+            enabled: true
+            filename: networks
+            filetype: txt
+            separate-character: "|"
+            comment-character: "//"
 
     httpclient:
         connectionTimeout: 5000

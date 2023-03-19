@@ -1,10 +1,11 @@
 package com.defaultvalue.observer.observer.services;
 
+import com.defaultvalue.observer.networkcheck.model.NetworkCheck;
+
 import com.defaultvalue.observer.observer.enums.ObserverFile;
 import com.defaultvalue.observer.observer.exceptions.ObserverException;
 import com.defaultvalue.observer.observer.helpers.ObserverFileHelper;
 import com.defaultvalue.observer.observer.properties.ObserverFileSettings;
-import com.defaultvalue.observer.resources.models.Resource;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.ByteArrayResource;
@@ -22,37 +23,37 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class ObserverResourcePreferencesServiceImpl implements ObserverPreferencesService<Resource> {
+public class ObserverNetworkCheckPreferencesServiceImpl implements ObserverPreferencesService<NetworkCheck> {
 
-    private final ObserverService<Resource> observerService;
+    private final ObserverService<NetworkCheck> observerService;
     private final ObserverFileHelper observerFileHelper;
     private final ObserverFileSettings observerFileSettings;
 
-    public ObserverResourcePreferencesServiceImpl(@Qualifier("observerResourceFileServiceImpl") ObserverService<Resource> observerService,
-                                                  ObserverFileHelper observerFileHelper,
-                                                  ObserverFileSettings observerFileSettings) {
+    public ObserverNetworkCheckPreferencesServiceImpl(@Qualifier("observerNetworkCheckFileServiceImpl") ObserverService<NetworkCheck> observerService,
+                                                      ObserverFileHelper observerFileHelper,
+                                                      ObserverFileSettings observerFileSettings) {
         this.observerService = observerService;
         this.observerFileHelper = observerFileHelper;
         this.observerFileSettings = observerFileSettings;
     }
 
     @Override
-    public boolean save(Resource obj) {
+    public boolean save(NetworkCheck obj) {
         return observerService.save(obj);
     }
 
     @Override
-    public boolean saveAll(Collection<Resource> resources) {
+    public boolean saveAll(Collection<NetworkCheck> resources) {
         return observerService.saveAll(resources);
     }
 
     @Override
-    public Resource findById(Integer id) {
+    public NetworkCheck findById(Integer id) {
         return observerService.findById(id);
     }
 
     @Override
-    public List<Resource> findAll() {
+    public List<NetworkCheck> findAll() {
         return observerService.findAll();
     }
 
@@ -62,21 +63,21 @@ public class ObserverResourcePreferencesServiceImpl implements ObserverPreferenc
     }
 
     @Override
-    public boolean swap(Integer selectedResourceId, Integer newSelectedIndex) {
-        List<Resource> resources = findAll();
+    public boolean swap(Integer selectedNetworkId, Integer newSelectedIndex) {
+        List<NetworkCheck> resources = findAll();
 
-        Resource selectedResource = resources.stream()
-                .filter(e -> e.getId().equals(selectedResourceId))
+        NetworkCheck selectedNetwork = resources.stream()
+                .filter(e -> e.getId().equals(selectedNetworkId))
                 .findFirst().orElseThrow();
-        int selectedResourceIndex = resources.indexOf(selectedResource);
+        int selectedNetworkIndex = resources.indexOf(selectedNetwork);
 
-        Resource newSelectedResource = resources.stream()
+        NetworkCheck newSelectedNetwork = resources.stream()
                 .filter(e -> e.getId().equals(newSelectedIndex))
                 .findFirst().orElseThrow();
-        int nextSelectedResourceIndex = resources.indexOf(newSelectedResource);
+        int nextSelectedNetworkIndex = resources.indexOf(newSelectedNetwork);
 
-        resources.remove(selectedResourceIndex);
-        resources.add(nextSelectedResourceIndex, selectedResource);
+        resources.remove(selectedNetworkIndex);
+        resources.add(nextSelectedNetworkIndex, selectedNetwork);
 
         return saveAll(resources);
     }
@@ -90,7 +91,7 @@ public class ObserverResourcePreferencesServiceImpl implements ObserverPreferenc
         try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8))) {
             String stringContent = bufferedReader.lines()
                     .collect(Collectors.joining("\n"));
-            observerFileHelper.saveToFile(stringContent, ObserverFile.RESOURCES);
+            observerFileHelper.saveToFile(stringContent, ObserverFile.NETWORKS);
         }
     }
 
@@ -106,7 +107,7 @@ public class ObserverResourcePreferencesServiceImpl implements ObserverPreferenc
 
     @Override
     public ByteArrayResource exportObject() throws IOException {
-        try (InputStream inputStream = new FileInputStream(observerFileHelper.getPathOfFile(ObserverFile.RESOURCES).toFile())) {
+        try (InputStream inputStream = new FileInputStream(observerFileHelper.getPathOfFile(ObserverFile.NETWORKS).toFile())) {
             return new ByteArrayResource(inputStream.readAllBytes());
         }
     }

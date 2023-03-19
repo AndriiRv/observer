@@ -7,49 +7,63 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties("observer.files")
 public class ObserverFileSettings {
 
-    private String filename;
-    private String filetype;
-    private Boolean enabled;
-    private String separateCharacter;
-    private String commentCharacter;
+    private final ObserverFileSettings.FileSettings resources = new FileSettings();
+    private final ObserverFileSettings.FileSettings networks = new FileSettings();
 
-    public String getFilename() {
-        return filename;
+    public FileSettings getResources() {
+        return resources;
     }
 
-    public void setFilename(String filename) {
-        this.filename = filename;
+    public FileSettings getNetworks() {
+        return networks;
     }
 
-    public String getFiletype() {
-        return filetype;
-    }
+    public static class FileSettings {
 
-    public void setFiletype(String filetype) {
-        this.filetype = filetype;
-    }
+        private Boolean enabled;
+        private String filename;
+        private String filetype;
+        private String separateCharacter;
+        private String commentCharacter;
 
-    public Boolean getEnabled() {
-        return enabled;
-    }
+        public Boolean getEnabled() {
+            return enabled;
+        }
 
-    public void setEnabled(Boolean enabled) {
-        this.enabled = enabled;
-    }
+        public void setEnabled(Boolean enabled) {
+            this.enabled = enabled;
+        }
 
-    public String getSeparateCharacter() {
-        return separateCharacter;
-    }
+        public String getFilename() {
+            return filename;
+        }
 
-    public void setSeparateCharacter(String separateCharacter) {
-        this.separateCharacter = separateCharacter;
-    }
+        public void setFilename(String filename) {
+            this.filename = filename;
+        }
 
-    public String getCommentCharacter() {
-        return commentCharacter;
-    }
+        public String getFiletype() {
+            return filetype;
+        }
 
-    public void setCommentCharacter(String commentCharacter) {
-        this.commentCharacter = commentCharacter;
+        public void setFiletype(String filetype) {
+            this.filetype = filetype;
+        }
+
+        public String getSeparateCharacter() {
+            return separateCharacter;
+        }
+
+        public void setSeparateCharacter(String separateCharacter) {
+            this.separateCharacter = separateCharacter;
+        }
+
+        public String getCommentCharacter() {
+            return commentCharacter;
+        }
+
+        public void setCommentCharacter(String commentCharacter) {
+            this.commentCharacter = commentCharacter;
+        }
     }
 }

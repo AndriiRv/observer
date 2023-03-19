@@ -79,7 +79,7 @@ function addSwapEvent(resourceElement) {
 
         function swap(initialIndex, newIndex) {
             let url = new URL(indexPreferencesPage + "resources/swap");
-            url.searchParams.set("selectedResourceId", initialIndex);
+            url.searchParams.set("selectedElementId", initialIndex);
             url.searchParams.set("newSelectedIndex", newIndex);
 
             putAjaxRequest(url.toString(), reload, function (error) {
