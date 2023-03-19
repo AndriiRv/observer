@@ -16,25 +16,7 @@
 
 <div class="header-wrapper" th:insert="fragments/header :: header(enableFilter=false)"></div>
 
-<div class="preferences" th:unless="${message} != null">
-    <div class="form-element">
-        <div class="form-elements">
-            <div class="input-group">
-                <label>
-                    <input name="name" type="search" class="form-control name-new-resource-js"
-                           placeholder="Name of resource" required/>
-                </label>
-            </div>
-            <div class="input-group">
-                <label>
-                    <input name="path" type="url" class="form-control path-new-resource-js" placeholder="Name of path"
-                           required/>
-                </label>
-            </div>
-        </div>
-        <button class="btn btn-primary save-new-resource-js" type="submit">Save</button>
-    </div>
-</div>
+<div class="preferences" th:unless="${message} != null"></div>
 
 <script th:src="@{/js/general/general.js}"></script>
 <script th:src="@{/js/preferences/saveResource.js}"></script>

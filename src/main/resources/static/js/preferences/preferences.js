@@ -17,6 +17,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
             addSwapEvent(resource);
         }
+
+        initSaveResource();
+
         addEventToImportTrigger(document.querySelector(".import-file-js"));
         addEventToExportTrigger(document.querySelector(".export-file-js"));
     });

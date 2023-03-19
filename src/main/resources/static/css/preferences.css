@@ -56,7 +56,7 @@ body {
     word-break: break-word;
 }
 
-.resource-remove-js button {
+.save-new-resource-js button, .resource-remove-js button {
     width: 100%;
 }
 

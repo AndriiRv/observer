@@ -24,6 +24,14 @@ async function buildResources() {
 
     tr.append(thContent);
     thead.append(tr);
+
+    let tr2 = document.createElement("tr");
+    tr2.append(document.createElement("th"));
+    tr2.append(buildInputInHeader("form-control name-new-resource-js", "Name of resource"));
+    tr2.append(buildInputInHeader("form-control path-new-resource-js", "Name of path"));
+    tr2.append(buildTableHeaderWithCallback("save-new-resource-js", buildButton("btn btn-primary", "Save")));
+    thead.append(tr2);
+
     table.append(thead);
 
     let tbody = document.createElement("tbody");
@@ -34,6 +42,28 @@ async function buildResources() {
 
         document.querySelector(".preferences").append(resourceInTableDiv);
     });
+}
+
+function buildInputInHeader(classNameStr, placeHolderStr) {
+    let th = document.createElement("th");
+
+    let inputElement = document.createElement("input");
+    inputElement.className = classNameStr;
+    inputElement.placeholder = placeHolderStr;
+    th.append(inputElement);
+
+    return th
+}
+
+function buildTableHeaderWithCallback(className, callback) {
+    let th = document.createElement("th");
+    th.className = className;
+
+    if (callback) {
+        th.append(callback);
+    }
+
+    return th;
 }
 
 function buildTableHeader(textContent) {

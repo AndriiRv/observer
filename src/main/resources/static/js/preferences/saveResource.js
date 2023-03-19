@@ -1,5 +1,5 @@
-document.addEventListener('DOMContentLoaded', function () {
 
+function initSaveResource() {
     addEvent(document.querySelector(".save-new-resource-js"), "click", function () {
         let nameNewResource = document.querySelector(".name-new-resource-js").value;
         let pathNewResource = document.querySelector(".path-new-resource-js").value;
@@ -40,4 +40,4 @@ document.addEventListener('DOMContentLoaded', function () {
 
         return true;
     }
-});
+}
