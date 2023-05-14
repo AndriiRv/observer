@@ -134,7 +134,7 @@ public class ObserverPreferencesNetworkCheckController {
         }
     }
 
-    @PutMapping(value = "/resources/import")
+    @PutMapping(value = "/import")
     public ResponseEntity<ResponseDto> importResources(MultipartFile file) {
         try {
             observerPreferencesService.importObject(file);
@@ -150,7 +150,7 @@ public class ObserverPreferencesNetworkCheckController {
         }
     }
 
-    @GetMapping(value = "/resources/export", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    @GetMapping(value = "/export", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     public ResponseEntity<ByteArrayResource> exportResources() throws IOException {
         ByteArrayResource byteArrayResource = observerPreferencesService.exportObject();
 

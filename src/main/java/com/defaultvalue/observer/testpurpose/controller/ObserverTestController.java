@@ -38,25 +38,6 @@ public class ObserverTestController {
         return "index.html";
     }
 
-    @GetMapping("/resources/count")
-    @ResponseBody
-    public ResponseEntity<ResponseDto> getCountOfResources() {
-        try {
-            int countOfResources = observerService.getCountOfResources();
-            if (countOfResources == 0) {
-                return ResponseEntity.status(HttpStatus.OK)
-                        .body(new ResponseDto("No one resources found. Please add some resource."));
-            }
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(new ResponseDto(countOfResources));
-        } catch (Exception e) {
-            String errorMessage = "Resources are not fetched. Please try again.";
-            LOG.error("Exception during get count of resources.", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ResponseDto(errorMessage));
-        }
-    }
-
     @GetMapping("/resources/{id}")
     @ResponseBody
     public ResponseEntity<ResponseDto> getResource(@PathVariable Integer id) {

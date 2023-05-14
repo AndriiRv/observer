@@ -64,7 +64,7 @@ public class ObserverNetworkFileRepositoryImpl implements ObserverRepository<Net
 
         List<NetworkCheck> networkChecks = new ArrayList<>();
 
-        List<String> elements = observerFileHelper.readTheFile(ObserverFile.RESOURCES);
+        List<String> elements = observerFileHelper.readTheFile(ObserverFile.NETWORKS);
         for (int i = 0; i < elements.size(); i++) {
             String line = elements.get(i);
             if (observerFileValidator.isElementEmpty(line)) {

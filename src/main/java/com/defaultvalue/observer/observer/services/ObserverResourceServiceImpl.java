@@ -49,12 +49,7 @@ public class ObserverResourceServiceImpl implements ObserverService<Resource> {
      */
     @Override
     public List<Resource> findAll() {
-        List<Resource> resources = observerService.findAll();
-        resources.stream()
-                .parallel()
-                .forEach(resource -> resource = addResponseStatus(resource));
-
-        return resources;
+        return observerService.findAll();
     }
 
     Resource addResponseStatus(Resource resource) {

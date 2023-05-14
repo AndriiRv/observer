@@ -43,9 +43,7 @@ public class ObserverNetworkCheckFileServiceImpl implements ObserverService<Netw
 
     @Override
     public List<NetworkCheck> findAll() {
-        Collection<NetworkCheck> networkChecks = observerRepository.findAll();
-        networkChecks.forEach(e -> e.setStatus(addStatus(e.getPath())));
-        return new ArrayList<>(networkChecks);
+        return new ArrayList<>(observerRepository.findAll());
     }
 
     @Override

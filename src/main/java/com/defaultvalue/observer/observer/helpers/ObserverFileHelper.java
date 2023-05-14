@@ -96,13 +96,11 @@ public class ObserverFileHelper {
      * @return built String file name.
      */
     String buildFilename(ObserverFile observerFile) {
-        String observerFileName = observerFileSettings.getResources().getFilename() + ".";
-
         if (observerFile.equals(ObserverFile.RESOURCES)) {
-            return observerFileName + observerFileSettings.getResources().getFiletype();
+            return observerFileSettings.getResources().getFilename() + "." + observerFileSettings.getResources().getFiletype();
         } else if (observerFile.equals(ObserverFile.NETWORKS)) {
-            return observerFileName + observerFileSettings.getNetworks().getFiletype();
+            return observerFileSettings.getNetworks().getFilename() + "." + observerFileSettings.getNetworks().getFiletype();
         }
-        return observerFileName;
+        return "";
     }
 }
