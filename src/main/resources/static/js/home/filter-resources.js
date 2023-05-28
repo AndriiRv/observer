@@ -1,39 +1,24 @@
-document.addEventListener('DOMContentLoaded', function () {
 
-    let filterInputElement = document.querySelector(".filter-resources-js");
-
+function filterObserverElements(filterInputElement) {
     addEvent(filterInputElement, "input", function () {
         filterResources(filterInputElement.value);
     });
 
     function filterResources(enteredValue) {
-        showAllResources();
+        let elements = filterInputElement.closest("table").querySelectorAll(".observer-element-row");
+        showAllResources(elements);
 
-        if (enteredValue.length >= 2) {
-            for (let resource of resources) {
-                if (!resource.name.toLowerCase().includes(enteredValue.toLowerCase())) {
-                    hideResource(resource.id);
-                }
+        for (let element of elements) {
+            const observerElementName = element.querySelector(".observer-element-name").textContent;
+            if (!observerElementName.toLowerCase().includes(enteredValue.toLowerCase())) {
+                element.style.display = "none";
             }
         }
     }
 
-    function showAllResources() {
-        let resourceDivisions = document.querySelectorAll(".resource-element");
-        for (const resourceDivision of resourceDivisions) {
-            resourceDivision.style.display = "flex";
+    function showAllResources(elements) {
+        for (const element of elements) {
+            element.style.display = "revert";
         }
     }
-
-    function hideResource(resourceId) {
-        let resourceIdInputElements = document.querySelectorAll(".resourceId");
-
-        for (const idInput of resourceIdInputElements) {
-            if (Number(idInput.value) === resourceId) {
-                idInput.parentElement.style.display = "none";
-                break;
-            }
-        }
-    }
-
-});
+}

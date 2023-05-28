@@ -12,20 +12,38 @@
     <link th:href="@{/css/preferences.css}" rel="stylesheet"/>
     <link th:href="@{/css/notification.css}" rel="stylesheet"/>
 </head>
-<body>
+<body th:attr="data-preferences-index-page-url=${#httpServletRequest.getContextPath()} + '/preferences',
+               data-get-all-resources-url=${#httpServletRequest.getContextPath()} + '/preferences/resources',
+               data-get-all-network-check-url=${#httpServletRequest.getContextPath()} + '/preferences/network-check',
+               data-save-resource-url=${#httpServletRequest.getContextPath()} + '/preferences/resources',
+               data-save-network-check-url=${#httpServletRequest.getContextPath()} + '/preferences/network-check',
+               data-update-resource-url=${#httpServletRequest.getContextPath()} + '/preferences/resources',
+               data-update-network-check-url=${#httpServletRequest.getContextPath()} + '/preferences/network-check',
+               data-remove-resource-url=${#httpServletRequest.getContextPath()} + '/preferences/resources',
+               data-remove-network-check-url=${#httpServletRequest.getContextPath()} + '/preferences/network-check',
+               data-swap-resource-url=${#httpServletRequest.getContextPath()} + '/preferences/resources/swap',
+               data-swap-network-check-url=${#httpServletRequest.getContextPath()} + '/preferences/network-check/swap',
 
-<div class="header-wrapper" th:insert="fragments/header :: header(enableFilter=false)"></div>
+               data-resource-import-url=${#httpServletRequest.getContextPath()} + '/preferences/resources/import',
+               data-resource-export-url=${#httpServletRequest.getContextPath()} + '/preferences/resources/export',
+               data-network-check-import-url=${#httpServletRequest.getContextPath()} + '/preferences/network-check/import',
+               data-network-check-export-url=${#httpServletRequest.getContextPath()} + '/preferences/network-check/export'">
 
-<div class="preferences" th:unless="${message} != null"></div>
+<div class="header-wrapper" th:insert="fragments/header"></div>
+
+<div class="root" th:unless="${message} != null"></div>
 
 <script th:src="@{/js/general/general.js}"></script>
-<script th:src="@{/js/preferences/saveResource.js}"></script>
 <script th:src="@{/js/utils.js}"></script>
+<script th:src="@{/js/utils/tables.js}"></script>
+<script th:src="@{/js/utils/elements.js}"></script>
 <script th:src="@{/js/fetch.js}"></script>
 <script th:src="@{/js/preferences/preferences.js}"></script>
 <script th:src="@{/js/preferences/preferenceResource.js}"></script>
-<script th:src="@{/js/preferences/swapElements.js}"></script>
-<script th:src="@{/js/preferences/importExportResources.js}"></script>
+<script th:src="@{/js/preferences/events/saveResource.js}"></script>
+<script th:src="@{/js/preferences/events/preferenceEvents.js}"></script>
+<script th:src="@{/js/preferences/events/swapElements.js}"></script>
+<script th:src="@{/js/preferences/events/importExport.js}"></script>
 
 <script th:src="@{/js/notification/notificationQueue.js}"></script>
 <script th:src="@{/js/notification/notification.js}"></script>

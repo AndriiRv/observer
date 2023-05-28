@@ -7,11 +7,7 @@ body {
     display: flex;
 }
 
-.preferences {
-    padding-left: 5px;
-    padding-right: 5px;
-
-    padding-top: 50px;
+.root {
     display: flex;
 }
 
@@ -36,38 +32,42 @@ body {
     flex-flow: column;
 }
 
-.resources-in-table {
+.observer-table-div {
     margin: 0 auto;
     overflow-y: auto;
-    height: calc(100vh - 180px);
+    height: calc(100vh - 56px);
 }
 
-.resources-in-table .resource-table th:nth-child(4) {
-    width: 165px;
-    max-width: 165px;
+.observer-table-div .observer-element-table th:nth-child(4) {
+    width: 170px;
+    max-width: 170px;
 }
 
-.resource-id-js {
+.id-js {
     cursor: grabbing;
 }
 
-.resource-name-js, .resource-path-js {
+.name-js, .path-js {
     cursor: pointer;
     word-break: break-word;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    max-width: 100px;
 }
 
-.save-new-resource-js button, .resource-remove-js button {
+.save-new-js button, .remove-js button {
     width: 100%;
 }
 
 @media screen and (max-width: 1024px) {
-    .resources-in-table {
+    .observer-table-div {
         width: 100%;
     }
 }
 
 @media screen and (min-width: 1195px) {
-    .resources-in-table {
+    .observer-table-div {
         width: 50%;
     }
 }

@@ -1,16 +1,20 @@
 
 .loader {
-    height: 100%;
-    margin: 0 auto;
-    animation: rotate 10s infinite;
+    height: 65px;
+    max-height: 65px;
+    animation: rotate 12s infinite;
+}
+
+.loader::before {
+    content: "[loading...]";
 }
 
 @keyframes rotate {
     0% {
-        background: darkred;
+        background: red;
     }
     10% {
-        background: red;
+        background: orangered;
     }
     20% {
         background: orange;
@@ -37,6 +41,9 @@
         background: rebeccapurple;
     }
     100% {
-        background: pink;
+        background: palevioletred;
+    }
+    110% {
+        background: darkred;
     }
 }

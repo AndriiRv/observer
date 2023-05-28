@@ -4,76 +4,101 @@ body {
     margin: 0;
 }
 
+body.green {
+    background: rgba(0, 128, 0, .1);
+}
+
+body.orange {
+    background: rgba(255, 165, 0, .1);
+}
+
+body.red {
+    background: rgba(139, 0, 0, .1);
+}
+
 .root {
+    display: grid;
+    grid-template-columns: 50% 50%;
+}
+
+.observer-table-div {
+    overflow-y: scroll;
+    height: calc(100vh - 56px);
+}
+
+table th:nth-child(2) {
+    width: 200px;
+}
+
+table td {
+    height: 65px;
+    max-height: 65px;
+}
+
+table thead .observer-element-filter {
+    position: sticky;
+    top: 0;
+    background-color: white;
+}
+
+table thead .observer-element-filter input {
+    width: 100%;
+    height: 100%;
+}
+
+.observer-element-data {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
+    max-width: 600px;
 }
 
-.resource-element {
-    display: flex;
-    min-width: 500px;
-    min-height: 200px;
-    padding: 5px;
-    border: black 1px solid;
-    flex-grow: 1;
-    justify-content: space-between;
+.observer-element-data span {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
-.info-resource, .status-resource {
-    display: flex;
-    flex-flow: column-reverse;
-    mix-blend-mode: difference;
+.observer-element-data a {
+    max-width: fit-content;
 }
 
-.resource-element span.status-resource-title {
-    font-size: 20px;
+.observer-element-status {
+    color: white;
+    display: grid;
 }
 
-.resource-element span.last-update-time-resource {
-    font-size: 15px;
+.last-update-time {
+    font-size: small;
 }
 
-.resource-element.red {
+.observer-element-status:hover {
+    cursor: pointer;
+}
+
+.table tbody tr:hover td.observer-element-status {
+    color: white;
+}
+
+.observer-element-status.red {
     background-color: darkred;
 }
 
-.resource-element.orange {
+.observer-element-status.red:before {
+    content: "[inactive]";
+}
+
+.observer-element-status.orange {
     background-color: orange;
 }
 
-.resource-element.orange span, .resource-element.orange a {
-    color: black;
+.observer-element-status.orange:before {
+    content: "[issues are exists]";
 }
 
-.resource-element.green {
+.observer-element-status.green {
     background-color: green;
 }
 
-.resource-element:not(.loader) .info-resource,
-.resource-element:not(.loader) .status-resource {
-    mix-blend-mode: unset;
-}
-
-.resource-element a {
-    color: white;
-    float: right;
-    text-decoration: none;
-}
-
-.resource-element a:hover {
-    text-decoration: underline;
-}
-
-.resource-element:hover {
-    opacity: 0.6;
-}
-
-.resource-element span {
-    color: white;
-    font-size: xx-large;
-}
-
-.message {
-    font-size: xx-large;
-    margin: 0 auto;
+.observer-element-status.green:before {
+    content: "[active]";
 }

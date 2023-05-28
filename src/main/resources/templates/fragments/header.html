@@ -20,9 +20,6 @@
 
         <div class="buttons-and-search">
             <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                <li th:if="${enableFilter}" class="nav-item">
-                    <input class="form-control mr-sm-2 filter-resources-js" type="search" placeholder="Search" aria-label="Search"/>
-                </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="${#httpServletRequest.getContextPath()} + '/preferences'">Preferences</a>
                 </li>

@@ -12,16 +12,20 @@
     <link th:href="@{/css/index.css}" rel="stylesheet"/>
     <link th:href="@{/css/loader.css}" rel="stylesheet"/>
 </head>
-<body>
+<body th:attr="data-resource-url=${#httpServletRequest.getContextPath()} + '/resources',
+               data-network-check-url=${#httpServletRequest.getContextPath()} + '/networks'">
 
-<div class="header-wrapper" th:insert="fragments/header :: header(enableFilter=true)"></div>
+<div class="header-wrapper" th:insert="fragments/header"></div>
 
 <div class="root"></div>
 
 <script th:src="@{/js/general/general.js}"></script>
+<script th:src="@{/js/utils/tables.js}"></script>
+<script th:src="@{/js/utils/elements.js}"></script>
 <script th:src="@{/js/utils.js}"></script>
 <script th:src="@{/js/home/loader.js}"></script>
 <script th:src="@{/js/home/index.js}"></script>
+<script th:src="@{/js/home/indexPageHelper.js}"></script>
 <script th:src="@{/js/home/filter-resources.js}"></script>
 <script th:src="@{/webjars/luxon/3.2.1/build/global/luxon.min.js}"></script>
 

@@ -1,17 +1,15 @@
 
-function addEventToImportTrigger(buttonElement) {
-    let inputSelectorElement = document.querySelector(".input-selector-js");
-
+function addEventToImportTrigger(buttonElement, inputFileElement, importEndpoint) {
     addEvent(buttonElement, "click", function () {
-        inputSelectorElement.click();
+        inputFileElement.click();
     });
 
-    addEvent(inputSelectorElement, "change", function () {
-        const file = inputSelectorElement.files[0];
+    addEvent(inputFileElement, "change", function () {
+        const file = inputFileElement.files[0];
         const formData = new FormData();
         formData.append('file', file);
 
-        fetch(indexPreferencesPage + "resources/import", {
+        fetch(importEndpoint, {
             method: 'PUT',
             body: formData
         }).then(response => {
@@ -25,19 +23,19 @@ function addEventToImportTrigger(buttonElement) {
             } else {
                 response.json().then(json => {
                     buildErrorNotification(3000, json.message);
-                    inputSelectorElement.value = "";
+                    inputFileElement.value = "";
                 });
             }
         }).catch(error => {
             buildErrorNotification(3000, "Error during upload file.");
-            inputSelectorElement.value = "";
+            inputFileElement.value = "";
         });
     });
 }
 
-function addEventToExportTrigger(buttonElement) {
+function addEventToExportTrigger(buttonElement, exportEndpoint) {
     addEvent(buttonElement, "click", function () {
-        fetch(indexPreferencesPage + "resources/export")
+        fetch(exportEndpoint)
             .then(response => {
                 if (response.ok) {
                     const filename = response.headers.get('Content-Disposition').split('filename=')[1];

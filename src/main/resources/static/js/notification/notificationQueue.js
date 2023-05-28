@@ -16,7 +16,7 @@ class NotificationQueue {
         this._bottomRightNotificationQueueDivElement = document.createElement("div");
         this._bottomRightNotificationQueueDivElement.className = "notification-queue-js notification-queue-bottom-right-js";
 
-        document.querySelector(".preferences").append(
+        document.querySelector(".root").append(
             this._topLeftNotificationQueueDivElement,
             this._topRightNotificationQueueDivElement,
             this._bottomLeftNotificationQueueDivElement,
