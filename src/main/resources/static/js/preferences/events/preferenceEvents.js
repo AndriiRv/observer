@@ -7,6 +7,11 @@ function addRenameEventToResource(tdElement, endpoint, isPathElement) {
     addEvent(tdElement, "focusout", function () {
         submitRenameResource(tdElement, endpoint, isPathElement);
     });
+    addEvent(tdElement, "keyup", function (event) {
+        if (event.key === "Enter") {
+            tdElement.querySelector("input").blur();
+        }
+    });
 }
 
 function renameResource(tdElement) {
