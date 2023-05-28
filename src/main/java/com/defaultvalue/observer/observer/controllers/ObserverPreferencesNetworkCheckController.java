@@ -55,13 +55,13 @@ public class ObserverPreferencesNetworkCheckController {
         }
 
         try {
-            NetworkCheck resource = networkCheckTransform.transformFromCommand(networkCheckCommand);
-            observerPreferencesService.save(resource);
+            NetworkCheck resourceNetwork = networkCheckTransform.transformFromCommand(networkCheckCommand);
+            observerPreferencesService.save(resourceNetwork);
             return ResponseEntity.ok(new ResponseDto(null));
         } catch (Exception e) {
             String errorId = UUID.randomUUID().toString();
-            String errorMessage = "Resource is not saved. Please try again. Error: " + errorId;
-            LOG.error("Exception during save resource. uuid = {}", errorId, e);
+            String errorMessage = "Network is not saved. Please try again. Error: " + errorId;
+            LOG.error("Exception during save network. uuid = {}", errorId, e);
 
             return ResponseEntity.internalServerError().body(new ResponseDto(errorMessage));
         }
@@ -79,13 +79,13 @@ public class ObserverPreferencesNetworkCheckController {
         }
 
         try {
-            NetworkCheck resource = networkCheckTransform.transformFromCommand(networkCheckCommand);
-            observerPreferencesService.save(resource);
+            NetworkCheck network = networkCheckTransform.transformFromCommand(networkCheckCommand);
+            observerPreferencesService.save(network);
             return ResponseEntity.ok(new ResponseDto(null));
         } catch (Exception e) {
             String errorId = UUID.randomUUID().toString();
-            String errorMessage = "Resource is not saved. Please try again. Error: " + errorId;
-            LOG.error("Exception during save resource. uuid = {}", errorId, e);
+            String errorMessage = "Network is not saved. Please try again. Error: " + errorId;
+            LOG.error("Exception during save network. uuid = {}", errorId, e);
 
             return ResponseEntity.internalServerError().body(new ResponseDto(errorMessage));
         }

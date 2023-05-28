@@ -1,5 +1,8 @@
 package com.defaultvalue.observer.networkcheck.dtos;
 
+import com.defaultvalue.observer.networkcheck.validator.NetworkCheckValid;
+
+@NetworkCheckValid
 public class NetworkCheckCommand {
 
     private Integer id;
