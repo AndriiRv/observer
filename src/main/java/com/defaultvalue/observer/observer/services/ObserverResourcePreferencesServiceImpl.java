@@ -4,7 +4,9 @@ import com.defaultvalue.observer.observer.enums.ObserverFile;
 import com.defaultvalue.observer.observer.exceptions.ObserverException;
 import com.defaultvalue.observer.observer.helpers.ObserverFileHelper;
 import com.defaultvalue.observer.observer.properties.ObserverFileSettings;
+import com.defaultvalue.observer.resources.dtos.ResourceCommand;
 import com.defaultvalue.observer.resources.models.Resource;
+import com.defaultvalue.observer.resources.validator.ResourceValidator;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.ByteArrayResource;
@@ -17,6 +19,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,6 +30,7 @@ public class ObserverResourcePreferencesServiceImpl implements ObserverPreferenc
     private final ObserverService<Resource> observerService;
     private final ObserverFileHelper observerFileHelper;
     private final ObserverFileSettings observerFileSettings;
+    private final ResourceValidator resourceValidator;
 
     public ObserverResourcePreferencesServiceImpl(@Qualifier("observerResourceFileServiceImpl") ObserverService<Resource> observerService,
                                                   ObserverFileHelper observerFileHelper,
@@ -34,6 +38,7 @@ public class ObserverResourcePreferencesServiceImpl implements ObserverPreferenc
         this.observerService = observerService;
         this.observerFileHelper = observerFileHelper;
         this.observerFileSettings = observerFileSettings;
+        this.resourceValidator = new ResourceValidator();
     }
 
     @Override
@@ -90,7 +95,7 @@ public class ObserverResourcePreferencesServiceImpl implements ObserverPreferenc
         try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8))) {
             String stringContent = bufferedReader.lines()
                     .collect(Collectors.joining("\n"));
-            observerFileHelper.saveToFile(stringContent, ObserverFile.RESOURCES);
+            observerFileHelper.saveToFile(validateImportedElements(stringContent), ObserverFile.RESOURCES);
         }
     }
 
@@ -102,6 +107,13 @@ public class ObserverResourcePreferencesServiceImpl implements ObserverPreferenc
 
         String fileExtension = fileName.substring(fileName.lastIndexOf(".") + 1);
         return fileExtension.equalsIgnoreCase(observerFileSettings.getResources().getFiletype());
+    }
+
+    String validateImportedElements(String stringContent) {
+        String separateChar = String.format("\\%s", observerFileSettings.getNetworks().getSeparateCharacter());
+        return Arrays.stream(stringContent.split("\n")).collect(Collectors.toList()).stream()
+                .filter(e -> resourceValidator.isValid(new ResourceCommand(e.split(separateChar)[0], e.split(separateChar)[1])))
+                .collect(Collectors.joining("\n"));
     }
 
     @Override

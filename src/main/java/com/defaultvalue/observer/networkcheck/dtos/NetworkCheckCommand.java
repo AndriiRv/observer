@@ -15,6 +15,11 @@ public class NetworkCheckCommand {
         this.path = path;
     }
 
+    public NetworkCheckCommand(String name, String path) {
+        this.name = name;
+        this.path = path;
+    }
+
     public NetworkCheckCommand() {
     }
 

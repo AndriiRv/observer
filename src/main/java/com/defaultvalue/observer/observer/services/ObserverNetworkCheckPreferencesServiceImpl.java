@@ -1,7 +1,9 @@
 package com.defaultvalue.observer.observer.services;
 
+import com.defaultvalue.observer.networkcheck.dtos.NetworkCheckCommand;
 import com.defaultvalue.observer.networkcheck.model.NetworkCheck;
 
+import com.defaultvalue.observer.networkcheck.validator.NetworkCheckValidator;
 import com.defaultvalue.observer.observer.enums.ObserverFile;
 import com.defaultvalue.observer.observer.exceptions.ObserverException;
 import com.defaultvalue.observer.observer.helpers.ObserverFileHelper;
@@ -18,6 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,6 +31,7 @@ public class ObserverNetworkCheckPreferencesServiceImpl implements ObserverPrefe
     private final ObserverService<NetworkCheck> observerService;
     private final ObserverFileHelper observerFileHelper;
     private final ObserverFileSettings observerFileSettings;
+    private final NetworkCheckValidator networkCheckValidator;
 
     public ObserverNetworkCheckPreferencesServiceImpl(@Qualifier("observerNetworkCheckFileServiceImpl") ObserverService<NetworkCheck> observerService,
                                                       ObserverFileHelper observerFileHelper,
@@ -35,6 +39,7 @@ public class ObserverNetworkCheckPreferencesServiceImpl implements ObserverPrefe
         this.observerService = observerService;
         this.observerFileHelper = observerFileHelper;
         this.observerFileSettings = observerFileSettings;
+        this.networkCheckValidator = new NetworkCheckValidator();
     }
 
     @Override
@@ -91,7 +96,7 @@ public class ObserverNetworkCheckPreferencesServiceImpl implements ObserverPrefe
         try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8))) {
             String stringContent = bufferedReader.lines()
                     .collect(Collectors.joining("\n"));
-            observerFileHelper.saveToFile(stringContent, ObserverFile.NETWORKS);
+            observerFileHelper.saveToFile(validateImportedElements(stringContent), ObserverFile.NETWORKS);
         }
     }
 
@@ -103,6 +108,13 @@ public class ObserverNetworkCheckPreferencesServiceImpl implements ObserverPrefe
 
         String fileExtension = fileName.substring(fileName.lastIndexOf(".") + 1);
         return fileExtension.equalsIgnoreCase(observerFileSettings.getResources().getFiletype());
+    }
+
+    String validateImportedElements(String stringContent) {
+        String separateChar = String.format("\\%s", observerFileSettings.getNetworks().getSeparateCharacter());
+        return Arrays.stream(stringContent.split("\n")).collect(Collectors.toList()).stream()
+                .filter(e -> networkCheckValidator.isValid(new NetworkCheckCommand(e.split(separateChar)[0], e.split(separateChar)[1])))
+                .collect(Collectors.joining("\n"));
     }
 
     @Override

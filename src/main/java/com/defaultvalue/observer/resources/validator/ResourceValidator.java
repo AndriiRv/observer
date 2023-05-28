@@ -16,6 +16,10 @@ public class ResourceValidator implements ConstraintValidator<ResourceValid, Res
         return nameValidation(command.getName(), context) && pathValidation(command.getPath(), context);
     }
 
+    public boolean isValid(ResourceCommand command) {
+        return StringUtils.isNotBlank(command.getName()) && StringUtils.isNotBlank(command.getPath()) && isPathValid(command.getPath());
+    }
+
     boolean nameValidation(String name, ConstraintValidatorContext context) {
         if (StringUtils.isNotBlank(name)) {
             return true;
