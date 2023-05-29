@@ -60,6 +60,9 @@ table thead .observer-element-filter input {
 
 .observer-element-data a {
     max-width: fit-content;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 .observer-element-status {
