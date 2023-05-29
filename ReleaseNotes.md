@@ -1,10 +1,18 @@
 # Observer Release Notes
 
+- [0.0.4 (2023-05-29)](#004-2023-05-29)
 - [0.0.3 (2023-01-29)](#003-2023-01-29)
 - [0.0.2 (2022-07-17)](#002-2022-07-17)
 - [0.0.1 (2022-06-22)](#001-2022-06-22)
 
 ---
+
+## 0.0.4 (2023-05-29)
+
+- Frontend changes to improve home and preference pages and other fixes (9034f253).
+- Backend changes to improve home and preference pages and other fixes (38a6b2bf).
+- Add backend network checking (91ead231).
+- Add import and export functionality (70d1746e).
 
 ## 0.0.3 (2023-01-29)
 
