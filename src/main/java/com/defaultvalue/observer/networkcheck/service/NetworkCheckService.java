@@ -1,5 +1,6 @@
 package com.defaultvalue.observer.networkcheck.service;
 
+import com.defaultvalue.observer.observer.properties.network_check.ObserverNetworkCheckSettings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -14,14 +15,14 @@ import java.util.List;
 public class NetworkCheckService {
 
     private static final Logger LOG = LoggerFactory.getLogger(NetworkCheckService.class);
+    private static final String WINDOWS_OS_NAME = "windows";
 
     private final List<String> commands;
 
-    public NetworkCheckService() {
-        String windowsOsName = "windows";
-        commands = System.getProperty("os.name").toLowerCase().contains(windowsOsName)
-                ? new ArrayList<>(List.of("cmd.exe", "/c", "ping -n 3"))
-                : new ArrayList<>(List.of("ping -n 3"));
+    public NetworkCheckService(ObserverNetworkCheckSettings observerNetworkCheckSettings) {
+        commands = System.getProperty("os.name").toLowerCase().contains(WINDOWS_OS_NAME)
+                ? new ArrayList<>(List.of("cmd.exe", "/c", "ping -n " + observerNetworkCheckSettings.getRequestsCount()))
+                : new ArrayList<>(List.of("ping", "-c", String.valueOf(observerNetworkCheckSettings.getRequestsCount())));
     }
 
     public boolean isNetworkAccessible(String networkStr) {
@@ -40,7 +41,8 @@ public class NetworkCheckService {
                 }
 
                 int exitCode = process.waitFor();
-                if (exitCode == 0 && stringBuilder.toString().contains("Lost = 0")) {
+                String terminalStringResult = stringBuilder.toString();
+                if (exitCode == 0 && (terminalStringResult.contains("Lost = 0") || terminalStringResult.contains("0% packet loss"))) {
                     return true;
                 }
             } catch (InterruptedException e) {

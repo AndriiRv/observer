@@ -29,4 +29,9 @@ observer:
         connectionTimeout: 5000
         readTimeout: 10000
         stacktrace:
-            enabled: false
+            enabled: true
+
+    network-check:
+        requests-count: 3
+        stacktrace:
+            enabled: true
