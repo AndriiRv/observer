@@ -1,10 +1,8 @@
-package com.defaultvalue.observer.observer.services;
+package com.defaultvalue.observer.observer.services.networkcheck;
 
-import com.defaultvalue.observer.networkcheck.enums.NetworkStatus;
-import com.defaultvalue.observer.networkcheck.helpers.NetworkStatusHelper;
 import com.defaultvalue.observer.networkcheck.model.NetworkCheck;
-import com.defaultvalue.observer.networkcheck.service.NetworkCheckService;
 import com.defaultvalue.observer.observer.repositories.ObserverRepository;
+import com.defaultvalue.observer.observer.services.ObserverService;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -15,15 +13,9 @@ import java.util.List;
 public class ObserverNetworkCheckFileServiceImpl implements ObserverService<NetworkCheck> {
 
     private final ObserverRepository<NetworkCheck> observerRepository;
-    private final NetworkCheckService networkCheckService;
-    private final NetworkStatusHelper networkStatusHelper;
 
-    public ObserverNetworkCheckFileServiceImpl(ObserverRepository<NetworkCheck> observerRepository,
-                                               NetworkCheckService networkCheckService,
-                                               NetworkStatusHelper networkStatusHelper) {
+    public ObserverNetworkCheckFileServiceImpl(ObserverRepository<NetworkCheck> observerRepository) {
         this.observerRepository = observerRepository;
-        this.networkCheckService = networkCheckService;
-        this.networkStatusHelper = networkStatusHelper;
     }
 
     @Override
@@ -48,13 +40,7 @@ public class ObserverNetworkCheckFileServiceImpl implements ObserverService<Netw
 
     @Override
     public NetworkCheck findById(Integer id) {
-        NetworkCheck networkCheck = observerRepository.findById(id).orElseThrow();
-        networkCheck.setStatus(addStatus(networkCheck.getPath()));
-        return networkCheck;
-    }
-
-    NetworkStatus addStatus(String path) {
-        return networkStatusHelper.buildResourceStatus(networkCheckService.isNetworkAccessible(path));
+        return observerRepository.findById(id).orElseThrow();
     }
 
     @Override

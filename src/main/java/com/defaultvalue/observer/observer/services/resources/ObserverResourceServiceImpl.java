@@ -1,6 +1,7 @@
-package com.defaultvalue.observer.observer.services;
+package com.defaultvalue.observer.observer.services.resources;
 
 import com.defaultvalue.observer.observer.helpers.HttpClientHelper;
+import com.defaultvalue.observer.observer.services.ObserverService;
 import com.defaultvalue.observer.resources.helpers.ResourceStatusHelper;
 import com.defaultvalue.observer.resources.models.Resource;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -38,24 +39,14 @@ public class ObserverResourceServiceImpl implements ObserverService<Resource> {
     public Resource findById(Integer id) {
         Resource resource = observerService.findById(id);
 
-        resource = addResponseStatus(resource);
+        int responseStatus = httpClientHelper.getResponseStatus(resource.getPath());
+        resource.setStatus(resourceStatusHelper.buildResourceStatus(responseStatus));
         return resource;
     }
 
-    /**
-     * Iteration by all resources and add response status to their by parallel manner.
-     *
-     * @return
-     */
     @Override
     public List<Resource> findAll() {
         return observerService.findAll();
-    }
-
-    Resource addResponseStatus(Resource resource) {
-        int httpResponseStatus = httpClientHelper.getResponseStatus(resource.getPath());
-        resource.setStatus(resourceStatusHelper.buildResourceStatus(httpResponseStatus));
-        return resource;
     }
 
     @Override

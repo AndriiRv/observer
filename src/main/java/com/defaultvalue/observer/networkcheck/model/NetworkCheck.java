@@ -1,35 +1,28 @@
 package com.defaultvalue.observer.networkcheck.model;
 
 import com.defaultvalue.observer.networkcheck.enums.NetworkStatus;
+import com.defaultvalue.observer.observer.entities.ObserverElement;
+import com.defaultvalue.observer.observer.enums.ObserverFile;
 
 import java.util.Objects;
 
-public class NetworkCheck {
+public class NetworkCheck extends ObserverElement {
 
-    private Integer id;
     private String name;
     private String path;
     private NetworkStatus status;
 
     public NetworkCheck(Integer id, String name, String path) {
-        this.id = id;
+        this.setId(id);
         this.name = name;
         this.path = path;
     }
 
     public NetworkCheck(Integer id) {
-        this.id = id;
+        this.setId(id);
     }
 
     public NetworkCheck() {
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -57,22 +50,27 @@ public class NetworkCheck {
     }
 
     @Override
+    public ObserverFile getObserverName() {
+        return ObserverFile.NETWORKS;
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         NetworkCheck networkCheck = (NetworkCheck) o;
-        return Objects.equals(id, networkCheck.id);
+        return Objects.equals(getId(), networkCheck.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(getId());
     }
 
     @Override
     public String toString() {
         return "Network{" +
-                "id=" + id +
+                "id=" + getId() +
                 ", name='" + name + '\'' +
                 ", path='" + path + '\'' +
                 ", status=" + status +

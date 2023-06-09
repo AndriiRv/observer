@@ -1,6 +1,7 @@
-package com.defaultvalue.observer.observer.services;
+package com.defaultvalue.observer.observer.services.resources;
 
 import com.defaultvalue.observer.observer.repositories.ObserverRepository;
+import com.defaultvalue.observer.observer.services.ObserverService;
 import com.defaultvalue.observer.resources.models.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

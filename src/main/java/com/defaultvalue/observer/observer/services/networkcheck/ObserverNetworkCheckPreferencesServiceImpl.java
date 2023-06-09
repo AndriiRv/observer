@@ -1,4 +1,4 @@
-package com.defaultvalue.observer.observer.services;
+package com.defaultvalue.observer.observer.services.networkcheck;
 
 import com.defaultvalue.observer.networkcheck.dtos.NetworkCheckCommand;
 import com.defaultvalue.observer.networkcheck.model.NetworkCheck;
@@ -8,7 +8,8 @@ import com.defaultvalue.observer.observer.enums.ObserverFile;
 import com.defaultvalue.observer.observer.exceptions.ObserverException;
 import com.defaultvalue.observer.observer.helpers.ObserverFileHelper;
 import com.defaultvalue.observer.observer.properties.ObserverFileSettings;
-import org.apache.commons.lang3.StringUtils;
+import com.defaultvalue.observer.observer.services.ObserverPreferencesService;
+import com.defaultvalue.observer.observer.services.ObserverService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.stereotype.Service;
@@ -20,9 +21,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Service
@@ -68,53 +69,20 @@ public class ObserverNetworkCheckPreferencesServiceImpl implements ObserverPrefe
     }
 
     @Override
-    public boolean swap(Integer selectedNetworkId, Integer newSelectedIndex) {
-        List<NetworkCheck> resources = findAll();
-
-        NetworkCheck selectedNetwork = resources.stream()
-                .filter(e -> e.getId().equals(selectedNetworkId))
-                .findFirst().orElseThrow();
-        int selectedNetworkIndex = resources.indexOf(selectedNetwork);
-
-        NetworkCheck newSelectedNetwork = resources.stream()
-                .filter(e -> e.getId().equals(newSelectedIndex))
-                .findFirst().orElseThrow();
-        int nextSelectedNetworkIndex = resources.indexOf(newSelectedNetwork);
-
-        resources.remove(selectedNetworkIndex);
-        resources.add(nextSelectedNetworkIndex, selectedNetwork);
-
-        return saveAll(resources);
-    }
-
-    @Override
     public void importObject(MultipartFile file) throws IOException {
-        if (!isFileHasSpecificType(file)) {
+        if (!isFileHasSpecificType(file, observerFileSettings.getResources().getFiletype())) {
             throw new ObserverException("Uploaded file contains wrong type.");
         }
 
         try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8))) {
             String stringContent = bufferedReader.lines()
                     .collect(Collectors.joining("\n"));
-            observerFileHelper.saveToFile(validateImportedElements(stringContent), ObserverFile.NETWORKS);
+
+            String separateChar = String.format("\\%s", observerFileSettings.getNetworks().getSeparateCharacter());
+            Predicate<String> predicate = s -> networkCheckValidator.isValid(new NetworkCheckCommand(s.split(separateChar)[0], s.split(separateChar)[1]));
+
+            observerFileHelper.saveToFile(validateImportedElements(stringContent, predicate), ObserverFile.NETWORKS);
         }
-    }
-
-    boolean isFileHasSpecificType(MultipartFile file){
-        String fileName = file.getOriginalFilename();
-        if (StringUtils.isBlank(fileName)) {
-            return false;
-        }
-
-        String fileExtension = fileName.substring(fileName.lastIndexOf(".") + 1);
-        return fileExtension.equalsIgnoreCase(observerFileSettings.getResources().getFiletype());
-    }
-
-    String validateImportedElements(String stringContent) {
-        String separateChar = String.format("\\%s", observerFileSettings.getNetworks().getSeparateCharacter());
-        return Arrays.stream(stringContent.split("\n")).collect(Collectors.toList()).stream()
-                .filter(e -> networkCheckValidator.isValid(new NetworkCheckCommand(e.split(separateChar)[0], e.split(separateChar)[1])))
-                .collect(Collectors.joining("\n"));
     }
 
     @Override
