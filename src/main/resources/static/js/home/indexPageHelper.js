@@ -19,12 +19,12 @@ function buildTable(observerElementName, fetchAllObserverElementsUrl, fetchObser
 
     const tbody = observerTable.createTBody();
     Promise.all([fetchAllObserverElements(fetchAllObserverElementsUrl, tbody, buildTableRows)])
-        .then(async () => {
+        .then(() => {
             if (!observerElementsCount) {
                 return;
             }
             for (let i = 0; i < observerElementTrs.length; i++) {
-                await fetchObserverElementById(fetchObserverElementByIdUrl, i + 1, observerElementTrs[i], buildObserverStatusTd);
+                fetchObserverElementById(fetchObserverElementByIdUrl, i + 1, observerElementTrs[i], buildObserverStatusTd);
             }
         });
     table.append(tbody);
