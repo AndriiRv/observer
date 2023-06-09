@@ -6,9 +6,10 @@
  * @param {String} fetchAllObserverElementsUrl
  * @param {String} fetchObserverElementByIdUrl
  * @param {boolean} isNavigableObserverElement
+ * @param {ObserverWebSocket} observerWebSocket
  * @returns {HTMLTableElement}
  */
-function buildTable(observerElementName, fetchAllObserverElementsUrl, fetchObserverElementByIdUrl, isNavigableObserverElement) {
+function buildTable(observerElementName, fetchAllObserverElementsUrl, fetchObserverElementByIdUrl, isNavigableObserverElement, observerWebSocket) {
     let observerElementsCount = 0;
     let observerElementTrs = [];
 
@@ -88,10 +89,14 @@ function buildTable(observerElementName, fetchAllObserverElementsUrl, fetchObser
 
     function buildObserverStatusTd(id, tr, observerElementObj) {
         let statusTd = tr.querySelector("td.observer-element-status");
+
+        statusTd.classList.remove(observerElementObj.status.toLowerCase(), "gray");
         statusTd.classList.add(observerElementObj.status === undefined || observerElementObj.status == null ? "gray" : observerElementObj.status.toLowerCase());
         statusTd.title = "Click to update status";
 
         statusTd.setAttribute("data-last-update-time", luxon.DateTime.now().toISO());
+
+        statusTd.querySelector(".last-update-time")?.remove();
         statusTd.append(buildSpan("last-update-time", calculateLastUpdateTime(luxon.DateTime.now().toISO())));
 
         if (observerElementObj.status) {
@@ -110,13 +115,20 @@ function buildTable(observerElementName, fetchAllObserverElementsUrl, fetchObser
                 document.querySelector("body").className = "";
             });
             addEvent(statusTd, "click", async function () {
-                statusTd.remove();
-                statusTd = observerTable.createTd("observer-element-status");
-                tr.append(statusTd);
-                addLoader(statusTd);
+                if (isAlreadyClicked(statusTd, "loader")) {
+                    return;
+                }
 
-                await fetchObserverElementById(fetchObserverElementByIdUrl, id, tr, buildObserverStatusTd);
+                observerWebSocket.sendRequest({"id": id});
+
+                addLoader(statusTd);
+                statusTd.classList.remove(observerElementObj.status.toLowerCase(), "gray");
+                statusTd.querySelector(".last-update-time")?.remove();
             });
+        }
+
+        function isAlreadyClicked(statusTd, className) {
+            return statusTd.classList.contains(className);
         }
     }
 
@@ -128,6 +140,29 @@ function buildTable(observerElementName, fetchAllObserverElementsUrl, fetchObser
                 });
             });
     }
+}
+
+/**
+ * WebSocket callback
+ *
+ * @param statusTd
+ * @param observerElementObj
+ */
+function updateStatus(observerElementObj) {
+    const statusTd = document.querySelectorAll(".observer-table-div." + observerElementObj.observerName?.toLowerCase() + " .observer-element-status")[observerElementObj.id - 1];
+    addLoader(statusTd);
+    statusTd.classList.remove(observerElementObj.status.toLowerCase(), "gray");
+    statusTd.querySelector(".last-update-time")?.remove();
+
+    statusTd.classList.add(observerElementObj.status === undefined || observerElementObj.status == null ? "gray" : observerElementObj.status.toLowerCase());
+
+    statusTd.setAttribute("data-last-update-time", luxon.DateTime.now().toISO());
+    statusTd.append(buildSpan("last-update-time", calculateLastUpdateTime(luxon.DateTime.now().toISO())));
+
+    if (observerElementObj.status) {
+        statusTd.setAttribute("data-status", observerElementObj.status.toLowerCase());
+    }
+    removeLoader(statusTd);
 }
 
 setInterval(function () {

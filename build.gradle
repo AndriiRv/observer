@@ -26,12 +26,15 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
 
     implementation 'jakarta.validation:jakarta.validation-api:2.0.2'
     implementation 'org.apache.commons:commons-lang3:3.12.0'
 
     webjars 'org.webjars.npm:bootstrap:5.2.3'
     webjars 'org.webjars.npm:luxon:3.2.1'
+    webjars 'org.webjars.npm:sockjs-client:1.6.1'
+    webjars 'org.webjars.npm:stomp-websocket:2.3.4-next'
     implementation configurations.webjars.dependencies
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'

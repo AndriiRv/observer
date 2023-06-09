@@ -1,6 +1,8 @@
 
 window.addEventListener('beforeunload', function () {
     loadingPageLogo();
+    observerResourceWebSocket.disconnect();
+    observerNetworksWebSocket.disconnect();
 });
 
 window.addEventListener("pageshow", function (event) {

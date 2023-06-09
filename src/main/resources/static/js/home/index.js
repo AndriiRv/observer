@@ -1,4 +1,7 @@
 
+const observerResourceWebSocket = new ObserverWebSocket('/observer/observer-resources-status', '/observer-app/resources-status', '/resources-simple-broker/status');
+const observerNetworksWebSocket = new ObserverWebSocket('/observer/observer-networks-status', '/observer-app/networks-status', '/networks-simple-broker/status');
+
 document.addEventListener('DOMContentLoaded', function () {
     const body = document.querySelector("body");
 
@@ -15,7 +18,9 @@ document.addEventListener('DOMContentLoaded', function () {
         const fetchAllElementsUrl = bodyElement.getAttribute("data-resource-url");
         const fetchElementByIdUrl = bodyElement.getAttribute("data-resource-url");
 
-        return buildTable(observerElementName, fetchAllElementsUrl, fetchElementByIdUrl, true);
+        observerResourceWebSocket.initConnect(updateStatus);
+
+        return buildTable(observerElementName, fetchAllElementsUrl, fetchElementByIdUrl, true, observerResourceWebSocket);
     }
 
     function buildNetworkTable(bodyElement) {
@@ -23,6 +28,8 @@ document.addEventListener('DOMContentLoaded', function () {
         const fetchAllElementsUrl = bodyElement.getAttribute("data-network-check-url");
         const fetchElementByIdUrl = bodyElement.getAttribute("data-network-check-url");
 
-        return buildTable(observerElementName, fetchAllElementsUrl, fetchElementByIdUrl, false);
+        observerNetworksWebSocket.initConnect(updateStatus);
+
+        return buildTable(observerElementName, fetchAllElementsUrl, fetchElementByIdUrl, false, observerNetworksWebSocket);
     }
 });
