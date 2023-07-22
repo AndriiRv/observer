@@ -60,3 +60,27 @@ function buildSpan(classNameStr, text, withPlaceHolder) {
     }
     return span;
 }
+
+function buildSelect(classNameStr, optionTitles, optionValues) {
+    if ((optionTitles && !optionValues) || (!optionTitles && optionValues)) {
+        throw new Error("Option titles should be with option values.");
+    }
+
+    if (optionTitles.length !== optionValues.length) {
+        throw new Error("Option titles count should match option values count.");
+    }
+
+    const select = document.createElement("select");
+    if (classNameStr) {
+        select.className = classNameStr;
+    }
+
+    for (let i = 0; i < optionTitles.length; i++) {
+        const option = document.createElement("option");
+        option.value = optionValues[i];
+        option.title = optionTitles[i];
+        option.innerText = optionTitles[i];
+        select.append(option);
+    }
+    return select;
+}

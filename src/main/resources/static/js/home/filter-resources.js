@@ -1,22 +1,37 @@
 
 function filterObserverElements(filterInputElement) {
     addEvent(filterInputElement, "input", function () {
-        filterResources(filterInputElement.value);
+        filterElements(filterInputElement, ".observer-element-name", filterInputElement.value);
     });
+}
 
-    function filterResources(enteredValue) {
-        let elements = filterInputElement.closest("table").querySelectorAll(".observer-element-row");
-        showAllResources(elements);
+/**
+ *
+ *
+ * @param {HTMLSelectElement} filterStatusSelect
+ */
+function initFilterStatuses(filterStatusSelect) {
+    addEvent(filterStatusSelect, "change", function () {
+        filterElements(
+            filterStatusSelect,
+            ".observer-element-status",
+            filterStatusSelect.options[filterStatusSelect.selectedIndex].value
+        );
+    });
+}
 
-        for (let element of elements) {
-            const observerElementName = element.querySelector(".observer-element-name").textContent;
-            if (!observerElementName.toLowerCase().includes(enteredValue.toLowerCase())) {
-                element.style.display = "none";
-            }
+function filterElements(elementSelector, elementSearchableSelector, value) {
+    let elements = elementSelector.closest("table").querySelectorAll(".observer-element-row");
+    showAllElements(elements);
+
+    for (let element of elements) {
+        const observerElementName = element.querySelector(elementSearchableSelector).textContent;
+        if (!observerElementName.toLowerCase().includes(value.toLowerCase())) {
+            element.style.display = "none";
         }
     }
 
-    function showAllResources(elements) {
+    function showAllElements(elements) {
         for (const element of elements) {
             element.style.display = "revert";
         }

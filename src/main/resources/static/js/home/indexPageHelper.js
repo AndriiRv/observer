@@ -33,10 +33,20 @@ function buildTable(observerElementName, fetchAllObserverElementsUrl, fetchObser
     function buildTHead(observerElementName) {
         const thead = observerTable.createTHead();
         const theadTr = observerTable.createTr();
-        theadTr.append(
-            observerTable.createTh(null, observerElementName),
-            observerTable.createTh(null, "Status")
+
+        const tHeadName = observerTable.createTh(null, observerElementName);
+        const tHeadStatus = observerTable.createTh(null, "Status");
+
+        const observerSelect = new ObserverSelect(
+            null,
+            ["All", "[inactive]", "[active]", "[issues are exists]"],
+            ["", "[inactive]", "[active]", "[issues are exists]"]
         );
+        const buildStatuses = observerSelect.buildSelect();
+        tHeadStatus.append(buildStatuses);
+        initFilterStatuses(buildStatuses);
+
+        theadTr.append(tHeadName, tHeadStatus);
 
         const filterTr = observerTable.createTr();
         const filterTd = observerTable.createTd("observer-element-filter");
@@ -92,7 +102,7 @@ function buildTable(observerElementName, fetchAllObserverElementsUrl, fetchObser
 
         statusTd.classList.remove(observerElementObj.status.toLowerCase(), "gray");
         statusTd.classList.add(observerElementObj.status === undefined || observerElementObj.status == null ? "gray" : observerElementObj.status.toLowerCase());
-        statusTd.title = "Click to update status";
+        statusTd.append(buildSpan("observer-element-status-title", buildStatusTitles(observerElementObj.status),"Click to update status"));
 
         statusTd.setAttribute("data-last-update-time", luxon.DateTime.now().toISO());
 
@@ -105,6 +115,19 @@ function buildTable(observerElementName, fetchAllObserverElementsUrl, fetchObser
         removeLoader(statusTd);
 
         addEventsToObserverStatus(tr, statusTd);
+
+        function buildStatusTitles(status) {
+            let result;
+            status = status.toLowerCase();
+            if (status === "red") {
+                result = "[inactive]";
+            } else if (status === "orange") {
+                result = "[issues are exists]";
+            } else {
+                result = "[active]";
+            }
+            return result;
+        }
 
         function addEventsToObserverStatus(tr, statusTd) {
             addEvent(statusTd, "mouseenter", function (event) {

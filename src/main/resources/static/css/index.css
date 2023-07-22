@@ -35,7 +35,7 @@ table td {
     max-height: 65px;
 }
 
-table thead .observer-element-filter {
+table thead {
     position: sticky;
     top: 0;
     background-color: white;
@@ -86,22 +86,10 @@ table thead .observer-element-filter input {
     background-color: darkred;
 }
 
-.observer-element-status.red:before {
-    content: "[inactive]";
-}
-
 .observer-element-status.orange {
     background-color: orange;
 }
 
-.observer-element-status.orange:before {
-    content: "[issues are exists]";
-}
-
 .observer-element-status.green {
     background-color: green;
-}
-
-.observer-element-status.green:before {
-    content: "[active]";
 }
