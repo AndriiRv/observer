@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const fetchAllElementsUrl = bodyElement.getAttribute("data-resource-url");
         const fetchElementByIdUrl = bodyElement.getAttribute("data-resource-url");
 
-        observerResourceWebSocket.initConnect(updateStatus);
+        observerResourceWebSocket.initConnect();
 
         return buildTable(observerElementName, fetchAllElementsUrl, fetchElementByIdUrl, true, observerResourceWebSocket);
     }
@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const fetchAllElementsUrl = bodyElement.getAttribute("data-network-check-url");
         const fetchElementByIdUrl = bodyElement.getAttribute("data-network-check-url");
 
-        observerNetworksWebSocket.initConnect(updateStatus);
+        observerNetworksWebSocket.initConnect();
 
         return buildTable(observerElementName, fetchAllElementsUrl, fetchElementByIdUrl, false, observerNetworksWebSocket);
     }

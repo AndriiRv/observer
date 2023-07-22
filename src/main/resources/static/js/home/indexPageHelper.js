@@ -116,19 +116,6 @@ function buildTable(observerElementName, fetchAllObserverElementsUrl, fetchObser
 
         addEventsToObserverStatus(tr, statusTd);
 
-        function buildStatusTitles(status) {
-            let result;
-            status = status.toLowerCase();
-            if (status === "red") {
-                result = "[inactive]";
-            } else if (status === "orange") {
-                result = "[issues are exists]";
-            } else {
-                result = "[active]";
-            }
-            return result;
-        }
-
         function addEventsToObserverStatus(tr, statusTd) {
             addEvent(statusTd, "mouseenter", function (event) {
                 let observerRow = event.target;
@@ -146,6 +133,7 @@ function buildTable(observerElementName, fetchAllObserverElementsUrl, fetchObser
 
                 addLoader(statusTd);
                 statusTd.classList.remove(observerElementObj.status.toLowerCase(), "gray");
+                statusTd.querySelector(".observer-element-status-title")?.remove();
                 statusTd.querySelector(".last-update-time")?.remove();
             });
         }
@@ -165,27 +153,46 @@ function buildTable(observerElementName, fetchAllObserverElementsUrl, fetchObser
     }
 }
 
-/**
- * WebSocket callback
- *
- * @param statusTd
- * @param observerElementObj
- */
-function updateStatus(observerElementObj) {
-    const statusTd = document.querySelectorAll(".observer-table-div." + observerElementObj.observerName?.toLowerCase() + " .observer-element-status")[observerElementObj.id - 1];
-    addLoader(statusTd);
-    statusTd.classList.remove(observerElementObj.status.toLowerCase(), "gray");
-    statusTd.querySelector(".last-update-time")?.remove();
+document.addEventListener("buildStatus", (e) => {
+        updateStatus(e.detail);
 
-    statusTd.classList.add(observerElementObj.status === undefined || observerElementObj.status == null ? "gray" : observerElementObj.status.toLowerCase());
+        /**
+         * WebSocket callback
+         *
+         * @param observerElementObj
+         */
+        function updateStatus(observerElementObj) {
+            const statusTd = document.querySelectorAll(".observer-table-div." + observerElementObj.observerName?.toLowerCase() + " .observer-element-status")[observerElementObj.id - 1];
+            addLoader(statusTd);
+            statusTd.classList.remove(observerElementObj.status.toLowerCase(), "gray");
+            statusTd.querySelector(".observer-element-status-title")?.remove();
+            statusTd.querySelector(".last-update-time")?.remove();
 
-    statusTd.setAttribute("data-last-update-time", luxon.DateTime.now().toISO());
-    statusTd.append(buildSpan("last-update-time", calculateLastUpdateTime(luxon.DateTime.now().toISO())));
+            statusTd.classList.add(observerElementObj.status === undefined || observerElementObj.status == null ? "gray" : observerElementObj.status.toLowerCase());
+            statusTd.append(buildSpan("observer-element-status-title", buildStatusTitles(observerElementObj.status),"Click to update status"));
 
-    if (observerElementObj.status) {
-        statusTd.setAttribute("data-status", observerElementObj.status.toLowerCase());
+            statusTd.setAttribute("data-last-update-time", luxon.DateTime.now().toISO());
+            statusTd.append(buildSpan("last-update-time", calculateLastUpdateTime(luxon.DateTime.now().toISO())));
+
+            if (observerElementObj.status) {
+                statusTd.setAttribute("data-status", observerElementObj.status.toLowerCase());
+            }
+            removeLoader(statusTd);
+        }
+    }, false,
+);
+
+function buildStatusTitles(status) {
+    let result;
+    status = status.toLowerCase();
+    if (status === "red") {
+        result = "[inactive]";
+    } else if (status === "orange") {
+        result = "[issues are exists]";
+    } else {
+        result = "[active]";
     }
-    removeLoader(statusTd);
+    return result;
 }
 
 setInterval(function () {

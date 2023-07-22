@@ -8,7 +8,7 @@ class ObserverWebSocket {
         this._stompClient = null;
     }
 
-    initConnect(callback) {
+    initConnect() {
         const socket = new SockJS(this._socketUrl);
         this._stompClient = Stomp.over(socket);
 
@@ -16,7 +16,9 @@ class ObserverWebSocket {
         this._stompClient.connect({}, function () {
             this.subscribe(webSocketObj._sendToUrl, function (messageOutput) {
                 const obj = JSON.parse(messageOutput.body).body.data;
-                callback(obj);
+                document.dispatchEvent(new CustomEvent("buildStatus", {
+                    detail: obj
+                }));
             });
         });
     }
