@@ -27,11 +27,14 @@
                data-resource-import-url=${#httpServletRequest.getContextPath()} + '/preferences/resources/import',
                data-resource-export-url=${#httpServletRequest.getContextPath()} + '/preferences/resources/export',
                data-network-check-import-url=${#httpServletRequest.getContextPath()} + '/preferences/network-check/import',
-               data-network-check-export-url=${#httpServletRequest.getContextPath()} + '/preferences/network-check/export'">
+               data-network-check-export-url=${#httpServletRequest.getContextPath()} + '/preferences/network-check/export',
+
+               data-export-logs-url=${#httpServletRequest.getContextPath()} + '/logs'">
 
 <div class="header-wrapper" th:insert="fragments/header"></div>
 
 <div class="root" th:unless="${message} != null"></div>
+<div class="additional-division"></div>
 
 <script th:src="@{/js/general/general.js}"></script>
 <script th:src="@{/js/utils.js}"></script>

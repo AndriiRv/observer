@@ -2,7 +2,7 @@
 document.addEventListener('DOMContentLoaded', function () {
     const body = document.querySelector("body");
 
-    let resourceDiv = buildDiv("observer-table-div");
+    const resourceDiv = buildDiv("observer-table-div");
     resourceDiv.append(buildPreferenceTable(
         body.getAttribute("data-get-all-resources-url"),
         body.getAttribute("data-resource-import-url"),
@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function () {
         true
     ));
 
-    let networkDiv = buildDiv("observer-table-div");
+    const networkDiv = buildDiv("observer-table-div");
     networkDiv.append(buildPreferenceTable(
         body.getAttribute("data-get-all-network-check-url"),
         body.getAttribute("data-network-check-import-url"),
@@ -29,4 +29,12 @@ document.addEventListener('DOMContentLoaded', function () {
     ));
 
     document.querySelector(".root").append(resourceDiv, networkDiv);
+
+    const otherPreferencesDiv = buildDiv("observer-other-preferences-div");
+    const exportLogsButton = buildButton("btn btn-primary export-file-js", "Export logs");
+    otherPreferencesDiv.append(exportLogsButton);
+    addEventToExportTrigger(exportLogsButton, body.getAttribute("data-export-logs-url"));
+
+    document.querySelector(".additional-division").append(otherPreferencesDiv);
+
 });

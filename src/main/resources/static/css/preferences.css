@@ -1,8 +1,4 @@
 
-body {
-    overflow: hidden;
-}
-
 .errorMessageDiv {
     display: flex;
 }
@@ -35,7 +31,7 @@ body {
 .observer-table-div {
     margin: 0 auto;
     overflow-y: auto;
-    height: calc(100vh - 56px);
+    height: calc(100vh - 94px);
 }
 
 .observer-table-div .observer-element-table th:nth-child(4) {
