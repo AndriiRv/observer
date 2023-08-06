@@ -44,7 +44,6 @@ function buildTable(observerElementName, fetchAllObserverElementsUrl, fetchObser
         );
         const buildStatuses = observerSelect.buildSelect();
         tHeadStatus.append(buildStatuses);
-        initFilterStatuses(buildStatuses);
 
         theadTr.append(tHeadName, tHeadStatus);
 
@@ -53,9 +52,14 @@ function buildTable(observerElementName, fetchAllObserverElementsUrl, fetchObser
         filterTd.colSpan = 2;
 
         const filterInput = buildInput("search", "form-control", "Search...");
-        filterObserverElements(filterInput);
         filterTd.append(filterInput);
         filterTr.append(filterTd);
+
+        const observerFilters = [
+            new ObserverFilter(filterInput, ".observer-element-name"),
+            new ObserverFilter(buildStatuses, ".observer-element-status-title")
+        ]
+        new ObserverFilters(observerFilters).init();
 
         thead.append(theadTr, filterTr);
         return thead;
