@@ -34,11 +34,17 @@ function buildTable(observerElementName, fetchAllObserverElementsUrl, fetchObser
         const thead = observerTable.createTHead();
         const theadTr = observerTable.createTr();
 
-        const tHeadName = observerTable.createTh(null, observerElementName);
-        const tHeadStatus = observerTable.createTh(null, "Status");
+        const tHeadName = observerTable.createTh();
+        tHeadName.append(buildSpan("observer-element-title", observerElementName));
+
+        const tHeadStatus = observerTable.createTh();
+        tHeadStatus.append(buildSpan("observer-element-title", "Status"));
+
+        const filterInput = buildInput("search", "form-control", "Search...");
+        tHeadName.append(filterInput);
 
         const observerSelect = new ObserverSelect(
-            null,
+            "form-control",
             ["All", "[inactive]", "[active]", "[issues are exists]"],
             ["", "[inactive]", "[active]", "[issues are exists]"]
         );
@@ -47,21 +53,13 @@ function buildTable(observerElementName, fetchAllObserverElementsUrl, fetchObser
 
         theadTr.append(tHeadName, tHeadStatus);
 
-        const filterTr = observerTable.createTr();
-        const filterTd = observerTable.createTd("observer-element-filter");
-        filterTd.colSpan = 2;
-
-        const filterInput = buildInput("search", "form-control", "Search...");
-        filterTd.append(filterInput);
-        filterTr.append(filterTd);
-
         const observerFilters = [
             new ObserverFilter(filterInput, ".observer-element-name"),
             new ObserverFilter(buildStatuses, ".observer-element-status-title")
         ]
         new ObserverFilters(observerFilters).init();
 
-        thead.append(theadTr, filterTr);
+        thead.append(theadTr);
         return thead;
     }
 
@@ -103,6 +101,7 @@ function buildTable(observerElementName, fetchAllObserverElementsUrl, fetchObser
 
     function buildObserverStatusTd(id, tr, observerElementObj) {
         let statusTd = tr.querySelector("td.observer-element-status");
+        removeLoader(statusTd);
 
         statusTd.classList.remove(observerElementObj.status.toLowerCase(), "gray");
         statusTd.classList.add(observerElementObj.status === undefined || observerElementObj.status == null ? "gray" : observerElementObj.status.toLowerCase());
@@ -116,7 +115,6 @@ function buildTable(observerElementName, fetchAllObserverElementsUrl, fetchObser
         if (observerElementObj.status) {
             statusTd.setAttribute("data-status", observerElementObj.status.toLowerCase());
         }
-        removeLoader(statusTd);
 
         addEventsToObserverStatus(tr, statusTd);
 
@@ -167,7 +165,8 @@ document.addEventListener("buildStatus", (e) => {
          */
         function updateStatus(observerElementObj) {
             const statusTd = document.querySelectorAll(".observer-table-div." + observerElementObj.observerName?.toLowerCase() + " .observer-element-status")[observerElementObj.id - 1];
-            addLoader(statusTd);
+            removeLoader(statusTd);
+
             statusTd.classList.remove(observerElementObj.status.toLowerCase(), "gray");
             statusTd.querySelector(".observer-element-status-title")?.remove();
             statusTd.querySelector(".last-update-time")?.remove();
@@ -181,7 +180,6 @@ document.addEventListener("buildStatus", (e) => {
             if (observerElementObj.status) {
                 statusTd.setAttribute("data-status", observerElementObj.status.toLowerCase());
             }
-            removeLoader(statusTd);
         }
     }, false,
 );

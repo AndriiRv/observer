@@ -5,10 +5,6 @@
     animation: rotate 12s infinite;
 }
 
-.loader::before {
-    content: "[loading...]";
-}
-
 @keyframes rotate {
     0% {
         background: red;

@@ -8,6 +8,7 @@ function addLoader(element) {
         return;
     }
     element.classList.add("loader");
+    element.append(buildSpan("loading-title", "[loading...]"));
 }
 
 /**
@@ -18,5 +19,6 @@ function removeLoader(element) {
     if (!element.classList.contains("loader")) {
         return;
     }
+    element.querySelector(".loading-title")?.remove();
     element.classList.remove("loader");
 }
