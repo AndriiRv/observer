@@ -14,22 +14,20 @@ document.addEventListener('DOMContentLoaded', function () {
     document.querySelector(".root").append(resourceDiv, networkDiv);
 
     function buildResourceTable(bodyElement) {
-        const observerElementName = "Resource";
         const fetchAllElementsUrl = bodyElement.getAttribute("data-resource-url");
         const fetchElementByIdUrl = bodyElement.getAttribute("data-resource-url");
 
         observerResourceWebSocket.initConnect();
 
-        return buildTable(observerElementName, fetchAllElementsUrl, fetchElementByIdUrl, true, observerResourceWebSocket);
+        return buildTable(fetchAllElementsUrl, fetchElementByIdUrl, true, observerResourceWebSocket);
     }
 
     function buildNetworkTable(bodyElement) {
-        const observerElementName = "Network";
         const fetchAllElementsUrl = bodyElement.getAttribute("data-network-check-url");
         const fetchElementByIdUrl = bodyElement.getAttribute("data-network-check-url");
 
         observerNetworksWebSocket.initConnect();
 
-        return buildTable(observerElementName, fetchAllElementsUrl, fetchElementByIdUrl, false, observerNetworksWebSocket);
+        return buildTable(fetchAllElementsUrl, fetchElementByIdUrl, false, observerNetworksWebSocket);
     }
 });

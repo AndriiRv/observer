@@ -2,17 +2,16 @@
 /**
  * Build table by passed observer element data.
  *
- * @param {String} observerElementName
  * @param {String} fetchAllObserverElementsUrl
  * @param {String} fetchObserverElementByIdUrl
  * @param {boolean} isNavigableObserverElement
  * @param {ObserverWebSocket} observerWebSocket
  * @returns {HTMLTableElement}
  */
-function buildTable(observerElementName, fetchAllObserverElementsUrl, fetchObserverElementByIdUrl, isNavigableObserverElement, observerWebSocket) {
+function buildTable(fetchAllObserverElementsUrl, fetchObserverElementByIdUrl, isNavigableObserverElement, observerWebSocket) {
     const observerTable = new ObserverTable();
     const table = observerTable.createTable("table table-bordered table-hover");
-    table.append(buildTHead(observerElementName));
+    table.append(buildTHead());
 
     const tbody = observerTable.createTBody();
     loadTableRows(tbody);
@@ -41,22 +40,19 @@ function buildTable(observerElementName, fetchAllObserverElementsUrl, fetchObser
             });
     }
 
-    function buildTHead(observerElementName) {
+    function buildTHead() {
         const thead = observerTable.createTHead();
         const theadTr = observerTable.createTr();
 
         const tHeadName = observerTable.createTh();
-        tHeadName.append(buildSpan("observer-element-title", observerElementName));
-
         const tHeadStatus = observerTable.createTh();
-        tHeadStatus.append(buildSpan("observer-element-title", "Status"));
 
         const filterInput = buildInput("search", "form-control", "Search...");
         tHeadName.append(filterInput);
 
         const observerSelect = new ObserverSelect(
             "form-control",
-            ["All", "[inactive]", "[active]", "[issues are exists]"],
+            ["All statuses", "[inactive]", "[active]", "[issues are exists]"],
             ["", "[inactive]", "[active]", "[issues are exists]"]
         );
         const buildStatuses = observerSelect.buildSelect();
