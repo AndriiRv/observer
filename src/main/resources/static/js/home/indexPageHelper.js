@@ -9,6 +9,9 @@
  * @returns {HTMLTableElement}
  */
 function buildTable(fetchAllObserverElementsUrl, fetchObserverElementByIdUrl, isNavigableObserverElement, observerWebSocket) {
+    let filterInput = null;
+    let observerElementNames = [];
+
     const observerTable = new ObserverTable();
     const table = observerTable.createTable("table table-bordered table-hover");
     table.append(buildTHead());
@@ -25,6 +28,11 @@ function buildTable(fetchAllObserverElementsUrl, fetchObserverElementByIdUrl, is
                 if (!jsonArray.length) {
                     return;
                 }
+
+                jsonArray.forEach(observerElement => {
+                    observerElementNames.push(observerElement.name);
+                });
+                observerDynamicElementPlaceholder(filterInput, observerElementNames);
 
                 const observerElementTrs = buildTableRows(jsonArray.map(json => ObserverElement.fromJson(json)));
                 for (let i = 0; i < observerElementTrs.length; i++) {
@@ -47,7 +55,7 @@ function buildTable(fetchAllObserverElementsUrl, fetchObserverElementByIdUrl, is
         const tHeadName = observerTable.createTh();
         const tHeadStatus = observerTable.createTh();
 
-        const filterInput = buildInput("search", "form-control", "Search...");
+        filterInput = buildInput("search", "form-control", "Search...");
         tHeadName.append(filterInput);
 
         const observerSelect = new ObserverSelect(

@@ -30,11 +30,5 @@ document.addEventListener('DOMContentLoaded', function () {
 
     document.querySelector(".root").append(resourceDiv, networkDiv);
 
-    const otherPreferencesDiv = buildDiv("observer-other-preferences-div");
-    const exportLogsButton = buildButton("btn btn-primary export-file-js", "Export logs");
-    otherPreferencesDiv.append(exportLogsButton);
-    addEventToExportTrigger(exportLogsButton, body.getAttribute("data-export-logs-url"));
-
-    document.querySelector(".additional-division").append(otherPreferencesDiv);
-
+    document.querySelector(".additional-division").append(buildOtherPreferences(body));
 });

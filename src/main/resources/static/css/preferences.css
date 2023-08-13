@@ -1,10 +1,15 @@
 
+body {
+    overflow: hidden;
+}
+
 .errorMessageDiv {
     display: flex;
 }
 
 .root {
     display: flex;
+    padding: 20px;
 }
 
 .form-element {
@@ -31,7 +36,7 @@
 .observer-table-div {
     margin: 0 auto;
     overflow-y: auto;
-    height: calc(100vh - 94px);
+    height: calc(100vh - 392px);
 }
 
 .observer-table-div .observer-element-table th:nth-child(4) {
@@ -54,6 +59,13 @@
 
 .save-new-js button, .remove-js button {
     width: 100%;
+}
+
+.observer-other-preferences-div {
+    background-color: gray;
+    margin: 20px;
+    padding: 10px;
+    color: white;
 }
 
 @media screen and (max-width: 1024px) {

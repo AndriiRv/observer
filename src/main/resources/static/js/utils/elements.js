@@ -47,6 +47,21 @@ function buildInputFile(typeStr, classNameStr, placeHolderStr, acceptTypeFileStr
     return inputFile;
 }
 
+function buildCheckbox(classNameStr) {
+    return buildInput("checkbox", classNameStr, null);
+}
+
+function buildNumberInput(classNameStr, placeHolderStr, min, max) {
+    const number = buildInput("number", classNameStr, placeHolderStr);
+    if (min) {
+        number.min = min;
+    }
+    if (max) {
+        number.max = max;
+    }
+    return number;
+}
+
 function buildSpan(classNameStr, text, withPlaceHolder) {
     const span = document.createElement("span");
     if (classNameStr) {
