@@ -18,7 +18,6 @@ function buildTable(observerElementName, fetchAllObserverElementsUrl, fetchObser
     loadTableRows(tbody);
 
     table.append(tbody);
-    return table;
 
     function loadTableRows(tbody) {
         fetch(fetchAllObserverElementsUrl).then(response => response.json())
@@ -36,7 +35,7 @@ function buildTable(observerElementName, fetchAllObserverElementsUrl, fetchObser
                     const id = i + 1;
                     fetch(fetchObserverElementByIdUrl + "/" + id).then(response => response.json()
                         .then(json => {
-                            buildObserverStatusTd(id, tr, ObserverElement.fromJson(json.data));
+                            buildInitObserverStatusTd(id, tr, ObserverElement.fromJson(json.data));
                         }));
                 }
             });
@@ -106,6 +105,21 @@ function buildTable(observerElementName, fetchAllObserverElementsUrl, fetchObser
         return tableRows;
     }
 
+    document.addEventListener("buildStatus", (e) => {
+            updateStatus(e.detail);
+
+            /**
+             * WebSocket callback
+             *
+             * @param observerElementObj
+             */
+            function updateStatus(observerElementObj) {
+                const statusTd = document.querySelectorAll(".observer-table-div." + observerElementObj.observerName?.toLowerCase() + " .observer-element-status")[observerElementObj.id - 1];
+                buildStatus(statusTd, observerElementObj.status);
+            }
+        }, false,
+    );
+
     /**
      *
      *
@@ -113,33 +127,13 @@ function buildTable(observerElementName, fetchAllObserverElementsUrl, fetchObser
      * @param tr
      * @param {ObserverElement} observerElementObj
      */
-    function buildObserverStatusTd(id, tr, observerElementObj) {
+    function buildInitObserverStatusTd(id, tr, observerElementObj) {
         let statusTd = tr.querySelector("td.observer-element-status");
-        removeLoader(statusTd);
+        buildStatus(statusTd, observerElementObj.status);
 
-        statusTd.classList.remove(observerElementObj.status.toLowerCase(), "gray");
-        statusTd.classList.add(observerElementObj.status === undefined || observerElementObj.status == null ? "gray" : observerElementObj.status.toLowerCase());
-        statusTd.append(buildSpan("observer-element-status-title", buildStatusTitles(observerElementObj.status),"Click to update status"));
+        addEventsToObserverStatus(statusTd);
 
-        statusTd.setAttribute("data-last-update-time", luxon.DateTime.now().toISO());
-
-        statusTd.querySelector(".last-update-time")?.remove();
-        statusTd.append(buildSpan("last-update-time", calculateLastUpdateTime(luxon.DateTime.now().toISO())));
-
-        if (observerElementObj.status) {
-            statusTd.setAttribute("data-status", observerElementObj.status.toLowerCase());
-        }
-
-        addEventsToObserverStatus(tr, statusTd);
-
-        function addEventsToObserverStatus(tr, statusTd) {
-            addEvent(statusTd, "mouseenter", function (event) {
-                let observerRow = event.target;
-                document.querySelector("body").className = observerRow.getAttribute("data-status").toLowerCase();
-            });
-            addEvent(statusTd, "mouseleave", function () {
-                document.querySelector("body").className = "";
-            });
+        function addEventsToObserverStatus(statusTd) {
             addEvent(statusTd, "click", async function () {
                 if (isAlreadyClicked(statusTd, "loader")) {
                     return;
@@ -158,36 +152,23 @@ function buildTable(observerElementName, fetchAllObserverElementsUrl, fetchObser
             return statusTd.classList.contains(className);
         }
     }
+
+    function buildStatus(statusTd, status){
+        removeLoader(statusTd);
+
+        statusTd.classList.remove(status.toLowerCase(), "gray");
+        statusTd.classList.add(!status ? "gray" : status.toLowerCase());
+        statusTd.querySelector(".observer-element-status-title")?.remove();
+        statusTd.append(buildSpan("observer-element-status-title", buildStatusTitles(status),"Click to update status"));
+
+        statusTd.setAttribute("data-last-update-time", luxon.DateTime.now().toISO());
+
+        statusTd.querySelector(".last-update-time")?.remove();
+        statusTd.append(buildSpan("last-update-time", calculateLastUpdateTime(luxon.DateTime.now().toISO())));
+    }
+
+    return table;
 }
-
-document.addEventListener("buildStatus", (e) => {
-        updateStatus(e.detail);
-
-        /**
-         * WebSocket callback
-         *
-         * @param observerElementObj
-         */
-        function updateStatus(observerElementObj) {
-            const statusTd = document.querySelectorAll(".observer-table-div." + observerElementObj.observerName?.toLowerCase() + " .observer-element-status")[observerElementObj.id - 1];
-            removeLoader(statusTd);
-
-            statusTd.classList.remove(observerElementObj.status.toLowerCase(), "gray");
-            statusTd.querySelector(".observer-element-status-title")?.remove();
-            statusTd.querySelector(".last-update-time")?.remove();
-
-            statusTd.classList.add(observerElementObj.status === undefined || observerElementObj.status == null ? "gray" : observerElementObj.status.toLowerCase());
-            statusTd.append(buildSpan("observer-element-status-title", buildStatusTitles(observerElementObj.status),"Click to update status"));
-
-            statusTd.setAttribute("data-last-update-time", luxon.DateTime.now().toISO());
-            statusTd.append(buildSpan("last-update-time", calculateLastUpdateTime(luxon.DateTime.now().toISO())));
-
-            if (observerElementObj.status) {
-                statusTd.setAttribute("data-status", observerElementObj.status.toLowerCase());
-            }
-        }
-    }, false,
-);
 
 function buildStatusTitles(status) {
     let result;

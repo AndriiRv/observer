@@ -4,18 +4,6 @@ body {
     margin: 0;
 }
 
-body.green {
-    background: rgba(0, 128, 0, .1);
-}
-
-body.orange {
-    background: rgba(255, 165, 0, .1);
-}
-
-body.red {
-    background: rgba(139, 0, 0, .1);
-}
-
 .root {
     display: grid;
     grid-template-columns: 50% 50%;
