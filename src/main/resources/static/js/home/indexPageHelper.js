@@ -10,25 +10,37 @@
  * @returns {HTMLTableElement}
  */
 function buildTable(observerElementName, fetchAllObserverElementsUrl, fetchObserverElementByIdUrl, isNavigableObserverElement, observerWebSocket) {
-    let observerElementsCount = 0;
-    let observerElementTrs = [];
-
     const observerTable = new ObserverTable();
     const table = observerTable.createTable("table table-bordered table-hover");
     table.append(buildTHead(observerElementName));
 
     const tbody = observerTable.createTBody();
-    Promise.all([fetchAllObserverElements(fetchAllObserverElementsUrl, tbody, buildTableRows)])
-        .then(() => {
-            if (!observerElementsCount) {
-                return;
-            }
-            for (let i = 0; i < observerElementTrs.length; i++) {
-                fetchObserverElementById(fetchObserverElementByIdUrl, i + 1, observerElementTrs[i], buildObserverStatusTd);
-            }
-        });
+    loadTableRows(tbody);
+
     table.append(tbody);
     return table;
+
+    function loadTableRows(tbody) {
+        fetch(fetchAllObserverElementsUrl).then(response => response.json())
+            .then(json => {
+                const jsonArray = json.data;
+                if (!jsonArray.length) {
+                    return;
+                }
+
+                const observerElementTrs = buildTableRows(jsonArray.map(json => ObserverElement.fromJson(json)));
+                for (let i = 0; i < observerElementTrs.length; i++) {
+                    const tr = observerElementTrs[i];
+                    tbody.append(tr);
+
+                    const id = i + 1;
+                    fetch(fetchObserverElementByIdUrl + "/" + id).then(response => response.json()
+                        .then(json => {
+                            buildObserverStatusTd(id, tr, ObserverElement.fromJson(json.data));
+                        }));
+                }
+            });
+    }
 
     function buildTHead(observerElementName) {
         const thead = observerTable.createTHead();
@@ -63,42 +75,44 @@ function buildTable(observerElementName, fetchAllObserverElementsUrl, fetchObser
         return thead;
     }
 
-    async function fetchAllObserverElements(fetchAllObserverElementsUrl, tbody, callback) {
-        return await fetch(fetchAllObserverElementsUrl)
-            .then(async response => {
-                await response.json().then(function (json) {
-                    const observerElementsArrayObj = json.data;
-
-                    callback(tbody, observerElementsArrayObj);
-                    observerElementsCount = observerElementsArrayObj.length;
-                });
-            });
-    }
-
-    function buildTableRows(tbody, elements) {
-        for (let i = 0; i < elements.length; i++) {
-            const element = elements[i];
+    /**
+     *
+     *
+     * @param tbody
+     * @param {ObserverElement[]} observerElements
+     * @returns {*[]}
+     */
+    function buildTableRows(observerElements) {
+        let tableRows = [];
+        for (let i = 0; i < observerElements.length; i++) {
+            const observerElement = observerElements[i];
 
             const tr = observerTable.createTr("observer-element-row");
-            let td = observerTable.createTd();
+            const td = observerTable.createTd();
 
-            let nameDiv = buildDiv("observer-element-data");
+            const nameDiv = buildDiv("observer-element-data");
             nameDiv.append(
-                buildSpan("observer-element-name", element.name, true),
-                isNavigableObserverElement ? buildAnchor(element.path) : buildSpan(null, element.path)
+                buildSpan("observer-element-name", observerElement.name, true),
+                isNavigableObserverElement ? buildAnchor(observerElement.path) : buildSpan(null, observerElement.path)
             );
             td.append(nameDiv);
 
-            let statusTd = observerTable.createTd("observer-element-status");
+            const statusTd = observerTable.createTd("observer-element-status");
             addLoader(statusTd);
 
             tr.append(td, statusTd);
-            tbody.append(tr);
-
-            observerElementTrs[i] = tr;
+            tableRows.push(tr);
         }
+        return tableRows;
     }
 
+    /**
+     *
+     *
+     * @param id
+     * @param tr
+     * @param {ObserverElement} observerElementObj
+     */
     function buildObserverStatusTd(id, tr, observerElementObj) {
         let statusTd = tr.querySelector("td.observer-element-status");
         removeLoader(statusTd);
@@ -143,15 +157,6 @@ function buildTable(observerElementName, fetchAllObserverElementsUrl, fetchObser
         function isAlreadyClicked(statusTd, className) {
             return statusTd.classList.contains(className);
         }
-    }
-
-    function fetchObserverElementById(fetchObserverElementByIdUrl, id, tr, callback) {
-        return fetch(fetchObserverElementByIdUrl + "/" + id)
-            .then(response => {
-                response.json().then(function (json) {
-                    callback(id, tr, json.data);
-                });
-            });
     }
 }
 
