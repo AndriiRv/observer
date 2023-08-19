@@ -9,6 +9,7 @@
 
     <link th:href="@{/webjars/bootstrap/5.2.3/dist/css/bootstrap.min.css}" rel="stylesheet">
     <link th:href="@{/css/header.css}" rel="stylesheet"/>
+    <link th:href="@{/css/footer.css}" rel="stylesheet"/>
     <link th:href="@{/css/preferences.css}" rel="stylesheet"/>
     <link th:href="@{/css/notification.css}" rel="stylesheet"/>
 </head>
@@ -35,6 +36,8 @@
 
 <div class="root" th:unless="${message} != null"></div>
 <div class="additional-division"></div>
+
+<div class="footer-wrapper" th:insert="fragments/footer"></div>
 
 <script th:src="@{/js/dtos/observerDynamicFilter.js}"></script>
 <script th:src="@{/js/general/general.js}"></script>

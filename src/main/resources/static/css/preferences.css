@@ -36,7 +36,7 @@ body {
 .observer-table-div {
     margin: 0 auto;
     overflow-y: auto;
-    height: calc(100vh - 392px);
+    height: calc(100vh - 442px);
 }
 
 .observer-table-div .observer-element-table th:nth-child(4) {
