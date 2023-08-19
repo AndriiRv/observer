@@ -12,6 +12,7 @@
     <link th:href="@{/css/footer.css}" rel="stylesheet"/>
     <link th:href="@{/css/index.css}" rel="stylesheet"/>
     <link th:href="@{/css/loader.css}" rel="stylesheet"/>
+    <link th:href="@{/css/notification.css}" rel="stylesheet"/>
 </head>
 <body th:attr="data-resource-url=${#httpServletRequest.getContextPath()} + '/resources',
                data-network-check-url=${#httpServletRequest.getContextPath()} + '/networks'">
@@ -23,7 +24,7 @@
 <div class="footer-wrapper" th:insert="fragments/footer"></div>
 
 <script th:src="@{/js/dtos/observerDynamicFilter.js}"></script>
-
+<script th:src="@{/js/general/newbie.js}"></script>
 <script th:src="@{/js/websocket/observerWebSocket.js}"></script>
 <script th:src="@{/webjars/sockjs-client/1.6.1/dist/sockjs.min.js}"></script>
 <script th:src="@{/webjars/stomp-websocket/2.3.4-next/lib/stomp.min.js}"></script>
@@ -39,6 +40,10 @@
 <script th:src="@{/js/home/filter-resources.js}"></script>
 <script th:src="@{/webjars/luxon/3.2.1/build/global/luxon.min.js}"></script>
 <script th:src="@{/js/home/observerPlaceholder.js}"></script>
+
+<script th:src="@{/js/notification/notification.js}"></script>
+<script th:src="@{/js/notification/notificationLocation.js}"></script>
+<script th:src="@{/js/notification/notificationType.js}"></script>
 
 </body>
 </html>
