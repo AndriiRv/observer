@@ -5,66 +5,138 @@ function buildOtherPreferences(body) {
     header.textContent = "Other preferences";
     otherPreferencesDiv.append(header);
 
+    const otherPreferencesTablesDiv = buildDiv("observer-other-preferences-tables-div");
+    otherPreferencesDiv.append(otherPreferencesTablesDiv);
+
     const observerTable = new ObserverTable();
-    const table = observerTable.createTable();
-    otherPreferencesDiv.append(table);
+    otherPreferencesTablesDiv.append(buildSearchDynamicPlaceholderTable(observerTable))
+    otherPreferencesTablesDiv.append(buildObserverLogsTable(observerTable));
 
-    const tbody = observerTable.createTBody();
-    table.append(tbody);
+    return otherPreferencesDiv;
 
-    const observerDynamicFilter = new ObserverDynamicFilter();
+    function buildSearchDynamicPlaceholderTable(observerTable) {
+        const table = observerTable.createTable();
 
-    const checkbox = buildCheckbox("checkbox");
-    const trCheckbox = buildTr(null, "Enable dynamic search filter placeholder", checkbox);
-    tbody.append(trCheckbox);
-    addEvent(checkbox, "click", function (event) {
-        if (event.target.checked) {
-            initDefaultDynamicPlaceholderPreferences(checkbox, initTimeoutInput, nextLoopTimeoutInput, waitingTimeoutInput, writingTimeoutInput);
-        } else {
-            localStorage.removeItem("observer.dynamic.placeholder.enabled");
-            localStorage.removeItem("observer.init.timeout.placeholder");
-            localStorage.removeItem("observer.next.loop.timeout.placeholder");
-            localStorage.removeItem("observer.waiting.timeout.placeholder");
-            localStorage.removeItem("observer.writing.timeout.placeholder");
-            document.querySelectorAll(".placeholder-preferences-input").forEach(e => e.value = "");
+        const thead = observerTable.createTHead("");
+        table.append(thead);
+        const tr = observerTable.createTr();
+        tr.append(observerTable.createTd("", "", buildDivHeader(5, "Manage Search Filter dynamic placeholder for current user")));
+        thead.append(tr);
+
+        const tbody = observerTable.createTBody();
+        table.append(tbody);
+
+        const checkbox = buildCheckbox("checkbox");
+        const trCheckbox = buildTr(null, "Enable dynamic placeholder", checkbox);
+        tbody.append(trCheckbox);
+        addEvent(checkbox, "click", function (event) {
+            let infoMessage;
+            if (event.target.checked) {
+                initDefaultDynamicPlaceholderPreferences(checkbox, initTimeoutInput, nextLoopTimeoutInput, waitingTimeoutInput, writingTimeoutInput);
+                infoMessage = "Search Filter dynamic placeholder enabled."
+            } else {
+                localStorage.removeItem("observer.dynamic.placeholder.enabled");
+                localStorage.removeItem("observer.init.timeout.placeholder");
+                localStorage.removeItem("observer.next.loop.timeout.placeholder");
+                localStorage.removeItem("observer.waiting.timeout.placeholder");
+                localStorage.removeItem("observer.writing.timeout.placeholder");
+                document.querySelectorAll(".placeholder-preferences-input").forEach(e => e.value = "");
+                infoMessage = "Search Filter dynamic placeholder disabled."
+            }
+            buildNotification(infoMessage);
+        });
+
+        const initTimeoutInput = buildNumberInput("placeholder-preferences-input", "seconds", "0", "60");
+        tbody.append(buildPreferenceNumberRow(initTimeoutInput, "Timeout before start after page loaded (s)", function (event) {
+            localStorage.setItem("observer.init.timeout.placeholder", event.target.value);
+            buildNotification("Timeout before start after page loaded - saved.");
+        }));
+
+        const nextLoopTimeoutInput = buildNumberInput("placeholder-preferences-input", "seconds", "3", "60");
+        tbody.append(buildPreferenceNumberRow(nextLoopTimeoutInput, "Timeout before start a next placeholders iteration after ending the previous one (s)", function (event) {
+            localStorage.setItem("observer.next.loop.timeout.placeholder", event.target.value);
+            buildNotification("Timeout before start a next placeholders iteration after ending the previous one - saved.");
+        }));
+
+        const waitingTimeoutInput = buildNumberInput("placeholder-preferences-input", "seconds", "3", "60");
+        tbody.append(buildPreferenceNumberRow(waitingTimeoutInput, "Timeout before render next placeholder of current iteration (s)", function (event) {
+            localStorage.setItem("observer.waiting.timeout.placeholder", event.target.value);
+            buildNotification("Timeout before render next placeholder of current iteration - saved.");
+        }));
+
+        const writingTimeoutInput = buildNumberInput("placeholder-preferences-input", "ms", "100", "1000");
+        tbody.append(buildPreferenceNumberRow(writingTimeoutInput, "Render placeholder velocity (ms). Bigger is slower.", function (event) {
+            localStorage.setItem("observer.writing.timeout.placeholder", event.target.value);
+            buildNotification("Render placeholder velocity - saved.");
+        }));
+
+        restoreValuesFromLocalStorageForDynamicPlaceholderPreferences(checkbox, initTimeoutInput, nextLoopTimeoutInput, waitingTimeoutInput, writingTimeoutInput);
+
+        return table;
+
+        function initDefaultDynamicPlaceholderPreferences(checkbox, initTimeoutInput, nextLoopTimeoutInput, waitingTimeoutInput, writingTimeoutInput) {
+            let observerDynamicFilter = new ObserverDynamicFilter()
+            observerDynamicFilter.enabled = "true";
+
+            setDefaultValueToElementAndLocalStorage(checkbox, observerDynamicFilter.enabled, "observer.dynamic.placeholder.enabled");
+            setDefaultValueToElementAndLocalStorage(initTimeoutInput, observerDynamicFilter.initTimeout, "observer.init.timeout.placeholder");
+            setDefaultValueToElementAndLocalStorage(nextLoopTimeoutInput, observerDynamicFilter.nextLoopTimeout, "observer.next.loop.timeout.placeholder");
+            setDefaultValueToElementAndLocalStorage(waitingTimeoutInput, observerDynamicFilter.waitingTimeout, "observer.waiting.timeout.placeholder");
+            setDefaultValueToElementAndLocalStorage(writingTimeoutInput, observerDynamicFilter.writingTimeout, "observer.writing.timeout.placeholder");
+
+            function setDefaultValueToElementAndLocalStorage(element, value, localStorageKey) {
+                if (element.type === "checkbox") {
+                    element.checked = value;
+                } else {
+                    element.value = value;
+                }
+                localStorage.setItem(localStorageKey, value);
+            }
         }
-    });
+    }
 
-    const initTimeoutInput = buildNumberInput("placeholder-preferences-input", "seconds", "0", "60");
-    tbody.append(buildPreferenceNumberRow(initTimeoutInput, "Begin dynamic 'Search' filter placeholder change after (s)", function (event) {
-        observerDynamicFilter.initTimeout = event.target.value;
-        localStorage.setItem("observer.init.timeout.placeholder", observerDynamicFilter.initTimeout);
-    }));
+    function buildObserverLogsTable(observerTable) {
+        const exportLogsButton = buildButton("btn btn-primary export-file-js", "Export logs");
+        addEventToExportTrigger(exportLogsButton, body.getAttribute("data-export-logs-url"));
 
-    const nextLoopTimeoutInput = buildNumberInput("placeholder-preferences-input", "seconds", "3", "60");
-    tbody.append(buildPreferenceNumberRow(nextLoopTimeoutInput, "Next 'Search' filter placeholders iteration after (s)", function (event) {
-        observerDynamicFilter.nextLoopTimeout = event.target.value;
-        localStorage.setItem("observer.next.loop.timeout.placeholder", observerDynamicFilter.nextLoopTimeout);
-    }));
+        const table = observerTable.createTable();
 
-    const waitingTimeoutInput = buildNumberInput("placeholder-preferences-input", "seconds", "3", "60");
-    tbody.append(buildPreferenceNumberRow(waitingTimeoutInput, "Waiting 'Search' filter rendered dynamic placeholder before changing after (s)", function (event) {
-        observerDynamicFilter.waitingTimeout = event.target.value;
-        localStorage.setItem("observer.waiting.timeout.placeholder", observerDynamicFilter.waitingTimeout);
-    }));
+        const thead = observerTable.createTHead("");
+        table.append(thead);
 
-    const writingTimeoutInput = buildNumberInput("placeholder-preferences-input", "ms", "100", "1000");
-    tbody.append(buildPreferenceNumberRow(writingTimeoutInput, "Writing 'Search' filter placeholder char by char velocity after (ms)", function (event) {
-        observerDynamicFilter.writingTimeout = event.target.value;
-        localStorage.setItem("observer.writing.timeout.placeholder", observerDynamicFilter.writingTimeout);
-    }));
+        const tr = observerTable.createTr();
+        tr.append(observerTable.createTd("", "", buildDivHeader(5, "Observer logs")));
+        thead.append(tr);
 
-    restoreValuesFromLocalStorageForDynamicPlaceholderPreferences(checkbox, initTimeoutInput, nextLoopTimeoutInput, waitingTimeoutInput, writingTimeoutInput);
+        const tbody = observerTable.createTBody();
+        table.append(tbody);
+        tbody.append(buildTr(null, "Export logs", exportLogsButton));
+        return table;
+    }
 
-    const exportLogsButton = buildButton("btn btn-primary export-file-js", "Export logs");
-    otherPreferencesDiv.append(exportLogsButton);
-    addEventToExportTrigger(exportLogsButton, body.getAttribute("data-export-logs-url"));
-    const trExportLogs = buildTr(null, "Export logs", exportLogsButton);
-    tbody.append(trExportLogs);
+    /**
+     * Build header division.
+     *
+     * @param {Number} headerLevel
+     * @param {String} text
+     * @returns {HTMLElement}
+     */
+    function buildDivHeader(headerLevel, text) {
+        const header = document.createElement("h" + headerLevel);
+        header.textContent = text;
+        return header;
+    }
 
+    /**
+     * Build table row with first table data as label ad second as passed element
+     *
+     * @param classNameStr
+     * @param labelText
+     * @param element
+     * @returns {HTMLElement}
+     */
     function buildTr(classNameStr, labelText, element) {
         const tr = observerTable.createTr(classNameStr);
-        tbody.append(tr);
 
         const tdLabel = observerTable.createTd();
         const label = document.createElement("label");
@@ -85,25 +157,6 @@ function buildOtherPreferences(body) {
         return tr;
     }
 
-    function initDefaultDynamicPlaceholderPreferences(checkbox, initTimeoutInput, nextLoopTimeoutInput, waitingTimeoutInput, writingTimeoutInput) {
-        let observerDynamicFilter = new ObserverDynamicFilter()
-        observerDynamicFilter.enabled = "true";
-        checkbox.checked = observerDynamicFilter.enabled;
-        localStorage.setItem("observer.dynamic.placeholder.enabled", observerDynamicFilter.enabled);
-
-        initTimeoutInput.value = observerDynamicFilter.initTimeout;
-        localStorage.setItem("observer.init.timeout.placeholder", observerDynamicFilter.initTimeout);
-
-        nextLoopTimeoutInput.value = observerDynamicFilter.nextLoopTimeout;
-        localStorage.setItem("observer.next.loop.timeout.placeholder", observerDynamicFilter.nextLoopTimeout);
-
-        waitingTimeoutInput.value = observerDynamicFilter.waitingTimeout;
-        localStorage.setItem("observer.waiting.timeout.placeholder", observerDynamicFilter.waitingTimeout);
-
-        writingTimeoutInput.value = observerDynamicFilter.writingTimeout;
-        localStorage.setItem("observer.writing.timeout.placeholder", observerDynamicFilter.writingTimeout);
-    }
-
     function restoreValuesFromLocalStorageForDynamicPlaceholderPreferences(checkbox, initTimeoutInput, nextLoopTimeoutInput, waitingTimeoutInput, writingTimeoutInput) {
         checkbox.checked = localStorage.getItem("observer.dynamic.placeholder.enabled");
         initTimeoutInput.value = localStorage.getItem("observer.init.timeout.placeholder");
@@ -112,55 +165,13 @@ function buildOtherPreferences(body) {
         writingTimeoutInput.value = localStorage.getItem("observer.writing.timeout.placeholder");
     }
 
-    return otherPreferencesDiv;
-}
-
-class ObserverDynamicFilter {
-
-    get enabled() {
-        return this._enabled;
-    }
-
-    set enabled(value) {
-        this._enabled = value === "true";
-    }
-
-    get initTimeout() {
-        return this._initTimeout ? this._initTimeout : "10";
-    }
-
-    set initTimeout(value) {
-        this._initTimeout = this.buildValue(value, "10");
-    }
-
-    get nextLoopTimeout() {
-        return this._nextLoopTimeout ? this._nextLoopTimeout : "5";
-    }
-
-    set nextLoopTimeout(value) {
-        this._nextLoopTimeout = this.buildValue(value, "5");
-    }
-
-    get waitingTimeout() {
-        return this._waitingTimeout ? this._waitingTimeout : "3";
-    }
-
-    set waitingTimeout(value) {
-        this._waitingTimeout = this.buildValue(value, "3");
-    }
-
-    get writingTimeout() {
-        return this._writingTimeout ? this._writingTimeout : "100";
-    }
-
-    set writingTimeout(value) {
-        this._writingTimeout = this.buildValue(value, "100");
-    }
-
-    buildValue(value, defaultValue) {
-        if (!value || Number(value) <= 0) {
-            return String(Number(defaultValue));
-        }
-        return String(Number(value));
+    function buildNotification(description) {
+        new Notification(
+            "Success!",
+            description,
+            NotificationLocation.NOTIFICATION_LOCATION.BOTTOM_RIGHT,
+            NotificationType.NOTIFICATION_TYPE.INFO,
+            3000
+        ).buildNotification();
     }
 }

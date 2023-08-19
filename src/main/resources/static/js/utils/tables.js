@@ -43,13 +43,16 @@ class ObserverTable {
         return tbody;
     }
 
-    createTd(className, textContent) {
+    createTd(className, textContent, anotherElement) {
         const td = document.createElement("td");
         if (className) {
             td.className = className;
         }
         if (textContent) {
             td.textContent = textContent;
+        }
+        if (anotherElement) {
+            td.append(anotherElement);
         }
         return td;
     }

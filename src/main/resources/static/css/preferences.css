@@ -68,6 +68,10 @@ body {
     color: white;
 }
 
+.observer-other-preferences-tables-div {
+    display: flex;
+}
+
 @media screen and (max-width: 1024px) {
     .observer-table-div {
         width: 100%;
