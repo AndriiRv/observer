@@ -55,8 +55,36 @@ function buildTable(fetchAllObserverElementsUrl, fetchObserverElementByIdUrl, is
         const tHeadName = observerTable.createTh();
         const tHeadStatus = observerTable.createTh();
 
+        const filterInputDiv = buildDiv("filter-input-div");
         filterInput = buildInput("search", "form-control", "Search...");
-        tHeadName.append(filterInput);
+        const searchPreferencesButton = buildButton("btn btn-primary search-preferences", "Placeholder");
+        searchPreferencesButton.hidden = true;
+        filterInputDiv.append(filterInput, searchPreferencesButton);
+
+        addEventToElements([filterInput, searchPreferencesButton], "mouseenter", function () {
+            searchPreferencesButton.hidden = false;
+        });
+        addEventToElements([filterInput, searchPreferencesButton], "mouseout", function () {
+            searchPreferencesButton.hidden = true;
+        });
+
+        let isClicked = false;
+        addEvent(searchPreferencesButton, "click", function () {
+            if (!isClicked) {
+                const theadTr = observerTable.createTr("additional-table-row");
+                const theadTh = observerTable.createTh();
+                theadTh.colSpan = 2;
+                theadTh.append(buildInputPlaceholderPreferences());
+                theadTr.append(theadTh);
+                thead.append(theadTr);
+                isClicked = true;
+            } else {
+                document.querySelectorAll(".additional-table-row")?.forEach(e => e?.remove());
+                isClicked = false;
+            }
+        });
+
+        tHeadName.append(filterInputDiv);
 
         const observerSelect = new ObserverSelect(
             "form-control",

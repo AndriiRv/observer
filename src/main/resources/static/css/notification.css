@@ -9,6 +9,7 @@
 .notification-queue-js {
     max-width: 300px;
     padding: 5px;
+    z-index: 999;
 }
 
 .notification-queue-js.notification-queue-top-left-js {

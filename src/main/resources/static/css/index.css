@@ -84,3 +84,11 @@ table thead {
 .observer-element-status.green {
     background-color: green;
 }
+
+.filter-input-div {
+    display: flex;
+}
+
+.observer-other-preferences-tables-div td {
+    height: unset;
+}

@@ -26,10 +26,10 @@ function initPlaceholderToNewUsers() {
     setTimeout(function () {
         new Notification(
             "Hello newbie!",
-            "You can manage of dynamic placeholder for yourself in a 'Preferences' page.",
-            NotificationLocation.NOTIFICATION_LOCATION.BOTTOM_RIGHT,
+            "You can manage of dynamic placeholder for yourself near of search filter.",
+            NotificationLocation.NOTIFICATION_LOCATION.TOP_RIGHT,
             NotificationType.NOTIFICATION_TYPE.INFO,
-            10000
+            7000
         ).buildNotification();
     }, Number(observerDynamicFilterObj.initTimeout + "000"));
 }
