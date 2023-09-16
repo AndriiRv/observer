@@ -9,7 +9,7 @@
             <line x1="0" y1="12" x2="400" y2="0" style="stroke:black"/>
         </svg>
     </div>
-    <span>Observer. For internal use only. 2023 Default Value. To be continued and pray for Ukraine</span>
+    <span th:text="'Observer. For internal use only. ' + ${#dates.format(#dates.createNow(),'YYYY')} + ' Default Value. To be continued and pray for Ukraine'"></span>
     <div class="footer-icon">
         <img class="logo" th:src="@{/images/ukr_flag.svg}" alt="Ukraine flag"/>
     </div>
